@@ -3,50 +3,41 @@ package parse
 import scala.util.parsing.combinator._
 import scala.collection.mutable.HashMap
 import java.io._
+import java.util.Properties
 
-object GraphGenerator {
+class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Properties) {
 
-  val PROBABILITY_THRESHOLD = 0.55
-  val CONFIDENCE_THRESHOLD = 0.45
+  val DEFAULT_PROB_THRESHOLD = 0.55
+  val DEFAULT_CONF_THRESHOLD = 0.45
 
-  val ADDED_OBSERVATIONS = 1
+  val DEFAULT_ADDED_OBSERVATIONS = 1
 
-  val STORY_FILE_NAME = "stories.txt"
-  val CLUSTER_FILE_NAME = "goldStandard.txt"
+  def getParameter[T](property: Properties, name: String, conversionFunc: String => T): Option[T] =
+    {
+      if (property.containsKey(name)) {
+        val s = property.getProperty(name)
+        try {
+          Some(conversionFunc(s))
+        } catch {
+          case e: Exception =>
+            println("illegal parameter value for " + name + " " + s)
+            e.printStackTrace()
+            None
+        }
+      } else 
+    	  None
+    }
 
-  val storyList: List[Story] = GoldParser.parseStories(STORY_FILE_NAME)
-  val clusterList: List[Cluster] = computeClusters()
+  val PROBABILITY_THRESHOLD: Double = getParameter(property, "probThresholds", x => x.toDouble).getOrElse(DEFAULT_PROB_THRESHOLD)
+
+  val CONFIDENCE_THRESHOLD = getParameter(property, "confThresholds", x => x.toDouble).getOrElse(DEFAULT_CONF_THRESHOLD)
+
+  val ADDED_OBSERVATIONS = getParameter(property, "addedObservations", x => x.toInt).getOrElse(DEFAULT_ADDED_OBSERVATIONS)
+
+  val storyList: List[Story] = stories
+  val clusterList: List[Cluster] = clusters
 
   val errorChecker = new ErrorChecker2()
-
-  def computeClusters() =
-    {
-      val hashmap = new HashMap[Int, Sentence]
-      storyList foreach {
-        story =>
-          story.members foreach
-            {
-              sentence =>
-                if (hashmap.contains(sentence.id)) throw new RuntimeException("sentence repeated" + sentence.id)
-                hashmap += ((sentence.id, sentence))
-            }
-      }
-
-      GoldParser.parseClusters(CLUSTER_FILE_NAME) map {
-        c =>
-          val newMembers = c.members map
-            {
-              sentence =>
-                //println(sentence.id)
-                hashmap.get(sentence.id).get
-            }
-          val newC = new Cluster(c.name, newMembers)
-          newC.members foreach { s =>
-            s.cluster = newC
-          }
-          newC
-      }
-    }
 
   def checkMissingSentences(storyList: List[Story]): Boolean =
     {
@@ -64,51 +55,12 @@ object GraphGenerator {
       false
     }
 
-  def main(args: Array[String]) {
+  def generate() {
 
-    //storyList = GoldParser.parseStories(STORY_FILE_NAME)
-
-    // insert sentences into a hashtable (id -> sentence)
-    //    val hashmap = new HashMap[Int, Sentence]
-    //    storyList foreach {
-    //      story =>
-    //        story.members foreach
-    //          {
-    //            sentence =>
-    //              if (hashmap.contains(sentence.id)) throw new RuntimeException("sentence repeated" + sentence.id)
-    //              hashmap += ((sentence.id, sentence))
-    //          }
-    //    }
-    //
-    //    // establish the clusters, and mark each sentence with their cluster
-    //    //clusterList = GoldParser.parseClusters(CLUSTER_FILE_NAME)
-    //
-    //    clusterList = clusterList map {
-    //      c =>
-    //        val newMembers = c.members map
-    //          {
-    //            sentence =>
-    //              //println(sentence.id)
-    //              hashmap.get(sentence.id).get
-    //          }
-    //        val newC = new Cluster(c.name, newMembers)
-    //        newC.members foreach { s =>
-    //          s.cluster = newC
-    //        }
-    //        newC
-    //    }
-
-    /*
-    println(clusterList)
-    val first = clusterList(0).members(0)
-    println(first)
-    val second = first.next
-    if (second != null) {
-      println(second)
-      println(second.cluster.name)
-    }
-
-     */
+    println("generating plot graph using the following parameters: \n" +
+      "probability threshold = " + PROBABILITY_THRESHOLD + "\n" +
+      "confidence threshold = " + CONFIDENCE_THRESHOLD + "\n" +
+      "added observations = " + ADDED_OBSERVATIONS + "\n")
 
     var statsList = List[(Int, Double, Double)]()
 
@@ -152,7 +104,7 @@ object GraphGenerator {
   }
 
   def updateBadPaths(badPaths: List[(Link, (Double, Double))], links: List[Link],
-    allRelations: List[Relation], shortestDistance: (List[Link], Cluster, Cluster) => Int): List[Relation] =
+                     allRelations: List[Relation], shortestDistance: (List[Link], Cluster, Cluster) => Int): List[Relation] =
     {
       var newRelations = allRelations
       var oldRelations = allRelations
@@ -222,12 +174,12 @@ object GraphGenerator {
     val invalid = allRelations.filter {
       relation => relation.confidence <= 0.4 && relation.confidence > 0.3 && relation.prob > 0.4
     }
-    
+
     val probWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream("probablities.txt")))
     valid.foreach { r =>
       probWriter.println(r.source.name + " -> " + r.target.name + ", " + r.prob + ", " + r.confidence)
     }
-    
+
     probWriter.close()
 
     //println(invalid.sorted.mkString("\n"))
