@@ -11,8 +11,8 @@ object GraphGenerator {
 
   val ADDED_OBSERVATIONS = 1
 
-  val STORY_FILE_NAME = "movieStories.txt"
-  val CLUSTER_FILE_NAME = "movieGold.txt"
+  val STORY_FILE_NAME = "stories.txt"
+  val CLUSTER_FILE_NAME = "goldStandard.txt"
 
   val storyList: List[Story] = GoldParser.parseStories(STORY_FILE_NAME)
   val clusterList: List[Cluster] = computeClusters()
@@ -119,7 +119,7 @@ object GraphGenerator {
 
       println(text)
 
-      val reducedLinks = drawDiagram(clusterList, allRelations, "movie")
+      val reducedLinks = drawDiagram(clusterList, allRelations, "restaurant-interative")
 
       val checker = errorChecker.getNewInstance()
 
@@ -136,7 +136,7 @@ object GraphGenerator {
 
       var relations = updateBadPaths(checker.getBadPaths, reducedLinks, allRelations, new ErrorChecker2().findShortestDistance)
 
-      val reduced2 = drawDiagram(clusterList, relations, "movie-best")
+      val reduced2 = drawDiagram(clusterList, relations, "restaurant-interative-adjusted")
       //println("hello " + relations.mkString("\n"))
       //      reduced2.foreach{
       //        r =>
@@ -172,33 +172,21 @@ object GraphGenerator {
           val expected = path._2._1
           val deviation = path._2._1 - path._2._2
           val target = link.target
-          println("processing bad link " + source.name + " " + target.name + " expected = " + expected + " " + (expected-1).toInt + " deviation =" + deviation)
-          var possibleSources = findPathEnds(source, (expected - 1).toInt, newLinks)
+          println("processing bad link " + source.name + " " + target.name + " " + deviation)
+          val possibleSources = findPathEnds(source, (expected - 1).toInt, newLinks)
 
-          //var updateSuccess = false
-          
-          possibleSources = possibleSources filter
+          possibleSources filter
             {
               possible =>
-                
-                val dist = shortestDistance(newLinks, target, possible)                
+                val dist = shortestDistance(newLinks, target, possible)
+                //if (dist == -1) println("check pass!! " + possible.name + " " + target.name)
+                //else println("actual distance = " + dist)
                 dist == -1
-                
-                /* This prevents cycles. If there is already a path fro target to this posible source,
-                 * and we strength the link from this possible source to target, 
-                 * we could create a cycle.
-                 */
-                
-            }
-          
-          var updateSuccess = (possibleSources.length == 0) 
-          // if there are no possible sources, we would not give up on the next
-          
-          possibleSources foreach {
-              possible =>                                
+            } foreach {
+              possible =>
                 newRelations.find(r => r.source == possible && r.target == target) match {
                   case Some(rel: Relation) =>
-                  	println ("possible source: " + possible.name)
+
                     val updated = rel.addEvidence(ADDED_OBSERVATIONS, 0)
 
                     oldRelations = newRelations
@@ -212,16 +200,14 @@ object GraphGenerator {
                     //newErr = sum / total
                     println("new error = " + newErr)
                     if (newErr > oldErr) {
-                      newRelations = oldRelations // the total error has increased. undo that update
+
+                      return oldRelations // the total error has increased. The stopping criteria has been reached.
                     } else {
-                      oldErr = newErr // total error decreased. update succeeded.
-                      updateSuccess = true
+                      oldErr = newErr
                     }
                   case None =>
                 }
             }
-            
-            //if (!updateSuccess) return newRelations
       }
 
       newRelations
@@ -236,14 +222,15 @@ object GraphGenerator {
     val invalid = allRelations.filter {
       relation => relation.confidence <= 0.4 && relation.confidence > 0.3 && relation.prob > 0.4
     }
-
-    //println(invalid.sorted.mkString("\n"))
-
+    
     val probWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream("probablities.txt")))
     valid.foreach { r =>
       probWriter.println(r.source.name + " -> " + r.target.name + ", " + r.prob + ", " + r.confidence)
     }
+    
     probWriter.close()
+
+    //println(invalid.sorted.mkString("\n"))
 
     val reducedLinks = simplifyGraph(clusterList, valid)
 
@@ -286,7 +273,7 @@ object GraphGenerator {
         }
       }
 
-      ends.distinct
+      ends
     }
 
   def computeRelations(storyList: List[Story], clusterList: List[Cluster]): List[Relation] =
@@ -418,7 +405,7 @@ object GraphGenerator {
 
     val order = new Ordering(numbers.toSet[(Int, Int)])
     val small = order.necessary()
-    //println(small)
+    println(small)
     val finalLinks = small map {
       n =>
         val source = clusterNumber.filter { x => x._2 == n._1 }(0)._1
