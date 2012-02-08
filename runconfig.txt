@@ -1,0 +1,6 @@
+storyFile = ./data/movie/movieStories.txt
+clusterFile = ./data/movie/movieGold.txt
+parameters = probThresholds, confThresholds, s
+probThresholds = 0.5, 0.55, 0.6, 0.65
+confThresholds = 0.4, 0.45, 0.5, 0.55
+s = 3, 4
