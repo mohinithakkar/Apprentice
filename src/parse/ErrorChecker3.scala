@@ -1,6 +1,7 @@
 package parse
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
+import data._
 
 /**
  * This error measure is mathematically sound.

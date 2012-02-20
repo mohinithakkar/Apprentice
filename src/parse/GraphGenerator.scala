@@ -4,6 +4,7 @@ import scala.util.parsing.combinator._
 import scala.collection.mutable.HashMap
 import java.io._
 import java.util.Properties
+import data._
 
 class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Properties) {
 

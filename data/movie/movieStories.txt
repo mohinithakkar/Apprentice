@@ -1,14 +1,14 @@
 2 John/NNP and/CC Sally/NNP wait/VBP in/IN line/NN for/IN ticket/NNS ./.
-3 John/NNP purchase/VBZ two/CD movie/NN ticket/NNS ./.
+3 John/NNP purchases/VBZ two/CD movie/NN ticket/NNS ./.
 4 John/NNP and/CC Sally/NNP walk/VBP up/RP to/TO the/DT concession/NN stand/NN ./.
-5 John/NNP buy/VBZ Sally/VBG a/DT large/JJ popcorn/NN ./.
+5 John/NNP buys/VBZ Sally/VBG a/DT large/JJ popcorn/NN ./.
 6 John/NNP and/CC Sally/NNP enter/VBP the/DT dark/JJ theater/NN ./.
-7 Sally/NNP choose/VBZ seat/NNS at/IN the/DT front/NN of/IN the/DT auditorium/NN ./.
-8 John/NNP turn/VBZ off/RP the/DT cellphone/NN ./.
-9 Sally/NNP eat/VBZ the/DT popcorn/NN ./.
-10 John/NNP be/VBZ bore/VBN during/IN come/VBG attraction/NNS ./.
+7 Sally/NNP chooses/VBZ seat/NNS at/IN the/DT front/NN of/IN the/DT auditorium/NN ./.
+8 John/NNP turns/VBZ off/RP the/DT cellphone/NN ./.
+9 Sally/NNP eats/VBZ the/DT popcorn/NN ./.
+10 John/NNP is/VBZ bored/VBN during/IN come/VBG attraction/NNS ./.
 11 John/NNP and/CC Sally/NNP laugh/NN during/IN the/DT movie/NN ./.
-12 Sally/NNP be/VBZ surprise/VBN by/IN the/DT movie/NN ending/NN ./.
+12 Sally/NNP is/VBZ surprised/VBN by/IN the/DT movie/NN ending/NN ./.
 13 Sally/NNP and/CC John/NNP leave/VBP when/WRB the/DT movie/NN finish/VBZ ./.
 ###
 15 John/NNP and/CC Sally/NNP get/VBP in/IN line/NN for/IN the/DT movie/NN ticket/NNS ./.
@@ -25,11 +25,11 @@
 26 John/NNP and/CC Sally/NNP leave/VBP the/DT movie/NN theater/NN ./.
 ###
 28 Sally/NNP and/CC John/NNP stand/VBP in/IN line/NN at/IN the/DT movie/NN theater/NN ./.
-29 John/NNP purchase/VBZ two/CD ticket/NNS from/IN the/DT clerk/NN for/IN the/DT four/CD oclock/RB show/NN ./.
-30 Sally/NNP buy/VBZ popcorn/NN and/CC an/DT orange/JJ soda/NN ./.
+29 John/NNP purchases/VBZ two/CD ticket/NNS from/IN the/DT clerk/NN for/IN the/DT four/CD oclock/RB show/NN ./.
+30 Sally/NNP buys/VBZ popcorn/NN and/CC an/DT orange/JJ soda/NN ./.
 31 John/NNP and/CC Sally/NNP walk/VBP into/IN the/DT auditorium/NN ./.
 32 John/NNP and/CC Sally/NNP take/VBP their/PRP$ seat/NNS in/IN the/DT fifth/JJ row/NN ./.
-33 John/NNP turn/VBZ off/RP his/PRP$ cell/NN phone/NN ./.
+33 John/NNP turns/VBZ off/RP his/PRP$ cell/NN phone/NN ./.
 34 John/NNP and/CC Sally/NNP watch/VBP the/DT movie/NN ./.
 35 John/NNP and/CC Sally/NNP clap/VB at/IN the/DT end/NN of/IN the/DT movie/NN ./.
 ###
@@ -68,7 +68,7 @@
 68 John/NNP and/CC Sally/NNP locate/VBP the/DT correct/JJ auditorium/NN ./.
 69 John/NNP and/CC Sally/NNP find/VBP seat/NNS close/VBP to/TO the/DT back/NN of/IN the/DT auditorium/NN ./.
 70 John/NNP go/VBZ to/TO buy/VB popcorn/NN ./.
-71 After/IN the/DT movie/NN be/VBZ over/IN John/NNP and/CC Sally/NNP stand/VBP up/RP ./.
+71 After/IN the/DT movie/NN is/VBZ over/IN ,/, John/NNP and/CC Sally/NNP stand/VBP up/RP ./.
 72 John/NNP and/CC Sally/NNP walk/VBP back/RB to/TO the/DT car/NN ./.
 73 John/NNP and/CC Sally/NNP drive/VBP out/RP of/IN the/DT theater/NN parking/NN lot/NN ./.
 ###
@@ -82,39 +82,39 @@
 82 John/NNP and/CC Sally/NNP leave/VBP the/DT movie/NN theater/NN ./.
 ###
 84 John/NNP and/CC Sally/NNP walk/VBP to/TO the/DT movie/NN ticket/NN counter/RB one/CD evening/NN ./.
-85 Sally/NNP pay/VBZ for/IN the/DT movie/NN ticket/NNS ./.
+85 Sally/NNP pays/VBZ for/IN the/DT movie/NN ticket/NNS ./.
 86 John/NNP and/CC Sally/NNP sit/VBP down/RP inside/IN the/DT auditorium/NN ./.
-87 Sally/NNP go/VBZ to/TO buy/VB popcorn/NN ./.
-88 John/NNP attempt/VBZ to/TO kiss/NNP Sally/NNP ./.
-89 John/NNP and/CC Sally/NNP leave/VBP the/DT theater/NN when/WRB the/DT movie/NN have/VBZ end/VBN ./.
+87 Sally/NNP goes/VBZ to/TO buy/VB popcorn/NN ./.
+88 John/NNP attempts/VBZ to/TO kiss/NNP Sally/NNP ./.
+89 John/NNP and/CC Sally/NNP leaves/VBP the/DT theater/NN when/WRB the/DT movie/NN have/VBZ end/VBN ./.
 ###
 91 John/NNP and/CC Sally/NNP walk/VBP up/RB to/TO theater/NN to/TO buy/VB movie/NN ticket/NNS ./.
 92 Sally/NNP and/CC John/NNP go/VBP inside/IN the/DT auditorium/NN to/TO watch/VB the/DT movie/NN ./.
 93 Sally/NNP and/CC John/NNP find/VBP seat/NNS on/IN the/DT right/JJ side/NN corner/NN ./.
-94 Sally/NNP ask/VBP John/NNP to/TO turn/VB off/RP the/DT cellphone/NN ./.
+94 Sally/NNP asks/VBP John/NNP to/TO turn/VB off/RP the/DT cellphone/NN ./.
 95 Sally/NNP and/CC John/NNP enjoy/VBP the/DT movie/NN very/RB much/RB ./.
 96 Sally/NNP and/CC John/NNP leave/VBP the/DT movie/NN theater/NN ./.
 ###
-98 John/NNP make/VBZ Sally/NNP giggle/NNP while/IN they/PRP stand/VBP in/IN line/NN for/IN ticket/NNS ./.
-99 Sally/NNP give/VBZ John/NNP a/DT hug/NN ./.
+98 John/NNP makes/VBZ Sally/NNP giggle/NNP while/IN they/PRP stand/VBP in/IN line/NN for/IN ticket/NNS ./.
+99 Sally/NNP gives/VBZ John/NNP a/DT hug/NN ./.
 100 Sally/NNP and/CC John/NNP buy/VBP some/DT snack/NNS ./.
-101 Sally/NNP buy/VBZ drink/NNS ./.
-102 John/NNP buy/VBZ chocolate/NNS and/CC popcorn/NN ./.
+101 Sally/NNP buys/VBZ drink/NNS ./.
+102 John/NNP buys/VBZ chocolate/NNS and/CC popcorn/NN ./.
 103 John/NNP and/CC Sally/NNP walk/VBP into/IN the/DT auditorium/NN ./.
 104 John/NNP and/CC Sally/NNP find/VBP their/PRP$ seat/NNS ./.
-105 Sally/NNP tilt/VBZ her/PRP$ head/NN on/IN John/NNP shoulder/NN ./.
-106 John/NNP hold/VBZ Sally/NNP hand/NN ./.
-107 John/NNP give/VBZ Sally/NNP a/DT long/JJ kiss/NN ./.
+105 Sally/NNP tilts/VBZ her/PRP$ head/NN on/IN John/NNP shoulder/NN ./.
+106 John/NNP holds/VBZ Sally/NNP hand/NN ./.
+107 John/NNP gives/VBZ Sally/NNP a/DT long/JJ kiss/NN ./.
 108 Sally/NNP and/CC John/NNP leave/VBP the/DT theater/NN ./.
 ###
 110 John/NNP and/CC Sally/NNP enter/VBP the/DT movie/NN theater/NN ./.
 111 John/NNP and/CC Sally/NNP look/VBP at/IN which/WDT movie/NN be/VBP play/VBG ./.
 112 John/NNP and/CC Sally/NNP choose/VBP a/DT movie/NN ./.
 113 John/NNP and/CC Sally/NNP buy/VBP ticket/NNS ./.
-114 John/NNP buy/VBZ a/DT glass/NN of/IN wine/NN and/CC a/DT coffee/NN ./.
-115 Sally/NNP go/VBZ to/TO the/DT toilet/NN ./.
-116 Sally/NNP return/VBZ from/IN the/DT toilet/NN ./.
-117 John/NNP give/VBZ Sally/NNP her/PRP$ wine/NN ./.
+114 John/NNP buys/VBZ a/DT glass/NN of/IN wine/NN and/CC a/DT coffee/NN ./.
+115 Sally/NNP goes/VBZ to/TO the/DT toilet/NN ./.
+116 Sally/NNP returns/VBZ from/IN the/DT toilet/NN ./.
+117 John/NNP gives/VBZ Sally/NNP her/PRP$ wine/NN ./.
 118 John/NNP and/CC Sally/NNP enter/VBP the/DT auditorium/NN ./.
 119 John/NNP and/CC Sally/NNP sit/VBP down/RP ./.
 120 John/NNP and/CC Sally/NNP watch/VBP the/DT movie/NN ./.
@@ -123,7 +123,7 @@
 123 John/NNP and/CC Sally/NNP wait/VBP in/IN line/NN outside/IN the/DT theater/NN ./.
 124 John/NNP and/CC Sally/NNP buy/VBP ticket/NNS ./.
 125 John/NNP and/CC Sally/NNP wait/VBP in/IN line/NN at/IN the/DT the/DT concession/NN stand/NN ./.
-126 John/NNP buy/VBZ Sally/NNP popcorn/NNP and/CC soda/NN ./.
+126 John/NNP buys/VBZ Sally/NNP popcorn/NNP and/CC soda/NN ./.
 127 John/NNP and/CC Sally/NNP make/VBP their/PRP$ way/NN into/IN the/DT auditorium/NN ./.
 128 John/NNP and/CC Sally/NNP argue/VBP over/IN seating/NN with/IN another/DT couple/NN ./.
 129 John/NNP and/CC Sally/NNP sit/VBP as/IN the/DT movie/NN begin/VBZ ./.
@@ -157,14 +157,14 @@
 156 John/NNP and/CC Sally/NNP drive/VBP home/NN ./.
 ###
 158 John/NNP and/CC Sally/NNP stand/VBP in/IN line/NN ./.
-159 John/NNP buy/VBZ the/DT ticket/NNS ./.
-160 Sally/NNP pay/VBZ for/IN the/DT popcorn/NN ./.
+159 John/NNP buys/VBZ the/DT ticket/NNS ./.
+160 Sally/NNP pays/VBZ for/IN the/DT popcorn/NN ./.
 161 John/NNP and/CC Sally/NNP hand/NN their/PRP$ ticket/NNS to/TO the/DT ticket/NN taker/NN ./.
 162 John/NNP and/CC Sally/NNP walk/VBP down/RB the/DT hall/NN to/TO the/DT movie/NN ./.
-163 Sally/NNP pick/VBZ out/RP seat/NNS in/IN the/DT middle/NN of/IN the/DT auditorium/NN ./.
+163 Sally/NNP picks/VBZ out/RP seat/NNS in/IN the/DT middle/NN of/IN the/DT auditorium/NN ./.
 164 John/NNP and/CC Sally/NNP eat/VBP the/DT popcorn/NN ./.
 165 John/NNP and/CC Sally/NNP watch/VBP the/DT preview/NNS and/CC the/DT movie/NN ./.
-166 When/WRB the/DT movie/NN be/VBZ over/IN John/NNP and/CC Sally/NNP get/VB up/RP to/TO leave/VB ./.
+166 When/WRB the/DT movie/NN us/VBZ over/IN ,/, John/NNP and/CC Sally/NNP get/VB up/RP to/TO leave/VB ./.
 167 John/NNP and/CC Sally/NNP leave/VBP the/DT theater/NN ./.
 ###
 169 John/NNP and/CC Sally/NNP stand/VBP in/IN line/NN for/IN ticket/NNS to/TO their/PRP$ movie/NN ./.
@@ -188,7 +188,7 @@
 187 John/NNP and/CC Sally/NNP choose/VBP a/DT seat/NN toward/IN the/DT center/NN middle/NN isle/NN ./.
 188 John/NNP and/CC Sally/NNP laugh/NN together/RB at/IN the/DT preview/NNS for/IN upcoming/JJ movie/NNS ./.
 189 John/NNP and/CC Sally/NNP hold/VBP hand/NNS ./.
-190 John/NNP and/CC Sally/NNP leave/VBP the/DT movie/NN theater/NN have/VBG enjoy/VBN a/DT great/JJ night/NN together/RB ./.
+190 John/NNP and/CC Sally/NNP leave/VBP the/DT movie/NN theater/NN ,/, having/VBG enjoy/VBN a/DT great/JJ night/NN together/RB ./.
 ###
 192 John/NNP and/CC Sally/NNP enter/VBP the/DT movie/NN theater/NN ./.
 193 John/NNP and/CC Sally/NNP go/VBP to/TO the/DT ticket/NN booth/NN ./.
@@ -212,28 +212,28 @@
 211 John/NNP and/CC Sally/NNP leave/VBP the/DT movie/NN theater/NN when/WRB the/DT movie/NN be/VBZ over/RP ./.
 ###
 213 Sally/NNP and/CC John/NNP stand/VBP in/IN line/NN for/IN ticket/NNS ./.
-214 John/NNP pay/VBZ for/IN the/DT movie/NN ticket/NNS with/IN cash/NN ./.
+214 John/NNP pays/VBZ for/IN the/DT movie/NN ticket/NNS with/IN cash/NN ./.
 215 Sally/NNP and/CC John/NNP walk/VBP up/RP to/TO the/DT concession/NN stand/NN ./.
-216 Sally/NNP order/NNS popcorn/VBZ ./.
-217 John/NNP order/NNS a/DT soda/NN ./.
-218 Sally/NNP pay/VBZ for/IN the/DT food/NN and/CC drink/NN ./.
+216 Sally/NNP orders/NNS popcorn/VBZ ./.
+217 John/NNP orders/NNS a/DT soda/NN ./.
+218 Sally/NNP pays/VBZ for/IN the/DT food/NN and/CC drink/NN ./.
 219 Sally/NNP and/CC John/NNP walk/VBP to/TO the/DT auditorium/NN ./.
-220 John/NNP pick/VBZ out/RP seat/NNS directly/RB in/IN the/DT middle/NN of/IN the/DT movie/NN theater/NN ./.
-221 John/NNP put/VBZ his/PRP$ arm/NN around/IN Sally/NNP ./.
+220 John/NNP picks/VBZ out/RP seat/NNS directly/RB in/IN the/DT middle/NN of/IN the/DT movie/NN theater/NN ./.
+221 John/NNP puts/VBZ his/PRP$ arm/NN around/IN Sally/NNP ./.
 222 Sally/NNP make/VBZ sure/JJ to/TO turn/VB off/RP their/PRP$ cell/NN phone/NNS ./.
 223 Sally/NNP and/CC John/NNP laugh/NN over/IN the/DT trivium/NNS on/IN the/DT screen/NN ./.
 224 John/NNP and/CC Sally/NNP nibble/VBP on/IN popcorn/NN when/WRB the/DT movie/NN begin/VBZ ./.
 ###
 226 John/NNP and/CC Sally/NNP stand/VBP in/IN line/NN ./.
-227 John/NNP buy/VBZ two/CD ticket/NNS ./.
+227 John/NNP buys/VBZ two/CD ticket/NNS ./.
 228 John/NNP and/CC Sally/NNP buy/VBP popcorn/NN and/CC drink/NNS ./.
 229 John/NNP and/CC Sally/NNP sit/VBP down/RP ./.
 230 John/NNP and/CC Sally/NNP watch/VBP ad/NNS ./.
-231 John/NNP grab/VBZ Sally/NNP ./.
-232 Sally/NNP complain/VBZ ./.
-233 John/NNP kiss/NNP Sally/NNP ./.
-234 Sally/NNP slap/VBZ John/NNP ./.
-235 John/NNP punch/VBZ Sally/NNP ./.
+231 John/NNP grabs/VBZ Sally/NNP ./.
+232 Sally/NNP complains/VBZ ./.
+233 John/NNP kisses/NNP Sally/NNP ./.
+234 Sally/NNP slaps/VBZ John/NNP ./.
+235 John/NNP punches/VBZ Sally/NNP ./.
 236 John/NNP and/CC Sally/NNP leave/VBP the/DT theater/NN separately/RB ./.
 ###
 238 John/NNP and/CC Sally/NNP arrive/VBP at/IN the/DT theater/NN ./.
@@ -260,79 +260,79 @@
 259 John/NNP and/CC Sally/NNP leave/VBP the/DT movie/NN theater/NN ./.
 ###
 261 John/NNP and/CC Sally/NNP wait/VBP in/IN line/NN to/TO buy/VB ticket/NNS ./.
-262 John/NNP buy/VBZ snack/NNS ./.
-263 Sally/NNP find/VBZ good/JJ seat/NNS ./.
-264 John/NNP turn/VBZ off/RP his/PRP$ cellphone/NN ./.
+262 John/NNP buys/VBZ snack/NNS ./.
+263 Sally/NNP finds/VBZ good/JJ seat/NNS ./.
+264 John/NNP turns/VBZ off/RP his/PRP$ cellphone/NN ./.
 265 John/NNP and/CC Sally/NNP hold/VBP hand/NNS ./.
 266 Sally/NNP be/VBZ cellphone/JJ ring/NNS ./.
 267 John/NNP and/CC Sally/NNP can/MD not/RB turn/VB off/RP Sally/NNP cellphone/NN ./.
-268 The/DT usher/NN kick/VBZ John/NNP and/CC Sally/NNP out/RP of/IN the/DT theater/NN ./.
+268 The/DT usher/NN kicks/VBZ John/NNP and/CC Sally/NNP out/RP of/IN the/DT theater/NN ./.
 269 John/NNP and/CC Sally/NNP have/VBP a/DT good/JJ laugh/NN ./.
 270 John/NNP and/CC Sally/NNP kiss/VBZ ./.
 271 John/NNP and/CC Sally/NNP leave/VBP the/DT theater/NN ./.
 ###
 273 John/NNP and/CC Sally/NNP stand/VBP in/IN line/NN for/IN ticket/NNS ./.
 274 Sally/NNP notice/VBZ the/DT long/JJ line/NN for/IN ticket/NNS ./.
-275 John/NNP feel/VBD impatient/JJ wait/VBG in/IN line/NN ./.
-276 John/NNP decide/VBZ to/TO walk/VB up/RP to/TO the/DT ticket/NN counter/NN ./.
-277 John/NNP cut/VBD in/IN front/NN of/IN the/DT entire/JJ line/NN ./.
-278 John/NNP purchase/VBZ two/CD ticket/NNS ./.
-279 The/DT lady/NN at/IN the/DT front/NN of/IN the/DT line/NN ask/VBD John/NNP to/TO step/VB aside/RB ./.
-280 Sally/NNP ask/VBD John/NNP to/TO stop/VB ./.
-281 John/NNP ask/VBD for/IN two/CD ticket/NNS again/RB ./.
-282 The/DT lady/NN pull/VBD a/DT taser/NN from/IN her/PRP$ purse/NN ./.
-283 John/NNP ask/VBD the/DT lady/NN not/RB to/TO hurt/VB him/PRP ./.
+275 John/NNP feels/VBD impatient/JJ wait/VBG in/IN line/NN ./.
+276 John/NNP decides/VBZ to/TO walk/VB up/RP to/TO the/DT ticket/NN counter/NN ./.
+277 John/NNP cuts/VBD in/IN front/NN of/IN the/DT entire/JJ line/NN ./.
+278 John/NNP purchases/VBZ two/CD ticket/NNS ./.
+279 The/DT lady/NN at/IN the/DT front/NN of/IN the/DT line/NN asks/VBD John/NNP to/TO step/VB aside/RB ./.
+280 Sally/NNP asks/VBD John/NNP to/TO stop/VB ./.
+281 John/NNP asks/VBD for/IN two/CD ticket/NNS again/RB ./.
+282 The/DT lady/NN pulls/VBD a/DT taser/NN from/IN her/PRP$ purse/NN ./.
+283 John/NNP asks/VBD the/DT lady/NN not/RB to/TO hurt/VB him/PRP ./.
 284 John/NNP and/CC Sally/NNP leave/VBP the/DT theater/NN ./.
 ###
 286 John/NNP and/CC Sally/NNP be/VBP wait/VBG in/IN line/NN at/IN the/DT movie/NN theater/NN ./.
 287 John/NNP and/CC Sally/NNP see/VBP their/PRP$ friend/NN Steve/NNP in/IN line/NN for/IN the/DT ticket/NN booth/NN ./.
 288 John/NNP and/CC Sally/NNP hide/VB from/IN Steve/NNP ./.
-289 Steve/NNP notice/VBZ John/NNP and/CC Sally/NNP ./.
-290 Steve/NNP walk/VBZ up/RP to/TO John/NNP and/CC Sally/NNP ./.
-291 Steve/NNP greet/VBZ John/NNP and/CC Sally/NNP ./.
-292 Steve/NNP ask/VBZ John/NNP and/CC Sally/NNP about/IN the/DT movie/NN ./.
+289 Steve/NNP notices/VBZ John/NNP and/CC Sally/NNP ./.
+290 Steve/NNP walks/VBZ up/RP to/TO John/NNP and/CC Sally/NNP ./.
+291 Steve/NNP greets/VBZ John/NNP and/CC Sally/NNP ./.
+292 Steve/NNP asks/VBZ John/NNP and/CC Sally/NNP about/IN the/DT movie/NN ./.
 293 John/NNP and/CC Sally/NNP tell/VBP Steve/NNP the/DT name/NN of/IN the/DT movie/NN ./.
-294 Steve/NNP be/VBZ go/VBG to/TO watch/VB the/DT same/JJ movie/NN ./.
-295 Steve/NNP want/VBZ to/TO sit/VB with/IN John/NNP and/CC Sally/NNP ./.
+294 Steve/NNP is/VBZ going/VBG to/TO watch/VB the/DT same/JJ movie/NN ./.
+295 Steve/NNP wants/VBZ to/TO sit/VB with/IN John/NNP and/CC Sally/NNP ./.
 296 John/NNP and/CC Sally/NNP want/VBD a/DT romantic/JJ evening/NN alone/RB ./.
 297 John/NNP and/CC Sally/NNP leave/VBP the/DT movie/NN theater/NN ./.
 ###
 299 John/NNP and/CC Sally/NNP walk/VBP up/RP to/TO stand/VB in/IN line/NN for/IN ticket/NNS ./.
 300 John/NNP and/CC Sally/NNP stand/VBP in/IN line/NN ./.
 301 John/NNP and/CC Sally/NNP reach/VBP the/DT front/NN of/IN the/DT line/NN ./.
-302 Sally/NNP ask/VBZ for/IN two/CD ticket/NNS to/TO the/DT movie/NN ./.
-303 John/NNP do/VBZ not/RB want/VB to/TO see/VB the/DT same/JJ movie/NN ./.
-304 Sally/NNP say/VBZ John/NNP have/VBZ bad/JJ taste/NN in/IN movie/NNS ./.
+302 Sally/NNP asks/VBZ for/IN two/CD ticket/NNS to/TO the/DT movie/NN ./.
+303 John/NNP does/VBZ not/RB want/VB to/TO see/VB the/DT same/JJ movie/NN ./.
+304 Sally/NNP says/VBZ John/NNP has/VBZ bad/JJ taste/NN in/IN movie/NNS ./.
 305 John/NNP and/CC Sally/NNP fight/VBP ./.
 306 John/NNP and/CC Sally/NNP break/VBP up/RP ./.
 307 John/NNP and/CC Sally/NNP leave/VBP the/DT movie/NN theater/NN ./.
 ###
-309 John/NNP ask/VBZ to/TO buy/VB two/CD movie/NN ticket/NNS ./.
+309 John/NNP asks/VBZ to/TO buy/VB two/CD movie/NN ticket/NNS ./.
 310 John/NNP and/CC Sally/NNP hand/NN their/PRP$ ticket/NNS to/TO the/DT attendant/NN ./.
 311 John/NNP and/CC Sally/NNP enter/VBP the/DT concession/NNS area/NN ./.
-312 Sally/NNP go/VBZ to/TO the/DT restroom/NN ./.
-313 John/NNP buy/VBZ popcorn/NN and/CC drink/NNS ./.
+312 Sally/NNP goes/VBZ to/TO the/DT restroom/NN ./.
+313 John/NNP buys/VBZ popcorn/NN and/CC drink/NNS ./.
 314 John/NNP and/CC Sally/NNP meet/VBP in/IN the/DT concession/NNS area/NN ./.
 315 John/NNP and/CC Sally/NNP enter/VBP the/DT auditorium/NN ./.
 316 John/NNP and/CC Sally/NNP talk/VBP before/IN the/DT movie/NN begin/VBZ ./.
 317 John/NNP and/CC Sally/NNP watch/VBP the/DT movie/NN ./.
-318 John/NNP hold/VBZ hand/NNS with/IN Sally/NNP ./.
+318 John/NNP holds/VBZ hand/NNS with/IN Sally/NNP ./.
 319 John/NNP and/CC Sally/NNP talk/VBP about/IN the/DT movie/NN afterwards/RB ./.
 320 John/NNP and/CC Sally/NNP leave/VBP the/DT movie/NN theater/NN ./.
 ###
 322 John/NNP and/CC Sally/NNP stand/VBP in/IN line/NN for/IN ticket/NNS ./.
-323 John/NNP pay/VBZ for/IN the/DT ticket/NNS ./.
+323 John/NNP pays/VBZ for/IN the/DT ticket/NNS ./.
 324 John/NNP and/CC Sally/NNP give/VBP their/PRP$ ticket/NNS to/TO an/DT usher/NN ./.
 325 John/NNP and/CC Sally/NNP find/VBP seat/NNS in/IN the/DT auditorium/NN ./.
-326 John/NNP ask/VBP Sally/NNP Do/VBP you/PRP want/VB popcorn/NN MW/. ./.
-327 Sally/NNP do/VBZ not/RB want/VB popcorn/NN ./.
-328 John/NNP and/CC Sally/NNP watch/VBP the/DT movie/NN ./.
-329 John/NNP try/VBZ to/TO put/VB his/PRP$ hand/NN around/IN Sally/NNP ./.
+326 John/NNP asks/VBP Sally/NNP Do/VBP you/PRP want/VB popcorn/NN MW/. ./.
+327 Sally/NNP does/VBZ not/RB want/VB popcorn/NN ./.
+328 John/NNP and/CC Sally/NNP watches/VBP the/DT movie/NN ./.
+329 John/NNP tries/VBZ to/TO put/VB his/PRP$ hand/NN around/IN Sally/NNP ./.
 330 The/DT movie/NN finish/VBZ ./.
 331 John/NNP and/CC Sally/NNP leave/VBP the/DT theater/NN ./.
 ###
 333 John/NNP wait/VBZ for/IN Sally/NNP to/TO arrive/VB at/IN the/DT theater/NN ./.
-334 John/NNP open/VBZ the/DT door/NN for/IN Sally/NNP ./.
+334 John/NNP opens/VBZ the/DT door/NN for/IN Sally/NNP ./.
 335 John/NNP and/CC Sally/NNP argue/VBP over/RP who/WP should/MD pay/VB for/IN the/DT ticket/NNS ./.
 336 Sally/NNP go/VBD to/TO the/DT bathroom/NN ./.
 337 John/NNP and/CC Sally/NNP enter/VBP the/DT auditorium/NN ./.

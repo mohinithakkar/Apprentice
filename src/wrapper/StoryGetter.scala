@@ -1,6 +1,7 @@
 package wrapper
 
 import parse._
+import data._
 
 object StoryGetter {
 
@@ -11,7 +12,7 @@ object StoryGetter {
         val stringList =
           story.members.map {
             sentence =>
-              sentence.content.map { _.word }.mkString("", " ", "\n")
+              sentence.tokens.map { _.word }.mkString("", " ", "\n")
           }
         println(stringList.mkString("", "", "###"))
     }

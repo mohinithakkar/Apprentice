@@ -1,5 +1,6 @@
 package parse
 import scala.collection.mutable.HashMap
+import data._
 
 /** This is the first implementation
  * 

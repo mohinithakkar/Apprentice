@@ -1,4 +1,5 @@
 package parse
+import data._
 
 class Relation(val source: Cluster, val target: Cluster, val trueInstance: Int, val totalObservations: Int) extends Ordered[Relation] {
 

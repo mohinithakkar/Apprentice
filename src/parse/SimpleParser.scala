@@ -5,17 +5,17 @@ import scala.collection.mutable.HashMap
 import java.io._
 import data._
 
-object GoldParser extends JavaTokenParsers {
-  protected def word: Parser[String] = """[-’\w\.,]+""".r
-  protected def pos: Parser[String] = """[A-Z\$\.,]+""".r
-  protected def token: Parser[Token] = word ~ "/" ~ pos ^^ {
-    case word ~ "/" ~ pos => Token(word, pos)
+object SimpleParser extends JavaTokenParsers {
+  protected def word: Parser[String] = """[-’\w\,'"?!]+""".r
+  protected def token: Parser[Token] = word ^^ 
+  {
+    case word => Token(word, "")
   }
 
-  protected def sentence: Parser[Sentence] = wholeNumber ~ rep(token) ^^
+  protected def sentence: Parser[Sentence] = wholeNumber ~ rep(token) <~ "." ^^
     {
       case number ~ list =>
-        Sentence(number.toInt, list.toArray)
+        Sentence(number.toInt, (list ::: List(Token(".", ""))).toArray)
     }
 
   protected def cluster: Parser[Cluster] = """@\s""".r ~> """[-\w\s]+\n""".r ~ rep(sentence) <~ "###" ^^
