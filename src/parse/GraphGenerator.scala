@@ -24,8 +24,8 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
             e.printStackTrace()
             None
         }
-      } else 
-    	  None
+      } else
+        None
     }
 
   val PROBABILITY_THRESHOLD: Double = getParameter(property, "probThresholds", x => x.toDouble).getOrElse(DEFAULT_PROB_THRESHOLD)
@@ -33,6 +33,8 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
   val CONFIDENCE_THRESHOLD = getParameter(property, "confThresholds", x => x.toDouble).getOrElse(DEFAULT_CONF_THRESHOLD)
 
   val ADDED_OBSERVATIONS = getParameter(property, "addedObservations", x => x.toInt).getOrElse(DEFAULT_ADDED_OBSERVATIONS)
+
+  val OUTPUT_FILE = getParameter(property, "outputFile", x => x).getOrElse("output")
 
   val storyList: List[Story] = stories
   val clusterList: List[Cluster] = clusters
@@ -55,51 +57,56 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
       false
     }
 
-  def generate() {
+  /* returns the error before and after adjustment
+   * 
+   */
+  def generate(): (Double, Double) = {
 
     println("generating plot graph using the following parameters: \n" +
       "probability threshold = " + PROBABILITY_THRESHOLD + "\n" +
       "confidence threshold = " + CONFIDENCE_THRESHOLD + "\n" +
       "added observations = " + ADDED_OBSERVATIONS + "\n")
 
+    var errorBefore = -1.0
+    var errorAfter = -1.0
+
     var statsList = List[(Int, Double, Double)]()
 
-    for (i <- 1 to 1) {
+    val allRelations: List[Relation] = computeRelations(storyList, clusterList).filter(_.totalObservations > 0)
+    val text = allRelations.sorted.mkString("\n")
 
-      val allRelations: List[Relation] = computeRelations(storyList, clusterList).filter(_.totalObservations > 0)
-      val text = allRelations.sorted.mkString("\n")
+    //println(text)
 
-      println(text)
+    val reducedLinks = drawDiagram(clusterList, allRelations, OUTPUT_FILE)
 
-      val reducedLinks = drawDiagram(clusterList, allRelations, "restaurant-interative")
+    val checker = errorChecker.getNewInstance()
 
-      val checker = errorChecker.getNewInstance()
+    var (sum, avg) = checker.checkErrors(storyList, clusterList, reducedLinks)
+    println("before improvement, avg err = " + avg)
+    errorBefore = avg
+    //println("GOOD PATHS: \n\n" + checker.getGoodPaths.mkString("\n"))
+    //println("\n\n BAD PATHS: \n\n" + checker.getBadPaths.mkString("\n"))
+    //statsList = (i, sum, avg) :: statsList
 
-      var (sum, avg) = checker.checkErrors(storyList, clusterList, reducedLinks)
-      println("before improvement, avg err = " + avg)
-      //println("GOOD PATHS: \n\n" + checker.getGoodPaths.mkString("\n"))
-      //println("\n\n BAD PATHS: \n\n" + checker.getBadPaths.mkString("\n"))
-      //statsList = (i, sum, avg) :: statsList
+    //println("threshold = " + i + ", sum = " + sum + ", avg = " + avg)
+    //      var relations = valid.filter { r =>
+    //        reducedLinks.exists { link => link.source == r.source && link.target == r.target }
+    //      }
 
-      //println("threshold = " + i + ", sum = " + sum + ", avg = " + avg)
-      //      var relations = valid.filter { r =>
-      //        reducedLinks.exists { link => link.source == r.source && link.target == r.target }
-      //      }
+    var relations = updateBadPaths(checker.getBadPaths, reducedLinks, allRelations, new ErrorChecker2().findShortestDistance)
 
-      var relations = updateBadPaths(checker.getBadPaths, reducedLinks, allRelations, new ErrorChecker2().findShortestDistance)
+    val reduced2 = drawDiagram(clusterList, relations, OUTPUT_FILE + "-adjusted")
+    //println("hello " + relations.mkString("\n"))
+    //      reduced2.foreach{
+    //        r =>
+    //          r.source + r.target + r.
+    //      }
 
-      val reduced2 = drawDiagram(clusterList, relations, "restaurant-interative-adjusted")
-      //println("hello " + relations.mkString("\n"))
-      //      reduced2.foreach{
-      //        r =>
-      //          r.source + r.target + r.
-      //      }
-
-      avg = errorChecker.getNewInstance().checkErrors(storyList, clusterList, reduced2)._2
-      println("after improvement, avg err = " + avg)
-    }
-
-    println(statsList.map(_.toString).map(x => x.substring(1, x.length - 2)).mkString("\n"))
+    avg = errorChecker.getNewInstance().checkErrors(storyList, clusterList, reduced2)._2
+    println("after improvement, avg err = " + avg)
+    errorAfter = avg
+    //println(statsList.map(_.toString).map(x => x.substring(1, x.length - 2)).mkString("\n"))
+    (errorBefore, errorAfter)
 
   }
 
@@ -124,7 +131,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
           val expected = path._2._1
           val deviation = path._2._1 - path._2._2
           val target = link.target
-          println("processing bad link " + source.name + " " + target.name + " " + deviation)
+          //println("processing bad link " + source.name + " " + target.name + " " + deviation)
           val possibleSources = findPathEnds(source, (expected - 1).toInt, newLinks)
 
           possibleSources filter
@@ -150,7 +157,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
                     })
                     newErr = errorChecker.getNewInstance().checkErrors(storyList, clusterList, newLinks)._2
                     //newErr = sum / total
-                    println("new error = " + newErr)
+                    //println("new error = " + newErr)
                     if (newErr > oldErr) {
 
                       return oldRelations // the total error has increased. The stopping criteria has been reached.
@@ -185,22 +192,25 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
     //println(invalid.sorted.mkString("\n"))
 
     val reducedLinks = simplifyGraph(clusterList, valid)
+//
+//    val fullWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream(filename + ".txt")))
+//    println("writing to file: " + filename + ".png")
+//    fullWriter.println("digraph G {")
+//    fullWriter.println(getRelationsText(valid))
+//    fullWriter.println("}")
+//    fullWriter.close()
+//
+//    Runtime.getRuntime().exec("dot -Tpng -o" + filename + ".png " + filename + ".txt")
+//    new File(filename + ".txt").deleteOnExit()
 
-    val fullWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream(filename + ".txt")))
-    fullWriter.println("digraph G {")
-    fullWriter.println(getRelationsText(valid))
-    fullWriter.println("}")
-    fullWriter.close()
-
-    Runtime.getRuntime().exec("dot -Tpng -o" + filename + ".png " + filename + ".txt")
-
-    val reducedWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream("re-" + filename + ".txt")))
+    val reducedWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream(filename + "-reduced.txt")))
     reducedWriter.println("digraph G {")
     reducedWriter.println(reducedLinks.mkString("\n"))
     reducedWriter.println("}")
     reducedWriter.close()
 
-    Runtime.getRuntime().exec("dot -Tpng -o" + "re" + filename + ".png " + "re-" + filename + ".txt")
+    Runtime.getRuntime().exec("dot -Tpng -o" + filename + "-reduced.png " + filename + "-reduced.txt")
+    new File(filename + "-reduced.txt").deleteOnExit()
 
     reducedLinks
   }
@@ -357,7 +367,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
 
     val order = new Ordering(numbers.toSet[(Int, Int)])
     val small = order.necessary()
-    println(small)
+    //println(small)
     val finalLinks = small map {
       n =>
         val source = clusterNumber.filter { x => x._2 == n._1 }(0)._1

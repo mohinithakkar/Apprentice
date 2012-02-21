@@ -1,4 +1,5 @@
 package parse
+import java.util.Properties
 
 class Relation(val source: Cluster, val target: Cluster, val trueInstance: Int, val totalObservations: Int) extends Ordered[Relation] {
 
@@ -26,8 +27,18 @@ class Relation(val source: Cluster, val target: Cluster, val trueInstance: Int, 
 
 object Relation {
 
-  val UNOBSERVED: Int = 4 // PARAMETER S: number of hidden observations
+  var UNOBSERVED: Int = 4 // PARAMETER S: number of hidden observations
 
+  def init(prop:java.util.Properties)
+  {
+    val str = prop.getProperty("s") 
+    if (str != null)
+    {
+      UNOBSERVED = str.trim.toInt
+      println("using the parameter: unobserved instances = " + UNOBSERVED)
+    }      
+  }
+  
   def apply(source: Cluster, target: Cluster, trueInstance: Int, totalObservations: Int) = new Relation(source, target,
     trueInstance, totalObservations)
 }
