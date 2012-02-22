@@ -107,7 +107,7 @@ class ConfigReader(val configFile: String) {
 
 object ConfigReader {
   def main(args: Array[String]) {
-    val reader = new ConfigReader("runconfig.txt")
+    val reader = new ConfigReader("configRt.txt")
     val (stories, clusters) = reader.initData()
     val parameters = reader.allParameters()
     val outputPath = new File(reader.properties.getProperty("storyFile")).getParent();

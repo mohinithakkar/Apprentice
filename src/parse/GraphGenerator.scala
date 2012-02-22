@@ -110,8 +110,8 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
 
   }
 
-  def updateBadPaths(badPaths: List[(Link, (Double, Double))], links: List[Link],
-                     allRelations: List[Relation], shortestDistance: (List[Link], Cluster, Cluster) => Int): List[Relation] =
+def updateBadPaths(badPaths: List[(Link, (Double, Double))], links: List[Link],
+    allRelations: List[Relation], shortestDistance: (List[Link], Cluster, Cluster) => Int): List[Relation] =
     {
       var newRelations = allRelations
       var oldRelations = allRelations
@@ -131,21 +131,33 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
           val expected = path._2._1
           val deviation = path._2._1 - path._2._2
           val target = link.target
-          //println("processing bad link " + source.name + " " + target.name + " " + deviation)
-          val possibleSources = findPathEnds(source, (expected - 1).toInt, newLinks)
+          //println("processing bad link " + source.name + " " + target.name + " expected = " + expected + " " + (expected-1).toInt + " deviation =" + deviation)
+          var possibleSources = findPathEnds(source, (expected - 1).toInt, newLinks)
 
-          possibleSources filter
+          //var updateSuccess = false
+          
+          possibleSources = possibleSources filter
             {
               possible =>
-                val dist = shortestDistance(newLinks, target, possible)
-                //if (dist == -1) println("check pass!! " + possible.name + " " + target.name)
-                //else println("actual distance = " + dist)
+                
+                val dist = shortestDistance(newLinks, target, possible)                
                 dist == -1
-            } foreach {
-              possible =>
+                
+                /* This prevents cycles. If there is already a path fro target to this posible source,
+                 * and we strength the link from this possible source to target, 
+                 * we could create a cycle.
+                 */
+                
+            }
+          
+          var updateSuccess = (possibleSources.length == 0) 
+          // if there are no possible sources, we would not give up on the next
+          
+          possibleSources foreach {
+              possible =>                                
                 newRelations.find(r => r.source == possible && r.target == target) match {
                   case Some(rel: Relation) =>
-
+                  	//println ("possible source: " + possible.name)
                     val updated = rel.addEvidence(ADDED_OBSERVATIONS, 0)
 
                     oldRelations = newRelations
@@ -159,14 +171,16 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
                     //newErr = sum / total
                     //println("new error = " + newErr)
                     if (newErr > oldErr) {
-
-                      return oldRelations // the total error has increased. The stopping criteria has been reached.
+                      newRelations = oldRelations // the total error has increased. undo that update
                     } else {
-                      oldErr = newErr
+                      oldErr = newErr // total error decreased. update succeeded.
+                      updateSuccess = true
                     }
                   case None =>
                 }
             }
+            
+            //if (!updateSuccess) return newRelations
       }
 
       newRelations
