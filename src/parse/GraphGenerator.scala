@@ -4,6 +4,8 @@ import scala.util.parsing.combinator._
 import scala.collection.mutable.HashMap
 import java.io._
 import java.util.Properties
+import error._
+import utils._
 
 class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Properties) {
 
@@ -60,7 +62,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
   /* returns the error before and after adjustment
    * 
    */
-  def generate(): (Double, Double) = {
+  def generate(): (Double, Double, Double, Double) = {
 
     println("generating plot graph using the following parameters: \n" +
       "probability threshold = " + PROBABILITY_THRESHOLD + "\n" +
@@ -69,6 +71,8 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
 
     var errorBefore = -1.0
     var errorAfter = -1.0
+    var freedomBefore = -1.0
+    var freedomAfter = -1.0
 
     var statsList = List[(Int, Double, Double)]()
 
@@ -84,6 +88,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
     var (sum, avg) = checker.checkErrors(storyList, clusterList, reducedLinks)
     println("before improvement, avg err = " + avg)
     errorBefore = avg
+    freedomBefore = new Freedom().computeFreedom(storyList, clusterList, reducedLinks)
     //println("GOOD PATHS: \n\n" + checker.getGoodPaths.mkString("\n"))
     //println("\n\n BAD PATHS: \n\n" + checker.getBadPaths.mkString("\n"))
     //statsList = (i, sum, avg) :: statsList
@@ -105,13 +110,70 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
     avg = errorChecker.getNewInstance().checkErrors(storyList, clusterList, reduced2)._2
     println("after improvement, avg err = " + avg)
     errorAfter = avg
+
+    freedomAfter = new Freedom().computeFreedom(storyList, clusterList, reduced2)
+
+    findCausal(storyList, clusterList, reduced2)
     //println(statsList.map(_.toString).map(x => x.substring(1, x.length - 2)).mkString("\n"))
-    (errorBefore, errorAfter)
+    (errorBefore, freedomBefore, errorAfter, freedomAfter)
 
   }
 
-def updateBadPaths(badPaths: List[(Link, (Double, Double))], links: List[Link],
-    allRelations: List[Relation], shortestDistance: (List[Link], Cluster, Cluster) => Int): List[Relation] =
+  def findCausal(storyList: List[Story], clusterList: List[Cluster], links: List[Link]) {
+    val usedClusters = links.flatMap { l => List(l.source, l.target) }.distinct.toArray
+    val total = usedClusters.length
+
+    var combinations = List[(Cluster, Cluster)]()
+    for (i <- 0 to total - 1) {
+      val clusterA = usedClusters(i)
+      for (j <- i + 1 to total - 1) {
+        val clusterB = usedClusters(j)
+        if (Graph.ordered(links, clusterA, clusterB)) {
+          combinations = (clusterA, clusterB) :: combinations
+        }
+      }
+    }
+
+    combinations map { pair =>
+      var a = pair._1
+      var b = pair._2
+
+      if (Graph.findShortestDistance(links, a, b) == -1) {
+        var temp = a
+        a = b
+        b = temp
+      }
+
+      val pB = countAndStories(List(b), storyList)
+      val pAB = countAndStories(List(a, b), storyList)
+      val prob1 = pAB / pB.toDouble
+      //print(pB + " " + pAB)
+      
+      val pnA = countAndNotStories(List(a), storyList)
+      val pnAB = countAndNotStories(List(a, b), storyList)
+      val prob2 = pnAB / pnA.toDouble
+      //println(" " + pnA + " " + pnAB)
+     if (prob2 > 0.8 && pB > 3 && pnAB < 28) 
+      println("possible causal: " + a.name + " -> " + b.name + " " + prob1 + ", " +  prob2)
+    }
+  }
+
+  def countAndStories(clusters: List[Cluster], storylist: List[Story]): Int =
+    {
+      storyList.filter { story => clusters.forall {
+       cluster => story.members.exists {x => cluster.members.contains(x)} 
+      } }.length
+    }
+
+  def countAndNotStories(clusters: List[Cluster], storylist: List[Story]): Int =
+    {
+      storyList.filterNot { story => clusters.exists {
+       cluster => story.members.exists {x => cluster.members.contains(x)} 
+      } }.length
+    }
+
+  def updateBadPaths(badPaths: List[(Link, (Double, Double))], links: List[Link],
+                     allRelations: List[Relation], shortestDistance: (List[Link], Cluster, Cluster) => Int): List[Relation] =
     {
       var newRelations = allRelations
       var oldRelations = allRelations
@@ -135,52 +197,52 @@ def updateBadPaths(badPaths: List[(Link, (Double, Double))], links: List[Link],
           var possibleSources = findPathEnds(source, (expected - 1).toInt, newLinks)
 
           //var updateSuccess = false
-          
+
           possibleSources = possibleSources filter
             {
               possible =>
-                
-                val dist = shortestDistance(newLinks, target, possible)                
+
+                val dist = shortestDistance(newLinks, target, possible)
                 dist == -1
-                
-                /* This prevents cycles. If there is already a path fro target to this posible source,
+
+              /* This prevents cycles. If there is already a path fro target to this posible source,
                  * and we strength the link from this possible source to target, 
                  * we could create a cycle.
                  */
-                
+
             }
-          
-          var updateSuccess = (possibleSources.length == 0) 
+
+          var updateSuccess = (possibleSources.length == 0)
           // if there are no possible sources, we would not give up on the next
-          
+
           possibleSources foreach {
-              possible =>                                
-                newRelations.find(r => r.source == possible && r.target == target) match {
-                  case Some(rel: Relation) =>
-                  	//println ("possible source: " + possible.name)
-                    val updated = rel.addEvidence(ADDED_OBSERVATIONS, 0)
+            possible =>
+              newRelations.find(r => r.source == possible && r.target == target) match {
+                case Some(rel: Relation) =>
+                  //println ("possible source: " + possible.name)
+                  val updated = rel.addEvidence(ADDED_OBSERVATIONS, 0)
 
-                    oldRelations = newRelations
-                    newRelations = updated :: (newRelations - rel)
+                  oldRelations = newRelations
+                  newRelations = updated :: (newRelations - rel)
 
-                    // adding the new relation to the set of links if it already surpasses the threshold
-                    newLinks = simplifyGraph(clusterList, newRelations.filter { r =>
-                      r.confidence > CONFIDENCE_THRESHOLD && r.prob > PROBABILITY_THRESHOLD
-                    })
-                    newErr = errorChecker.getNewInstance().checkErrors(storyList, clusterList, newLinks)._2
-                    //newErr = sum / total
-                    //println("new error = " + newErr)
-                    if (newErr > oldErr) {
-                      newRelations = oldRelations // the total error has increased. undo that update
-                    } else {
-                      oldErr = newErr // total error decreased. update succeeded.
-                      updateSuccess = true
-                    }
-                  case None =>
-                }
-            }
-            
-            //if (!updateSuccess) return newRelations
+                  // adding the new relation to the set of links if it already surpasses the threshold
+                  newLinks = simplifyGraph(clusterList, newRelations.filter { r =>
+                    r.confidence > CONFIDENCE_THRESHOLD && r.prob > PROBABILITY_THRESHOLD
+                  })
+                  newErr = errorChecker.getNewInstance().checkErrors(storyList, clusterList, newLinks)._2
+                  //newErr = sum / total
+                  //println("new error = " + newErr)
+                  if (newErr > oldErr) {
+                    newRelations = oldRelations // the total error has increased. undo that update
+                  } else {
+                    oldErr = newErr // total error decreased. update succeeded.
+                    updateSuccess = true
+                  }
+                case None =>
+              }
+          }
+
+        //if (!updateSuccess) return newRelations
       }
 
       newRelations
@@ -206,16 +268,16 @@ def updateBadPaths(badPaths: List[(Link, (Double, Double))], links: List[Link],
     //println(invalid.sorted.mkString("\n"))
 
     val reducedLinks = simplifyGraph(clusterList, valid)
-//
-//    val fullWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream(filename + ".txt")))
-//    println("writing to file: " + filename + ".png")
-//    fullWriter.println("digraph G {")
-//    fullWriter.println(getRelationsText(valid))
-//    fullWriter.println("}")
-//    fullWriter.close()
-//
-//    Runtime.getRuntime().exec("dot -Tpng -o" + filename + ".png " + filename + ".txt")
-//    new File(filename + ".txt").deleteOnExit()
+    //
+    //    val fullWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream(filename + ".txt")))
+    //    println("writing to file: " + filename + ".png")
+    //    fullWriter.println("digraph G {")
+    //    fullWriter.println(getRelationsText(valid))
+    //    fullWriter.println("}")
+    //    fullWriter.close()
+    //
+    //    Runtime.getRuntime().exec("dot -Tpng -o" + filename + ".png " + filename + ".txt")
+    //    new File(filename + ".txt").deleteOnExit()
 
     val reducedWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream(filename + "-reduced.txt")))
     reducedWriter.println("digraph G {")

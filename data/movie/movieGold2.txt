@@ -302,20 +302,3 @@
 233 John/NNP kiss/NNP Sally/NNP ./.
 270 John/NNP and/CC Sally/NNP kiss/VBZ ./.
 ###
-@ physical violence
-234 Sally/NNP slap/VBZ John/NNP ./.
-235 John/NNP punch/VBZ Sally/NNP ./.
-###
-@ argument
-232 Sally/NNP complain/VBZ ./.
-335 John/NNP and/CC Sally/NNP argue/VBP over/RP who/WP should/MD pay/VB for/IN the/DT ticket/NNS ./.
-128 John/NNP and/CC Sally/NNP argue/VBP over/IN seating/NN with/IN another/DT couple/NN ./.
-280 Sally/NNP ask/VBD John/NNP to/TO stop/VB ./.
-305 John/NNP and/CC Sally/NNP fight/VBP ./.
-304 Sally/NNP say/VBZ John/NNP have/VBZ bad/JJ taste/NN in/IN movie/NNS ./.
-###
-@ laugh
-188 John/NNP and/CC Sally/NNP laugh/NN together/RB at/IN the/DT preview/NNS for/IN upcoming/JJ movie/NNS ./.
-11 John/NNP and/CC Sally/NNP laugh/NN during/IN the/DT movie/NN ./.
-223 Sally/NNP and/CC John/NNP laugh/NN over/IN the/DT trivium/NNS on/IN the/DT screen/NN ./.
-###

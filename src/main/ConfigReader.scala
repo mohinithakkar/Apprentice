@@ -48,14 +48,23 @@ class ConfigReader(val configFile: String) {
       val clusterFile = properties.getProperty("clusterFile")
 
       println("using story file: " + storyFile)
-      val storyList: List[Story] = GoldParser.parseStories(storyFile)
+      var storyList: List[Story] = GoldParser.parseStories(storyFile)
 
       println("using cluster file: " + clusterFile)
       val clusterList: List[Cluster] = initClusters(storyList, clusterFile)
 
+      storyList = filterUnused(storyList, clusterList)
       (storyList, clusterList)
     }
-
+  
+  def filterUnused(storyList: List[Story], clusterList:List[Cluster]):List[Story] =
+  {
+    val sentences = clusterList.flatMap{_.members}
+    storyList map {story =>
+      val newMembers = story.members.filter{s => sentences.contains(s)}
+      new Story(newMembers)
+      }         
+  }
   /**
    * initializing the clusters. assigning the sentences to the right story and cluster, so we
    * do not create duplicate sentence objects.
@@ -107,7 +116,7 @@ class ConfigReader(val configFile: String) {
 
 object ConfigReader {
   def main(args: Array[String]) {
-    val reader = new ConfigReader("configRt.txt")
+    val reader = new ConfigReader("configMv1.txt")
     val (stories, clusters) = reader.initData()
     val parameters = reader.allParameters()
     val outputPath = new File(reader.properties.getProperty("storyFile")).getParent();
@@ -124,13 +133,13 @@ object ConfigReader {
       
       Relation.init(para)
       val gen = new GraphGenerator(stories, clusters, para)
-      val (prevErr, afterErr) = gen.generate()
-      pw.print(prevErr + ", ")
-      pw.println(afterErr)
+      val (prevErr, prevFreedom, afterErr, afterFreedom) = gen.generate()
+      pw.print(prevErr + ", " + afterErr +  ", " + prevFreedom + ", " + afterFreedom + ", "  + "\n")
       
     }
     
     pw.close()
+    Thread.sleep(1000)
   }
 
 }
