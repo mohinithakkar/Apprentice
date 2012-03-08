@@ -1,4 +1,6 @@
 package parse
+
+import data._
 import scala.collection.mutable.HashMap
 
 /** This is the first implementation
@@ -14,7 +16,7 @@ class ErrorChecker {
       hash.filter {
         x =>
           val (expected, real) = x._2
-          Math.abs(expected - real) < 1
+          math.abs(expected - real) < 1
       }.toList
     }
 

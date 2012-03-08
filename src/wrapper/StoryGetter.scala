@@ -1,5 +1,6 @@
 package wrapper
 
+import data._
 import parse._
 
 object StoryGetter {

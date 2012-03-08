@@ -1,11 +1,13 @@
-package parse
+package graph
 
 import scala.util.parsing.combinator._
 import scala.collection.mutable.HashMap
-import java.io._
 import java.util.Properties
+import java.io._
 import error._
-import utils._
+import graph._
+import data._
+import parse._
 
 class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Properties) {
 
@@ -20,13 +22,15 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
         val s = property.getProperty(name)
         try {
           Some(conversionFunc(s))
-        } catch {
+        }
+        catch {
           case e: Exception =>
             println("illegal parameter value for " + name + " " + s)
             e.printStackTrace()
             None
         }
-      } else
+      }
+      else
         None
     }
 
@@ -113,64 +117,11 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
 
     freedomAfter = new Freedom().computeFreedom(storyList, clusterList, reduced2)
 
-    findCausal(storyList, clusterList, reduced2)
+    Causality.findCausal(storyList, clusterList, reduced2)
     //println(statsList.map(_.toString).map(x => x.substring(1, x.length - 2)).mkString("\n"))
     (errorBefore, freedomBefore, errorAfter, freedomAfter)
 
   }
-
-  def findCausal(storyList: List[Story], clusterList: List[Cluster], links: List[Link]) {
-    val usedClusters = links.flatMap { l => List(l.source, l.target) }.distinct.toArray
-    val total = usedClusters.length
-
-    var combinations = List[(Cluster, Cluster)]()
-    for (i <- 0 to total - 1) {
-      val clusterA = usedClusters(i)
-      for (j <- i + 1 to total - 1) {
-        val clusterB = usedClusters(j)
-        if (Graph.ordered(links, clusterA, clusterB)) {
-          combinations = (clusterA, clusterB) :: combinations
-        }
-      }
-    }
-
-    combinations map { pair =>
-      var a = pair._1
-      var b = pair._2
-
-      if (Graph.findShortestDistance(links, a, b) == -1) {
-        var temp = a
-        a = b
-        b = temp
-      }
-
-      val pB = countAndStories(List(b), storyList)
-      val pAB = countAndStories(List(a, b), storyList)
-      val prob1 = pAB / pB.toDouble
-      //print(pB + " " + pAB)
-      
-      val pnA = countAndNotStories(List(a), storyList)
-      val pnAB = countAndNotStories(List(a, b), storyList)
-      val prob2 = pnAB / pnA.toDouble
-      //println(" " + pnA + " " + pnAB)
-     if (prob2 > 0.8 && pB > 3 && pnAB < 28) 
-      println("possible causal: " + a.name + " -> " + b.name + " " + prob1 + ", " +  prob2)
-    }
-  }
-
-  def countAndStories(clusters: List[Cluster], storylist: List[Story]): Int =
-    {
-      storyList.filter { story => clusters.forall {
-       cluster => story.members.exists {x => cluster.members.contains(x)} 
-      } }.length
-    }
-
-  def countAndNotStories(clusters: List[Cluster], storylist: List[Story]): Int =
-    {
-      storyList.filterNot { story => clusters.exists {
-       cluster => story.members.exists {x => cluster.members.contains(x)} 
-      } }.length
-    }
 
   def updateBadPaths(badPaths: List[(Link, (Double, Double))], links: List[Link],
                      allRelations: List[Relation], shortestDistance: (List[Link], Cluster, Cluster) => Int): List[Relation] =
@@ -184,7 +135,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
       var oldErr = errorChecker.getNewInstance().checkErrors(storyList, clusterList, newLinks)._2
       var newErr = oldErr
 
-      badPaths.sort {
+      badPaths.sortWith {
         (x, y) => (x._2._1 - x._2._2) > (y._2._1 - y._2._2)
       } foreach {
         path =>
@@ -223,7 +174,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
                   val updated = rel.addEvidence(ADDED_OBSERVATIONS, 0)
 
                   oldRelations = newRelations
-                  newRelations = updated :: (newRelations - rel)
+                  newRelations = updated :: (newRelations filterNot (_ == rel))
 
                   // adding the new relation to the set of links if it already surpasses the threshold
                   newLinks = simplifyGraph(clusterList, newRelations.filter { r =>
@@ -234,7 +185,8 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
                   //println("new error = " + newErr)
                   if (newErr > oldErr) {
                     newRelations = oldRelations // the total error has increased. undo that update
-                  } else {
+                  }
+                  else {
                     oldErr = newErr // total error decreased. update succeeded.
                     updateSuccess = true
                   }
@@ -322,7 +274,8 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
       def increment(source: Cluster, target: Cluster) {
         if (linkTable.contains((source, target))) {
           linkTable.get((source, target)).get.increment()
-        } else
+        }
+        else
           linkTable += { (source, target) -> new ClusterLink(source, target, 1) }
       }
 
@@ -375,7 +328,8 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
     def increment(source: Cluster, target: Cluster) {
       if (linkTable.contains((source, target))) {
         linkTable.get((source, target)).get.increment()
-      } else
+      }
+      else
         linkTable += { (source, target) -> new ClusterLink(source, target, 1) }
     }
 

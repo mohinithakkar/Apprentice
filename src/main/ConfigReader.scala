@@ -1,6 +1,7 @@
 package main
-
+import data._
 import parse._
+import graph._
 import java.io._
 import java.util.Properties
 import scala.collection.mutable.HashMap

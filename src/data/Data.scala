@@ -1,4 +1,4 @@
-package parse
+package data
 
 case class Token(val word: String, val pos: String)
 

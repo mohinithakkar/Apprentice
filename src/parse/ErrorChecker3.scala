@@ -1,7 +1,7 @@
 package parse
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
-
+import data._
 /**
  * This error measure is mathematically sound.
  *
@@ -16,7 +16,7 @@ class ErrorChecker3 {
       hash.filter {
         x =>
           val (expected, real) = x._2
-          Math.abs(expected - real) < 1
+          math.abs(expected - real) < 1
       }.toList
     }
 
@@ -26,7 +26,7 @@ class ErrorChecker3 {
         x =>
           val (expected, real) = x._2
           if (real != 0) expected - real > 2 // there are links
-          else Math.abs(expected) > 2 // there are no links. i.e. parallel
+          else math.abs(expected) > 2 // there are no links. i.e. parallel
       }.toList
     }
 

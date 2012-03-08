@@ -1,7 +1,7 @@
 package error
 
-import parse._
-import utils._
+import data._
+import graph._
 
 class Freedom {
 
@@ -16,7 +16,7 @@ class Freedom {
     {
       for (j <- i + 1 to total - 1)
       {
-        if (!Graph.ordered(links,clusters(i), clusters(j)))
+        if (!GraphAlgo.ordered(links,clusters(i), clusters(j)))
             unconstrained += 1
       }
     }

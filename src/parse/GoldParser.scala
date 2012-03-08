@@ -3,7 +3,7 @@ package parse
 import scala.util.parsing.combinator._
 import scala.collection.mutable.HashMap
 import java.io._
-
+import data._
 object GoldParser extends JavaTokenParsers {
   protected def word: Parser[String] = """[-’\w\.]+""".r
   protected def pos: Parser[String] = """[A-Z\$\.]+""".r
@@ -155,7 +155,7 @@ object GoldParser extends JavaTokenParsers {
 
         val realDistance = findDistance(reducedLinks, source, target)
         //println(source.name + " -> " + target.name + ", expected: " + distance + " real: " + realDistance)
-        sum += scala.Math.abs(realDistance - distance)
+        sum += scala.math.abs(realDistance - distance)
     }
     println("sum = " + sum + ", avg = " + sum / distances.length)
     (sum, sum / distances.length)

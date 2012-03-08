@@ -1,7 +1,11 @@
-package utils
-import parse._
+package graph
 
-object Graph {
+import data._
+
+/** contains graph related algorithms
+ * 
+ */
+object GraphAlgo {
   
   /** returns if cluster1 and 2 are ordered on the given graph, which is described by the links
    * 
