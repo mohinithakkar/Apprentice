@@ -45,7 +45,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
   val storyList: List[Story] = stories
   val clusterList: List[Cluster] = clusters
 
-  val errorChecker = new ErrorChecker2()
+  val errorChecker = new ErrorChecker()
 
   def checkMissingSentences(storyList: List[Story]): Boolean =
     {
@@ -62,6 +62,8 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
       }
       false
     }
+  
+  def thresholdFilter = (r: Relation) => (r.confidence > CONFIDENCE_THRESHOLD && r.prob > PROBABILITY_THRESHOLD)
 
   /* returns the error before and after adjustment
    * 
@@ -81,18 +83,20 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
     var statsList = List[(Int, Double, Double)]()
 
     val allRelations: List[Relation] = computeRelations(storyList, clusterList).filter(_.totalObservations > 0)
-    val text = allRelations.sorted.mkString("\n")
 
-    //println(text)
+    
 
-    val reducedLinks = drawDiagram(clusterList, allRelations, OUTPUT_FILE)
-
-    val checker = errorChecker.getNewInstance()
-
-    var (sum, avg) = checker.checkErrors(storyList, clusterList, reducedLinks)
+    // create the graph that contains every link
+    val allLinks = filterRelations(allRelations, thresholdFilter)
+    val totalGraph = new Graph(clusterList, allLinks)
+    totalGraph.draw(OUTPUT_FILE)
+    //println(totalGraph.links.mkString("\n"))
+    val compactGraph = totalGraph.compact
+    //println(compactGraph.links.mkString("\n"))
+    var (sum, avg) = errorChecker.checkErrors(storyList, compactGraph)
     println("before improvement, avg err = " + avg)
     errorBefore = avg
-    freedomBefore = new Freedom().computeFreedom(storyList, clusterList, reducedLinks)
+    freedomBefore = Freedom(storyList, totalGraph)
     //println("GOOD PATHS: \n\n" + checker.getGoodPaths.mkString("\n"))
     //println("\n\n BAD PATHS: \n\n" + checker.getBadPaths.mkString("\n"))
     //statsList = (i, sum, avg) :: statsList
@@ -102,37 +106,36 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
     //        reducedLinks.exists { link => link.source == r.source && link.target == r.target }
     //      }
 
-    var relations = updateBadPaths(checker.getBadPaths, reducedLinks, allRelations, new ErrorChecker2().findShortestDistance)
+    val updatedRelations = updateBadPaths(errorChecker.getBadPaths, compactGraph, allRelations)
+    val updatedLinks = filterRelations(updatedRelations, thresholdFilter)
+    val updatedGraph = new Graph(clusterList, updatedLinks).compact
+    updatedGraph.draw(OUTPUT_FILE + "-adjusted")
 
-    val reduced2 = drawDiagram(clusterList, relations, OUTPUT_FILE + "-adjusted")
-    //println("hello " + relations.mkString("\n"))
-    //      reduced2.foreach{
-    //        r =>
-    //          r.source + r.target + r.
-    //      }
 
-    avg = errorChecker.getNewInstance().checkErrors(storyList, clusterList, reduced2)._2
+    avg = errorChecker.checkErrors(storyList, updatedGraph)._2
     println("after improvement, avg err = " + avg)
     errorAfter = avg
 
-    freedomAfter = new Freedom().computeFreedom(storyList, clusterList, reduced2)
+    freedomAfter = Freedom(storyList, totalGraph)
 
-    Causality.findCausal(storyList, clusterList, reduced2)
+    Causality.findCausal(storyList, clusterList, updatedLinks)
     //println(statsList.map(_.toString).map(x => x.substring(1, x.length - 2)).mkString("\n"))
     (errorBefore, freedomBefore, errorAfter, freedomAfter)
 
   }
 
-  def updateBadPaths(badPaths: List[(Link, (Double, Double))], links: List[Link],
-                     allRelations: List[Relation], shortestDistance: (List[Link], Cluster, Cluster) => Int): List[Relation] =
+  def updateBadPaths(badPaths: List[(Link, (Double, Double))], graph: Graph,
+                     allRelations: List[Relation]): List[Relation] =
     {
+    /*** SOMETHING IS WRONG WITH THIS METHOD. FIX IT ***/
       var newRelations = allRelations
       var oldRelations = allRelations
 
-      var newLinks = links
-      //var oldLinks = newLinks
+      var newLinks = graph.links
+      var newGraph = graph
+      var oldGraph = graph
 
-      var oldErr = errorChecker.getNewInstance().checkErrors(storyList, clusterList, newLinks)._2
+      var oldErr = errorChecker.checkErrors(storyList, graph)._2
       var newErr = oldErr
 
       badPaths.sortWith {
@@ -145,7 +148,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
           val deviation = path._2._1 - path._2._2
           val target = link.target
           //println("processing bad link " + source.name + " " + target.name + " expected = " + expected + " " + (expected-1).toInt + " deviation =" + deviation)
-          var possibleSources = findPathEnds(source, (expected - 1).toInt, newLinks)
+          var possibleSources = newGraph.takeSteps(source, math.round(expected - 1).toInt)
 
           //var updateSuccess = false
 
@@ -153,10 +156,10 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
             {
               possible =>
 
-                val dist = shortestDistance(newLinks, target, possible)
+                val dist = newGraph.shortestDistance(target, possible)
                 dist == -1
 
-              /* This prevents cycles. If there is already a path fro target to this posible source,
+              /* This prevents cycles. If there is already a path from target to this posible source,
                  * and we strength the link from this possible source to target, 
                  * we could create a cycle.
                  */
@@ -177,17 +180,22 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
                   newRelations = updated :: (newRelations filterNot (_ == rel))
 
                   // adding the new relation to the set of links if it already surpasses the threshold
-                  newLinks = simplifyGraph(clusterList, newRelations.filter { r =>
-                    r.confidence > CONFIDENCE_THRESHOLD && r.prob > PROBABILITY_THRESHOLD
-                  })
-                  newErr = errorChecker.getNewInstance().checkErrors(storyList, clusterList, newLinks)._2
+                  newLinks = filterRelations(newRelations, thresholdFilter)
+                  newGraph = new Graph(graph.nodes, newLinks).compact
+                  newErr = errorChecker.checkErrors(storyList, newGraph)._2
                   //newErr = sum / total
                   //println("new error = " + newErr)
-                  if (newErr > oldErr) {
-                    newRelations = oldRelations // the total error has increased. undo that update
+                  if (newErr >= oldErr) {
+                    // the total error has increased or stay constant. undo that update
+                    // this is a change from previous approach which only requires the error not to increase. 
+                    // This seems to curb the indeterminism
+                    newRelations = oldRelations 
+                    newGraph = oldGraph
                   }
                   else {
                     oldErr = newErr // total error decreased. update succeeded.
+                    oldGraph = newGraph
+                    oldRelations = newRelations
                     updateSuccess = true
                   }
                 case None =>
@@ -199,6 +207,10 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
 
       newRelations
     }
+
+  def filterRelations(relations: List[Relation], filterFunc: Relation => Boolean): List[Link] = {
+    relations.filter(filterFunc).map { r => new Link(r.source, r.target) }
+  }
 
   def drawDiagram(clusterList: List[Cluster], allRelations: List[Relation], filename: String) = {
 
@@ -243,28 +255,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
     reducedLinks
   }
 
-  def findPathEnds(source: Cluster, steps: Int, links: List[Link]): List[Cluster] =
-    {
-      var ends = List[Cluster]()
-
-      val distance = scala.collection.mutable.Queue[(Cluster, Int)]()
-      var remaining = links
-      distance += ((source, 0))
-
-      while (distance != Nil) {
-        val elem = distance.dequeue()
-        val head = elem._1
-        val dist = elem._2
-        if (dist == steps) ends = head :: ends // find one end. add it to the list
-        else {
-          links.filter(link => link.source == head).foreach {
-            link => distance.enqueue((link.target, dist + 1))
-          }
-        }
-      }
-
-      ends
-    }
+ 
 
   def computeRelations(storyList: List[Story], clusterList: List[Cluster]): List[Relation] =
     {

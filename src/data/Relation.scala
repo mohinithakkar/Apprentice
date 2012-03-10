@@ -43,11 +43,18 @@ object Relation {
     trueInstance, totalObservations)
 }
 
-class Link(val source: Cluster, val target: Cluster) {
+/** the Link class includes both temporal and causal links
+ * the default is temporal if the kind field is not specified
+ */
+class Link(val source: Cluster, val target: Cluster, val kind:String = "T") {
+  require(kind == "T" || kind == "C")
+  
   override def toString = source.name.replace(" ", "_") + " -> " + target.name.replace(" ", "_")
   override def equals(o:Any) = o match
   {
-    case other:Link => this.source == other.source && this.target == other.target
+    case other:Link => this.source == other.source && this.target == other.target && this.kind == other.kind
     case _ => false
   }
+  def isTemporal = (kind == "T")
+  def isCausal = (kind == "C")
 }

@@ -23,7 +23,7 @@ object Combinatorics {
    *  res0: List[List[Symbol]] = List(List('a, 'b, 'c), List('a, 'b, 'd), List('a, 'b, 'e), ...
    */
   def combinations[A](n: Int, ls: Seq[A]): Seq[Seq[A]] =
-    if (n == 0) List(Nil)
+    if (n == 0) Seq(Nil)
     else flatMapSublists(ls) { sl =>
       combinations(n - 1, sl.tail) map { sl.head +: _ }
     }

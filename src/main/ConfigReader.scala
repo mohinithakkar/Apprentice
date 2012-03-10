@@ -18,7 +18,7 @@ class ConfigReader(val configFile: String) {
   def allParameters(): Array[Properties] =
     {
       var params: Array[Properties] = new Array[Properties](0)
-      paraNames foreach { n =>
+      for (n <- paraNames) {
         val name = n.trim
         // for each parameter listed, we get a list of values
         val values = properties.getProperty(name).split(",")
@@ -28,7 +28,8 @@ class ConfigReader(val configFile: String) {
             p.setProperty(name, v)
             p
           }
-        } else {
+        }
+        else {
           // for each existing Properties object, we append this parameter
           params = params flatMap { param =>
             values.map { v =>
@@ -57,18 +58,17 @@ class ConfigReader(val configFile: String) {
       storyList = filterUnused(storyList, clusterList)
       (storyList, clusterList)
     }
-  
-  def filterUnused(storyList: List[Story], clusterList:List[Cluster]):List[Story] =
-  {
-    val sentences = clusterList.flatMap{_.members}
-    storyList map {story =>
-      val newMembers = story.members.filter{s => sentences.contains(s)}
-      new Story(newMembers)
-      }         
-  }
-  /**
-   * initializing the clusters. assigning the sentences to the right story and cluster, so we
-   * do not create duplicate sentence objects.
+
+  def filterUnused(storyList: List[Story], clusterList: List[Cluster]): List[Story] =
+    {
+      val sentences = clusterList.flatMap { _.members }
+      storyList map { story =>
+        val newMembers = story.members.filter { s => sentences.contains(s) }
+        new Story(newMembers)
+      }
+    }
+  /** initializing the clusters. assigning the sentences to the right story and cluster, so we
+   *  do not create duplicate sentence objects.
    *
    */
   def initClusters(storyList: List[Story], clusterFile: String) =
@@ -111,34 +111,34 @@ class ConfigReader(val configFile: String) {
     paraNames foreach { name =>
       val value = para.getProperty(name.trim)
       pw.print(value + ", ")
-    }    
+    }
   }
 }
 
 object ConfigReader {
   def main(args: Array[String]) {
-    val reader = new ConfigReader("configMv1.txt")
+    val reader = new ConfigReader("configMv2.txt")
     val (stories, clusters) = reader.initData()
     val parameters = reader.allParameters()
     val outputPath = new File(reader.properties.getProperty("storyFile")).getParent();
     var i = 1;
     val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(outputPath + "\\summary.csv")));
-    
+
     reader.printParameterNames(pw)
-    
+
     parameters foreach { para =>
       reader.printParameterValues(para, pw)
       para.put("outputFile", outputPath + "\\conf" + i)
       println(outputPath + "conf" + i)
       i += 1
-      
+
       Relation.init(para)
       val gen = new GraphGenerator(stories, clusters, para)
       val (prevErr, prevFreedom, afterErr, afterFreedom) = gen.generate()
-      pw.print(prevErr + ", " + afterErr +  ", " + prevFreedom + ", " + afterFreedom + ", "  + "\n")
-      
+      pw.print(prevErr + ", " + afterErr + ", " + prevFreedom + ", " + afterFreedom + ", " + "\n")
+
     }
-    
+
     pw.close()
     Thread.sleep(1000)
   }

@@ -28,6 +28,7 @@ class Story(val members: Array[Sentence]) {
     }
 
 }
+
 class ClusterLink(val source: Cluster, val target: Cluster, var count: Int = 0) extends Ordered[ClusterLink] {
   
   override def equals(that: Any): Boolean =
