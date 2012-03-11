@@ -1,8 +1,28 @@
 package data
+import scala.annotation.target.field
+import javax.xml.bind.annotation._
+import javax.xml.bind.annotation.adapters._
+import javax.xml.bind._
 
-case class Token(val word: String, val pos: String)
+@XmlRootElement(name="token")
+@XmlAccessorType(XmlAccessType.FIELD)
+case class Token(
+    @XmlElement @field val word: String, 
+    @XmlElement @field val pos: String) {
+  
+  private def this() = this("", "")
+}
 
-case class Sentence(val id: Int, val content: List[Token], var next: Sentence = null, var cluster: Cluster = null) {
+@XmlRootElement(name="sentence")
+@XmlAccessorType(XmlAccessType.FIELD)
+case class Sentence(
+    @XmlElement @field val id: Int, 
+    @XmlJavaTypeAdapter(classOf[TokenListAdapter]) @field val content: List[Token], 
+    @XmlElement @field var next: Sentence = null, 
+    @XmlElement @field var cluster: Cluster = null) {
+  
+  private def this() = this(0, Nil)
+  
   override def toString(): String =
     {
       "(S" + id + ") " + content.map { t => t.word + "\\" + t.pos }.mkString(" ")
@@ -14,19 +34,30 @@ case class Sentence(val id: Int, val content: List[Token], var next: Sentence = 
     }
 }
 
-class Cluster(val name: String, val members: List[Sentence]) {
+@XmlRootElement(name="cluster")
+@XmlAccessorType(XmlAccessType.FIELD)
+class Cluster(
+    @XmlElement val name: String, 
+    val members: List[Sentence]) {
+  
+  private def this() = this("", Nil)
+  
   override def toString(): String =
     {
       "Cluster \"" + name + "\": [" + members.map(_.id).mkString(",") + "]"
     }
 }
 
-class Story(val members: Array[Sentence]) {
+@XmlRootElement(name="story")
+@XmlAccessorType(XmlAccessType.FIELD)
+class Story(
+    @XmlElement val members: Array[Sentence]) {
   override def toString(): String =
     {
       "Story (" + members(0).id + ", " + members.last.id + ")"
     }
 
+  private def this() = this(Array())
 }
 
 class ClusterLink(val source: Cluster, val target: Cluster, var count: Int = 0) extends Ordered[ClusterLink] {

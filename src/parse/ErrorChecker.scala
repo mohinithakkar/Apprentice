@@ -4,7 +4,8 @@ import data._
 import graph._
 import scala.collection.mutable.HashMap
 
-/** This is the first implementation
+/**
+ * This is the first implementation
  *
  */
 class ErrorChecker {
@@ -68,18 +69,16 @@ class ErrorChecker {
             	  println("WARNING: SOURCE = " + source + "TARGET = " + target)
             	  println(story.members(i))
             	  println(story.members(j))*/
-              }
-              else
+              } else
                 addDistance(source, target, j - i)
             }
           }
       }
 
-      val rtn =
-        distanceTable.map { e =>
-          val distance = e._2._1.toDouble / e._2._2
-          e._1 -> distance
-        }
+      distanceTable.map { e =>
+        val distance = e._2._1.toDouble / e._2._2
+        e._1 -> distance
+      }
     }
 
   def compareDist(distances: HashMap[(Cluster, Cluster), Double], graph: Graph): (Double, Double) = {
@@ -110,8 +109,7 @@ class ErrorChecker {
         if (backwardDist != -1) {
           //println("ignoring pair: " + source.name + ", " + target.name)
           // the backward link exists. We can safely ignore this pair of nodes
-        }
-        else {
+        } else {
           /* neither links exists. Therefore those nodes are parallel
               * First, check if the reverse has already been computed.
               * If not, sum up Dn from both directions and compare it with this pair's Dg, which is 0
@@ -131,8 +129,7 @@ class ErrorChecker {
             checkedList = (source, target) :: checkedList
           }
         }
-      }
-      else {
+      } else {
         // found the forward link
         sum += (forwardDist - distance) * (forwardDist - distance)
         total += 1
