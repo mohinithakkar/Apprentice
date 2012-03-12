@@ -4,7 +4,9 @@ import data._
 import java.io._
 import scala.collection.immutable.HashMap
 
-class Graph(val nodes: List[Cluster], val links: List[Link]) {
+class Graph(val nodes: List[Cluster], val links: List[Link]) extends XStreamable{
+  
+  override def alias() = "plot-graph"
   /** returns if cluster1 and 2 are ordered on the given graph, which is described by the links
    *
    */

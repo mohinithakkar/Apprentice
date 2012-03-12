@@ -1,28 +1,15 @@
 package data
-import scala.annotation.target.field
-import javax.xml.bind.annotation._
-import javax.xml.bind.annotation.adapters._
-import javax.xml.bind._
 
-@XmlRootElement(name="token")
-@XmlAccessorType(XmlAccessType.FIELD)
 case class Token(
-    @XmlElement @field val word: String, 
-    @XmlElement @field val pos: String) {
-  
-  private def this() = this("", "")
-}
+  val word: String,
+  val pos: String) extends XStreamable
 
-@XmlRootElement(name="sentence")
-@XmlAccessorType(XmlAccessType.FIELD)
 case class Sentence(
-    @XmlElement @field val id: Int, 
-    @XmlJavaTypeAdapter(classOf[TokenListAdapter]) @field val content: List[Token], 
-    @XmlElement @field var next: Sentence = null, 
-    @XmlElement @field var cluster: Cluster = null) {
-  
-  private def this() = this(0, Nil)
-  
+  val id: Int,
+  val content: List[Token],
+  var next: Sentence = null,
+  var cluster: Cluster = null) extends XStreamable {
+
   override def toString(): String =
     {
       "(S" + id + ") " + content.map { t => t.word + "\\" + t.pos }.mkString(" ")
@@ -34,51 +21,42 @@ case class Sentence(
     }
 }
 
-@XmlRootElement(name="cluster")
-@XmlAccessorType(XmlAccessType.FIELD)
 class Cluster(
-    @XmlElement val name: String, 
-    val members: List[Sentence]) {
-  
-  private def this() = this("", Nil)
-  
+  val name: String,
+  val members: List[Sentence]) extends XStreamable {
+
   override def toString(): String =
     {
       "Cluster \"" + name + "\": [" + members.map(_.id).mkString(",") + "]"
     }
 }
 
-@XmlRootElement(name="story")
-@XmlAccessorType(XmlAccessType.FIELD)
 class Story(
-    @XmlElement val members: Array[Sentence]) {
+  val members: Array[Sentence]) extends XStreamable {
   override def toString(): String =
     {
       "Story (" + members(0).id + ", " + members.last.id + ")"
     }
-
-  private def this() = this(Array())
 }
 
-class ClusterLink(val source: Cluster, val target: Cluster, var count: Int = 0) extends Ordered[ClusterLink] {
-  
+class ClusterLink(val source: Cluster, val target: Cluster, var count: Int = 0) extends Ordered[ClusterLink] with XStreamable {
+
   override def equals(that: Any): Boolean =
     that match {
       case link: ClusterLink => this.source == link.source && this.target == link.target
       case _ => false
     }
-  
-  def increment()
-  {
+
+  def increment() {
     count += 1
   }
-  
+
   override def toString() = source.name + ", " + target.name + ", " + count
 
-  override def compare(that:ClusterLink):Int =
-  {
-    if (this.count < that.count) 1
-    else if (this.count == that.count) 0
-    else -1
-  }
+  override def compare(that: ClusterLink): Int =
+    {
+      if (this.count < that.count) 1
+      else if (this.count == that.count) 0
+      else -1
+    }
 }

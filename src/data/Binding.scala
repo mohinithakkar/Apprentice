@@ -24,7 +24,7 @@ object Binding {
     def marshal(v: BigDecimal): JBigDecimal = v.underlying
   }
 
-  abstract class AbstractListAdapter[A, B <: JList[A]] extends XmlAdapter[B, List[A]] {
+  abstract class AbstractListAdapter[A, B <: AbstractList[A]] extends XmlAdapter[B, List[A]] {
     import scala.collection.JavaConverters._
 
     def marshal(v: List[A]) = if (v == null) create(new ArrayList[A]) else create(v.asJava)
