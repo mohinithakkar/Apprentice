@@ -19,6 +19,14 @@ case class Sentence(
     {
       "(S" + id + ") " + content.map { _.word }.mkString(" ")
     }
+  
+  // these two override methods are only temporary. Should delete after Mar 15
+  override def equals(o:Any) = o match {
+    case s:Sentence => this.id == s.id 
+    case _ => false
+  }
+  
+  override def hashCode() = id.hashCode()
 }
 
 class Cluster(
@@ -29,14 +37,31 @@ class Cluster(
     {
       "Cluster \"" + name + "\": [" + members.map(_.id).mkString(",") + "]"
     }
+
+  override def equals(o: Any) = o match {
+    case that: Cluster => this.name == that.name
+    case _ => false
+  }
+
+  override def hashCode(): Int = ("Cluster" + name).hashCode
 }
 
 class Story(
   val members: Array[Sentence]) extends XStreamable {
   override def toString(): String =
     {
-      "Story (" + members(0).id + ", " + members.last.id + ")"
+      if (members.isEmpty)
+        "Story ()"
+      else
+        "Story (" + members.head.id + ", " + members.last.id + ")"
     }
+  
+  override def equals(o:Any):Boolean = o match {
+    case that:Story => this.members == that.members
+    case _ => false
+  }
+
+  override def hashCode() = ("Story".hashCode * 29 + members.hashCode * 53) / 107
 }
 
 class ClusterLink(val source: Cluster, val target: Cluster, var count: Int = 0) extends Ordered[ClusterLink] with XStreamable {

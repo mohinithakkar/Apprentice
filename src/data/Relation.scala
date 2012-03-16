@@ -55,6 +55,7 @@ class Link(val source: Cluster, val target: Cluster, val kind:String = "T") {
     case other:Link => this.source == other.source && this.target == other.target && this.kind == other.kind
     case _ => false
   }
+  override def hashCode():Int = (source.hashCode() + target.hashCode() + kind.hashCode()) * 19 / 97
   def isTemporal = (kind == "T")
   def isCausal = (kind == "C")
 }

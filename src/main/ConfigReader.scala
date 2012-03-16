@@ -61,9 +61,11 @@ class ConfigReader(val configFile: String) {
 
   def filterUnused(storyList: List[Story], clusterList: List[Cluster]): List[Story] =
     {
-      val sentences = clusterList.flatMap { _.members }
+      val used = clusterList.flatMap { _.members }
       storyList map { story =>
-        val newMembers = story.members.filter { s => sentences.contains(s) }
+        val newMembers = story.members.filter { s => used.contains(s) }
+        val str = story.members.filterNot{s => used.contains(s)}.map{_.toShortString()}.mkString("\n")
+        println(str)
         new Story(newMembers)
       }
     }
@@ -117,8 +119,9 @@ class ConfigReader(val configFile: String) {
 
 object ConfigReader {
   def main(args: Array[String]) {
-    val reader = new ConfigReader("configMv2.txt")
+    val reader = new ConfigReader("configMv3.txt")
     val (stories, clusters) = reader.initData()
+    for(s <- stories) println(s)
     val parameters = reader.allParameters()
     val outputPath = new File(reader.properties.getProperty("storyFile")).getParent();
     var i = 1;
@@ -140,7 +143,7 @@ object ConfigReader {
     }
 
     pw.close()
-    Thread.sleep(1000)
+    Thread.sleep(2000)
   }
 
 }

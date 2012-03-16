@@ -89,9 +89,11 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
     // create the graph that contains every link
     val allLinks = filterRelations(allRelations, thresholdFilter)
     val totalGraph = new Graph(clusterList, allLinks)
+    println("outputing to " + OUTPUT_FILE)
     totalGraph.draw(OUTPUT_FILE)
     //println(totalGraph.links.mkString("\n"))
     val compactGraph = totalGraph.compact
+    compactGraph.draw(OUTPUT_FILE + "-simplified")
     //println(compactGraph.links.mkString("\n"))
     var (sum, avg) = errorChecker.checkErrors(storyList, compactGraph)
     println("before improvement, avg err = " + avg)
@@ -108,7 +110,8 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
 
     val updatedRelations = updateBadPaths(errorChecker.getBadPaths, compactGraph, allRelations)
     val updatedLinks = filterRelations(updatedRelations, thresholdFilter)
-    val updatedGraph = new Graph(clusterList, updatedLinks).compact
+    val updatedTotalGraph = new Graph(clusterList, updatedLinks)
+    val updatedGraph = updatedTotalGraph.compact
     updatedGraph.draw(OUTPUT_FILE + "-adjusted")
 
 
@@ -118,7 +121,8 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
 
     freedomAfter = Freedom(storyList, totalGraph)
 
-    Causality.findCausal(storyList, clusterList, updatedLinks)
+    val causalGraph = Causality.findCausal(storyList, updatedTotalGraph).compact.singleLink
+    causalGraph.draw(OUTPUT_FILE + "-causal")
     //println(statsList.map(_.toString).map(x => x.substring(1, x.length - 2)).mkString("\n"))
     (errorBefore, freedomBefore, errorAfter, freedomAfter)
 
