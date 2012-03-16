@@ -314,8 +314,12 @@
 305 John/NNP and/CC Sally/NNP fight/VBP ./.
 304 Sally/NNP say/VBZ John/NNP have/VBZ bad/JJ taste/NN in/IN movie/NNS ./.
 ###
-@ laugh
+@ excited by movie
 188 John/NNP and/CC Sally/NNP laugh/NN together/RB at/IN the/DT preview/NNS for/IN upcoming/JJ movie/NNS ./.
+35 John/NNP and/CC Sally/NNP clap/VB at/IN the/DT end/NN of/IN the/DT movie/NN ./.
+131 John/NNP and/CC Sally/NNP applaud/VBP when/WRB the/DT movie/NN end/VBZ ./.
+340 Sally/NNP jump/VBZ in/IN her/PRP seat/NN when/WRB watch/VBG the/DT action/NN movie/NN trailer/NNS ./.
 11 John/NNP and/CC Sally/NNP laugh/NN during/IN the/DT movie/NN ./.
 223 Sally/NNP and/CC John/NNP laugh/NN over/IN the/DT trivium/NNS on/IN the/DT screen/NN ./.
+387 Sally/NNP scream/VBZ in/IN reaction/NN to/TO the/DT movie/NN ./.
 ###

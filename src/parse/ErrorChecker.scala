@@ -1,21 +1,26 @@
 package parse
+
+import data._
+import graph._
 import scala.collection.mutable.HashMap
 import data._
 
-/** This is the first implementation
- * 
+/**
+ * This is the first implementation
+ *
  */
 class ErrorChecker {
 
   // (source, target) -> (expected, real)
-  val hash = new HashMap[Link, (Double, Double)]()
+  var hash = new HashMap[Link, (Double, Double)]()
+  var storyDistances: HashMap[(Cluster, Cluster), Double] = HashMap()
 
   def getGoodPaths(): List[(Link, (Double, Double))] =
     {
       hash.filter {
         x =>
           val (expected, real) = x._2
-          Math.abs(expected - real) < 1
+          math.abs(expected - real) < 1
       }.toList
     }
 
@@ -25,19 +30,24 @@ class ErrorChecker {
         x =>
           val (expected, real) = x._2
           //Math.abs(expected - real) > 2
-          expected - real > 2
+          //expected - real > 2
+
+          if (real != 0) expected - real > 0 // there are links
+          else math.abs(expected) > 0 // there are no links. i.e. parallel
       }.toList
     }
 
-  def checkErrors(storyList: List[Story], clusterList: List[Cluster], reducedLinks: List[Link]) = {
+  def checkErrors(storyList: List[Story], simpleGraph: Graph) = {
 
-    val usedClusters = reducedLinks flatMap { l => List(l.source, l.target) } distinct
-    var distances = computeDistance(storyList, clusterList) filter { x => usedClusters.contains(x._1) && usedClusters.contains(x._2) }
-    compareDist(distances, reducedLinks)
+    val usedClusters = simpleGraph.usedClusters
+    // this avoids computing the story based distances again
+    if (storyDistances.isEmpty)
+      storyDistances = storyBasedDistance(storyList)
+    compareDist(storyDistances, simpleGraph)
   }
 
   /** computer the average distances over the stories */
-  def computeDistance(storyList: List[Story], clusterList: List[Cluster]): List[(Cluster, Cluster, Double)] =
+  def storyBasedDistance(storyList: List[Story]): HashMap[(Cluster, Cluster), Double] =
     {
       // (sum, total)
       val distanceTable = new HashMap[(Cluster, Cluster), (Int, Int)]
@@ -66,138 +76,74 @@ class ErrorChecker {
           }
       }
 
-      val keys = distanceTable.keySet
-
-      val distList = keys map {
-        key =>
-          val data = distanceTable.get(key).get
-          val avgDist = data._1 / data._2.toDouble
-          (key._1, key._2, avgDist)
+      distanceTable.map { e =>
+        val distance = e._2._1.toDouble / e._2._2
+        e._1 -> distance
       }
-
-      distList.toList
     }
 
-  def compareDist(distances: List[(Cluster, Cluster, Double)], links: List[Link]): (Double, Double) = {
+  def compareDist(distances: HashMap[(Cluster, Cluster), Double], graph: Graph): (Double, Double) = {
     var sum: Double = 0
     var total: Int = 0
-    distances.foreach {
-      x =>
-        val source = x._1
-        val target = x._2
-        val distance = x._3
 
-        var debug = false
-        //debug = (source.name == "wait in line" && target.name == "choose menu item")
-        //println("pair: " + source.name + ", " + target.name)
-        val forwardDist = findShortestDistance(links, source, target)
-        if (debug) println("forward dist " + forwardDist)
-        if (forwardDist == -1) {
-          // forward link does not exist. But may the backward link exists
-          val backwardDist = findShortestDistance(links, target, source)
-          if (debug) println("backward dist " + backwardDist)
-          if (backwardDist != -1) {
-            println("ignoring pair: " + source.name + ", " + target.name)
-            // the backward link exists. We can safely ignore this pair of nodes
-          } else {
-            // neither links exists. Therefore those nodes are parallel
+    // (source, target) -> (expected, real) 
+    // must create a new instance here.
+    hash = new HashMap[Link, (Double, Double)]()
+    // this list contains pairs of cluster that are parallel and are already counted
+    var checkedList: List[(Cluster, Cluster)] = Nil
+    // println("comparing distance")
+    for (
+      ((source, target), distance) <- distances if (graph.nodes.contains(source) && graph.nodes.contains(target))
+    ) {
+      var debug = false
+      //debug = (source.name == "wait in line" && target.name == "choose menu item")
+      //println("pair: " + source.name + ", " + target.name + ": " + distance)
+      val forwardDist = graph.shortestDistance(source, target)
 
-            // should only count these nodes once. Hence, we must introduce an abitrary ordering. 
-            // only counting them when the name of the first is bigger than the second
-//            if (source.name > target.name) {
-              // their distance from the graph is zero
-              sum += distance * distance
-              total += 1
-              //            println(source.name + " -> " + target.name + ", expected: " + distance + " real: " + 0)
-              if (hash.get(new Link(source, target)).isDefined) throw new Exception("should not contain " + source.name + ", " + target.name)
-              hash.put(new Link(source, target), (distance, 0))
-//            }
-//            else
-//            {
-//              println("ignoring pair: " + source.name + ", " + target.name)
-//            }
-          }
+      if (debug)
+        println("forward dist " + forwardDist)
+
+      if (forwardDist == -1) {
+        // forward link does not exist. But may the backward link exists
+        val backwardDist = graph.shortestDistance(target, source)
+        if (debug) println("backward dist " + backwardDist)
+        if (backwardDist != -1) {
+          //println("ignoring pair: " + source.name + ", " + target.name)
+          // the backward link exists. We can safely ignore this pair of nodes
         } else {
-          // found the forward link
-          sum += (forwardDist - distance) * (forwardDist - distance)
-          total += 1
-          //          println(source.name + " -> " + target.name + ", expected: " + distance + " real: " + forwardDist)
-          if (hash.get(new Link(source, target)).isDefined) throw new Exception("should not contain " + source.name + ", " + target.name)
-          hash.put(new Link(source, target), (distance, forwardDist))
-        }
+          /* neither links exists. Therefore those nodes are parallel
+              * First, check if the reverse has already been computed.
+              * If not, sum up Dn from both directions and compare it with this pair's Dg, which is 0
+              * Finally, add it to the checked list
+              */
+          if (!checkedList.contains((source, target))) {
+            val reverseDistance = distances.getOrElse((target, source), 0.0)
+            //println("reverse direction distance = " + reverseDistance)
 
+            val totalDist = distance - reverseDistance
+            sum += totalDist * totalDist
+            total += 1
+
+            val key = new Link(source, target)
+            if (hash.get(key).isDefined) throw new Exception("should not contain " + source.name + ", " + target.name)
+            hash += (key -> (totalDist, 0))
+            checkedList = (source, target) :: checkedList
+          }
+        }
+      } else {
+        // found the forward link
+        sum += (forwardDist - distance) * (forwardDist - distance)
+        total += 1
+        //          println(source.name + " -> " + target.name + ", expected: " + distance + " real: " + forwardDist)
+        val key = new Link(source, target)
+        if (hash.get(key).isDefined) throw new Exception("should not contain " + source.name + ", " + target.name)
+        hash += (key -> (distance, forwardDist))
+      }
     }
-    val error = sum 
+    val error = sum
     val avg = error / total
-    println("sum squared = " + error + ", avg = " + avg + " number of pairs = " + total)
+    //println("sum squared = " + error + ", avg = " + avg + " number of pairs = " + total)
     (error, avg)
   }
-  
-   /**
-   * find the shortest part distance between the two nodes based on the graph
-   *
-   */
-  def findShortestDistance(links: List[Link], source: Cluster, target: Cluster): Int =
-    {
-      var debug = false
-      //if (source.name == "choose restaurant" && target.name == "eat food") debug = true
-      // a breadth-first search
-      var longest = -1
-      val queue = scala.collection.mutable.Queue[(Cluster, Int)]()
-      var remaining = links
-      queue += ((source, 0))
 
-      while (queue != Nil) {
-        val elem = queue.dequeue()
-
-        val head = elem._1
-        val dist = elem._2
-        if (debug) println("dequeue: " + head.name + " " + dist)
-        if (head == target) {
-          return dist
-        } else {
-          links.filter(link => link.source == head).foreach {
-            link =>
-              queue.enqueue((link.target, dist + 1))
-              if (debug) println("enqueue: " + link.target.name + " " + (dist + 1))
-          }
-        }
-      }
-      //println("distance from " + source.name + " to " + target.name + " = " + longest)
-      -1
-    }
-
-  /**
-   * find the diameter between the two nodes based on the graph
-   *
-   */
-  def findDiameter(links: List[Link], source: Cluster, target: Cluster): Int =
-    {
-      var debug = false
-      //if (source.name == "choose restaurant" && target.name == "eat food") debug = true
-      // a breadth-first search
-      var longest = -1
-      val queue = scala.collection.mutable.Queue[(Cluster, Int)]()
-      var remaining = links
-      queue += ((source, 0))
-
-      while (queue != Nil) {
-        val elem = queue.dequeue()
-
-        val head = elem._1
-        val dist = elem._2
-        if (debug) println("dequeue: " + head.name + " " + dist)
-        if (head == target) {
-          if (dist > longest) longest = dist
-        } else {
-          links.filter(link => link.source == head).foreach {
-            link =>
-              queue.enqueue((link.target, dist + 1))
-              if (debug) println("enqueue: " + link.target.name + " " + (dist + 1))
-          }
-        }
-      }
-      //println("distance from " + source.name + " to " + target.name + " = " + longest)
-      longest
-    }
 }

@@ -1,0 +1,14 @@
+.cache
+.classpath
+.settings
+.project
+
+*.class
+
+*.png
+*.gif
+
+*.zip
+*.7z
+
+Thumbs.db

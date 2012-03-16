@@ -1,4 +1,4 @@
-package parse
+package graph
 
 class Ordering(val list: Set[(Int, Int)]) {
 
@@ -135,7 +135,7 @@ class Ordering(val list: Set[(Int, Int)]) {
         }
         if (tail != Nil) {
           head = tail.head
-          rest = rest - head
+          rest = rest filterNot(_ == head)
           //println("Rest: " + rest)
         }
       }

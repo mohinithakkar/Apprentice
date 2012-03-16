@@ -89,9 +89,6 @@
 112 John/NNP get/VB his/PRP$ food/NN ./.
 121 Mary/NNP get/VB her/PRP$ order/NN ./.
 ###
-@ choose route
-61 Mary/NNP decide/VB on/IN the/DT best/JJS route/NN to/TO closest/JJS restaurant/NN chosen/VBN ./.
-###
 @ place order
 26 John/NNP place/VB his/PRP$ order/NN ./.
 74 Mary/NNP order/NN her/PRP$ food/NN ./.
@@ -167,10 +164,8 @@
 211 John/NNP take/VB out/RP his/PRP$ wallet/NN ./.
 197 Mary/NNP pull/VB out/RP her/PRP$ wallet/NN ./.
 177 Mary/NNP get/VB her/PRP$ wallet/NN ./.
-206 John/NNP check/VB his/PRP$ wallet/NN for/IN cash/NN ./.
-205 John/NNP locate/VB his/PRP$ wallet/NN ./.
 ###
-@ wait for meal
+@ wait for food
 89 Mary/NNP wait/VB for/IN her/PRP$ food/NN ./.
 213 John/NNP wait/VB until/IN his/PRP$ order/NN be/VB filled/VBN ./.
 200 Mary/NNP wait/VB for/IN her/PRP$ meal/NN ./.
@@ -261,8 +256,4 @@
 226 Mary/NNP pull/VB into/IN the/DT drive/NN thru/NN ./.
 109 John/NNP pull/VB up/RP to/TO the/DT speaker/NN at/IN the/DT drive/NN thru/NN ./.
 33 Mary/NNP pull/VB up/RP to/TO drive-thru/NNP ./.
-###
-@ get in car
-94 Mary/NNP walk/VB to/TO her/PRP$ car/NN ./.
-22 John/NNP get/VB in/IN his/PRP$ car/NN ./.
 ###
