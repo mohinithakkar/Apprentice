@@ -2,9 +2,9 @@ package data
 
 import parse._
 import java.io._
-class StorySet(
+class StorySet (
   val name: String,
-  var storyList: List[Story]) {
+  var storyList: List[Story]) extends XStreamable{
 }
 
 object PersistenceTest extends App {

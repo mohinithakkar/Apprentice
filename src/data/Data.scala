@@ -1,40 +1,39 @@
 package data
 
-case class Token(
-  val id:Int, val word: String, val pos: String, val lemma:String, val ner:String) extends XStreamable
-  
-object Token {
-  def apply(word: String, pos: String):Token = new Token(word: String, pos: String)
-}
+import edu.stanford.nlp.trees._
 
+case class Token(
+  val id: Int, val word: String, val pos: String, val lemma: String, val ner: String) extends XStreamable
+
+object Token {
+  def apply(word: String, pos: String): Token = new Token(0, word, pos, "", "")
+}
 
 case class Sentence(
   val id: Int,
-  val tokens: List[Token],
+  val tokens: Array[Token],
   var parse: Tree,
   var deps: List[Dependency],
   var next: Sentence = null,
   var cluster: Cluster = null) extends XStreamable {
 
-
   override def toString(): String =
-    {
-"(S" + id + ") " + tokens.map { t => t.word + "\\" + t.pos }.mkString(" ")
-    }
+    "(S" + id + ") " + tokens.map { t => t.word + "/" + t.pos }.mkString(" ")
 
   def toShortString(): String =
     {
       "(S" + id + ") " + tokens.map { _.word }.mkString(" ")
     }
-  
+
   // these two override methods are only temporary. Should delete after Mar 15
-  override def equals(o:Any) = o match {
-    case s:Sentence => this.id == s.id 
+  override def equals(o: Any) = o match {
+    case s: Sentence => this.id == s.id
     case _ => false
   }
-  
-    override def hashCode() = id.hashCode()
-    
+
+  override def hashCode() = id.hashCode()
+}
+
 object Sentence {
   def apply(id: Int, tokens: Array[Token]) = new Sentence(id, tokens, null, null)
 }
@@ -65,9 +64,9 @@ class Story(
       else
         "Story (" + members.head.id + ", " + members.last.id + ")"
     }
-  
-  override def equals(o:Any):Boolean = o match {
-    case that:Story => this.members == that.members
+
+  override def equals(o: Any): Boolean = o match {
+    case that: Story => this.members == that.members
     case _ => false
   }
 

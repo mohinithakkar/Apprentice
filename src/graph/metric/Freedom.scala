@@ -1,4 +1,4 @@
-package error
+package graph.metric
 
 import data._
 import graph._

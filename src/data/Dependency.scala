@@ -35,7 +35,7 @@ object Dependency {
 
       while (!queue.isEmpty) {
         val (typedDep, depth) = queue.dequeue()
-        listbuffer + new Dependency(typedDep.gov, typedDep.dep, typedDep.relation, typedDep.specific, depth)
+        listbuffer += new Dependency(typedDep.gov, typedDep.dep, typedDep.relation, typedDep.specific, depth)
         val nextLayer = allDeps.filter(_.gov == typedDep.dep)
         allDeps = allDeps -- nextLayer
         queue ++= nextLayer.map((_, depth + 1))

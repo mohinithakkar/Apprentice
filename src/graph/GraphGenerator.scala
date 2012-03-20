@@ -4,11 +4,11 @@ import scala.util.parsing.combinator._
 import scala.collection.mutable.HashMap
 import java.util.Properties
 import java.io._
-import error._
 import graph._
 import data._
 import parse._
 import data._
+import graph.metric._
 
 class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Properties) {
 

@@ -1,6 +1,6 @@
 package main
 import data._
-import util.HungarianAlgo
+import utils.HungarianAlgo
 import scala.collection.mutable.Queue
 import scala.collection.mutable.HashMap
 import de.linguatools.disco.DISCO

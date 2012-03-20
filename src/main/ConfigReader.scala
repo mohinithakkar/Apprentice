@@ -35,8 +35,7 @@ class ConfigReader(val configFile: String) {
             p.setProperty(name, v)
             p
           }
-        }
-        else {
+        } else {
           // for each existing Properties object, we append this parameter
           params = params flatMap { param =>
             values.map { v =>
@@ -57,7 +56,7 @@ class ConfigReader(val configFile: String) {
       val clusterFile = properties.getProperty("clusterFile")
 
       println("using story file: " + storyFile)
-      var storyList: List[Story] = SimpleParser.parseStories(storyFile)
+      var storyList: List[Story] = GoldParser.parseStories(storyFile)
 
       //      println("old Stories \n " + storyList.map {
       //        story =>
@@ -69,7 +68,7 @@ class ConfigReader(val configFile: String) {
       // val text = storyList.map(_.members.mkString("\n")).mkString("\n")
       //println(text)
 
-      storyList = parseSentence(storyList)
+      //      storyList = parseSentence(storyList)
       //      
       //      println("\n new Stories \n " + storyList.map {
       //        story =>
@@ -81,7 +80,8 @@ class ConfigReader(val configFile: String) {
       println("using cluster file: " + clusterFile)
       val clusterList: List[Cluster] = initClusters(storyList, clusterFile)
 
-      storyList = filterUnused(storyList, clusterList)
+      // This filters unused sentences in the stories
+      //storyList = filterUnused(storyList, clusterList)
       (storyList, clusterList)
     }
 
@@ -90,12 +90,13 @@ class ConfigReader(val configFile: String) {
       val used = clusterList.flatMap { _.members }
       storyList map { story =>
         val newMembers = story.members.filter { s => used.contains(s) }
-        val str = story.members.filterNot{s => used.contains(s)}.map{_.toShortString()}.mkString("\n")
+        val str = story.members.filterNot { s => used.contains(s) }.map { _.toShortString() }.mkString("\n")
         println(str)
         new Story(newMembers)
       }
     }
-  /** initializing the clusters. assigning the sentences to the right story and cluster, so we
+  /**
+   * initializing the clusters. assigning the sentences to the right story and cluster, so we
    *  do not create duplicate sentence objects.
    *
    */
@@ -128,59 +129,59 @@ class ConfigReader(val configFile: String) {
       }
     }
 
-  def parseSentence(storyList: List[Story]): List[Story] =
-    {
-      //    val sentences
-      val text = storyList.map {
-        story =>
-          story.members.map {
-            sentence: Sentence => sentence.tokens.map(_.word).mkString(" ")
-          }.mkString("\n")
-      }.mkString("\n")
-      //println("text = " + text)
-      NLPWrapper.init()
-      NLPWrapper.getParsed(text)
-
-      var allSents = storyList flatMap { _.members } toArray
-      var sentBuffer = new ListBuffer[Sentence]()
-      var i = 0
-
-      while (NLPWrapper.hasNextSentence) {
-        NLPWrapper.processNextSentence()
-        var tokensArray = NLPWrapper.getTokens()
-        if (tokensArray.length > 1 || tokensArray(0)(0) != ".") { // filters out empty sentences with a single period
-
-          var tokenBuffer = new ListBuffer[Token]()
-          for (i <- 0 to tokensArray.length - 1) {
-            val t = tokensArray(i)
-            tokenBuffer += new Token(i, t(0), t(1), t(2), { if (t(3) == "O") "" else t(3) })
-          }
-
-          val tokens = tokenBuffer.toArray
-          println(i + ": " + tokens.mkString(" "))
-          val tree = NLPWrapper.getParseTree()
-          val graph = NLPWrapper.getSemanticGraph()
-
-          val relations = graphToRelations(graph, tokens)
-          sentBuffer += Sentence(allSents(i).id, tokens, tree, relations)
-          //        println("old sentence " + i + " " + allSents(i).tokens.map(_.word).mkString(" "))
-          println(tokens.mkString(" "))
-          println(relations.mkString("\n"))
-          i += 1 // going through two lists simultaneously
-        }
-      }
-
-      var allNewSents = sentBuffer.toList
-      var storyBuffer = new ListBuffer[Story]()
-
-      storyList.foreach { story =>
-        val length = story.members.length
-        storyBuffer += new Story(allNewSents.take(length).toArray)
-        allNewSents = allNewSents.drop(length)
-      }
-
-      storyBuffer.toList
-    }
+  //  def parseSentence(storyList: List[Story]): List[Story] =
+  //    {
+  //      //    val sentences
+  //      val text = storyList.map {
+  //        story =>
+  //          story.members.map {
+  //            sentence: Sentence => sentence.tokens.map(_.word).mkString(" ")
+  //          }.mkString("\n")
+  //      }.mkString("\n")
+  //      //println("text = " + text)
+  //      NLPWrapper.init()
+  //      NLPWrapper.getParsed(text)
+  //
+  //      var allSents = storyList flatMap { _.members } toArray
+  //      var sentBuffer = new ListBuffer[Sentence]()
+  //      var i = 0
+  //
+  //      while (NLPWrapper.hasNextSentence) {
+  //        NLPWrapper.processNextSentence()
+  //        var tokensArray = NLPWrapper.getTokens()
+  //        if (tokensArray.length > 1 || tokensArray(0)(0) != ".") { // filters out empty sentences with a single period
+  //
+  //          var tokenBuffer = new ListBuffer[Token]()
+  //          for (i <- 0 to tokensArray.length - 1) {
+  //            val t = tokensArray(i)
+  //            tokenBuffer += new Token(i, t(0), t(1), t(2), { if (t(3) == "O") "" else t(3) })
+  //          }
+  //
+  //          val tokens = tokenBuffer.toArray
+  //          println(i + ": " + tokens.mkString(" "))
+  //          val tree = NLPWrapper.getParseTree()
+  //          val graph = NLPWrapper.getSemanticGraph()
+  //
+  //          val relations = graphToRelations(graph, tokens)
+  //          sentBuffer += Sentence(allSents(i).id, tokens, tree, relations)
+  //          //        println("old sentence " + i + " " + allSents(i).tokens.map(_.word).mkString(" "))
+  //          println(tokens.mkString(" "))
+  //          println(relations.mkString("\n"))
+  //          i += 1 // going through two lists simultaneously
+  //        }
+  //      }
+  //
+  //      var allNewSents = sentBuffer.toList
+  //      var storyBuffer = new ListBuffer[Story]()
+  //
+  //      storyList.foreach { story =>
+  //        val length = story.members.length
+  //        storyBuffer += new Story(allNewSents.take(length).toArray)
+  //        allNewSents = allNewSents.drop(length)
+  //      }
+  //
+  //      storyBuffer.toList
+  //    }
 
   def graphToRelations(graph: SemanticGraph, tokens: Array[Token]): List[Dependency] = {
     var relations = new ListBuffer[Dependency]()
@@ -234,10 +235,40 @@ class ConfigReader(val configFile: String) {
 
 object ConfigReader {
   def main(args: Array[String]) {
+    //    val string = scala.io.Source.fromFile("movieParsed.txt").mkString    
+    //    val obj = XStream.fromXML(string).asInstanceOf[StorySet]
+    //    println(obj.storyList.mkString("\n"))
     val reader = new ConfigReader("configMv3.txt")
     val (stories, clusters) = reader.initData()
-    for(s <- stories) println(s)
-    
+    val parser = new StoryNLPParser(stories, "movieParsed.txt", true)
+    val s = parser()
+    val zero = s.storyList(0)
+    println(zero)
+    println(zero.members.mkString("\n"))
+
+  }
+
+  def xml() {
+    val reader = new ConfigReader("configMv3.txt")
+    val (stories, clusters) = reader.initData()
+    val xml = data.XStream.toXML(stories)
+    val filename = "movieParse.xml"
+    val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(filename)))
+    pw.println("<Root>")
+    pw.println(xml)
+    pw.println("</Root>")
+    pw.close()
+    println("finished printing to file: " + filename)
+
+    pw.close()
+    Thread.sleep(2000)
+  }
+
+  def generateGraphs() {
+    val reader = new ConfigReader("configMv3.txt")
+    val (stories, clusters) = reader.initData()
+    for (s <- stories) println(s)
+
     val parameters = reader.allParameters()
     val outputPath = new File(reader.properties.getProperty("storyFile")).getParent();
     var i = 1;
@@ -257,25 +288,5 @@ object ConfigReader {
       pw.print(prevErr + ", " + afterErr + ", " + prevFreedom + ", " + afterFreedom + ", " + "\n")
 
     }
-val xml = stories.flatMap{_.members}.map { _.toXML }.mkString("\n")
-    val filename = "movieParse.xml"
-    val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(filename)))
-    pw.println("<Root>")
-    pw.println(xml)
-    pw.println("</Root>")
-    pw.close()
-    println("finished printing to file: " + filename)
-    //    val parameters = reader.allParameters()
-    //    parameters foreach { para =>
-    ////      println(para)
-    ////      println(para.getProperty("confThresholds"))
-    ////      println(para.containsKey("confThresholds"))
-    //      val gen = new GraphGenerator(stories, clusters, para)
-    //      gen.generate()
-    //    }
-
-    pw.close()
-    Thread.sleep(2000)
   }
-
 }

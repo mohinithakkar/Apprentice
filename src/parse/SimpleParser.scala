@@ -4,6 +4,7 @@ import scala.util.parsing.combinator._
 import scala.collection.mutable.HashMap
 import java.io._
 import data._
+import graph._
 
 object SimpleParser extends JavaTokenParsers {
   protected def word: Parser[String] = """[-’\w\,'"?!]+""".r
@@ -156,7 +157,7 @@ object SimpleParser extends JavaTokenParsers {
 
         val realDistance = findDistance(reducedLinks, source, target)
         //println(source.name + " -> " + target.name + ", expected: " + distance + " real: " + realDistance)
-        sum += scala.Math.abs(realDistance - distance)
+        sum += scala.math.abs(realDistance - distance)
     }
     println("sum = " + sum + ", avg = " + sum / distances.length)
     (sum, sum / distances.length)

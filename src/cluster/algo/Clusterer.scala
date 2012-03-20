@@ -1,8 +1,11 @@
-package clusterer
+package cluster.algo
 
 import parse._
 import data._
 
+/** The hierarhical clustering algorithm
+ * @author Albert Li
+ */
 object Clusterer {
 
   def main(args: Array[String]) {

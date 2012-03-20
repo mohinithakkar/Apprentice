@@ -1,5 +1,8 @@
 package graph
 
+/** This class is used to compute transitive closures in graphs.
+ *  @author Albert Li
+ */
 class Ordering(val list: Set[(Int, Int)]) {
 
   lazy val allIDs: Set[Int] =

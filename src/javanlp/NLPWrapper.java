@@ -15,13 +15,13 @@ import edu.stanford.nlp.ling.*;
 
 public class NLPWrapper {
 
-	static Properties props = null;
-	static StanfordCoreNLP pipeline;
-	static List<CoreMap> sentences;
-	static Iterator<CoreMap> sentIt;
-	static CoreMap curSentence;
+	Properties props = null;
+	StanfordCoreNLP pipeline;
+	List<CoreMap> sentences;
+	Iterator<CoreMap> sentIt;
+	CoreMap curSentence;
 
-	public static void init() {
+	public NLPWrapper() {
 		// creates a StanfordCoreNLP object, with POS tagging, lemmatization,
 		// NER, parsing.
 		props = new Properties();
@@ -29,8 +29,8 @@ public class NLPWrapper {
 		pipeline = new StanfordCoreNLP(props);
 	}
 
-	public static void getParsed(String text) {
-
+	public void getParsed(String text) {
+		
 		// create an empty Annotation just with the given text
 		Annotation document = new Annotation(text);
 
@@ -40,15 +40,15 @@ public class NLPWrapper {
 		sentIt = sentences.iterator();
 	}
 
-	public static boolean hasNextSentence() {
+	public boolean hasNextSentence() {
 		return sentIt.hasNext();
 	}
 
-	public static void processNextSentence() {
+	public void processNextSentence() {
 		curSentence = sentIt.next();
 	}
 
-	public static String[][] getTokens() {
+	public String[][] getTokens() {
 		List<CoreLabel> tokenList = curSentence.get(TokensAnnotation.class);
 		String[][] ans = new String[tokenList.size()][4];
 		int i = 0;
@@ -71,34 +71,34 @@ public class NLPWrapper {
 		return ans;
 	}
 
-	public static Tree getParseTree() {
+	public Tree getParseTree() {
 		// this is the parse tree of the current sentence
 		return curSentence.get(TreeAnnotation.class);
 	}
 
-	public static SemanticGraph getSemanticGraph() {
+	public SemanticGraph getSemanticGraph() {
 		// SemanticGraph dependencies =
 		// sentence.get(CollapsedCCProcessedDependenciesAnnotation.class);
 		return curSentence
 				.get(CollapsedCCProcessedDependenciesAnnotation.class);
 	}
 	
-	public static void main(String[] args)
-	{
-		init();
-		getParsed("This is a sentence. \n Tom orders a cake.\n Jerry ordered a cake. \n");
-		while(hasNextSentence())
-		{
-			processNextSentence();
-			String[][] t = getTokens();
-			for(int i = 0; i < t.length; i++)
-			{
-				for(int j = 0; j < 4; j++)
-					System.out.print(t[i][j] + " ");
-				
-				System.out.println();
-			}
-			
-		}
-	}
+//	public void main(String[] args)
+//	{
+//		init();
+//		getParsed("This is a sentence. \n Tom orders a cake.\n Jerry ordered a cake. \n");
+//		while(hasNextSentence())
+//		{
+//			processNextSentence();
+//			String[][] t = getTokens();
+//			for(int i = 0; i < t.length; i++)
+//			{
+//				for(int j = 0; j < 4; j++)
+//					System.out.print(t[i][j] + " ");
+//				
+//				System.out.println();
+//			}
+//			
+//		}
+//	}
 }

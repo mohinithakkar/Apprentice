@@ -121,7 +121,7 @@ object Evaluation {
     }
 
   def testBCubed1() {
-    val sentences = (0 to 12).map(Sentence(_, Nil))
+    val sentences = (0 to 12).map(Sentence(_, Array()))
     val c1 = new Cluster("a", List(sentences(0), sentences(1), sentences(2), sentences(3), sentences(4)))
     val c2 = new Cluster("b", List(sentences(5), sentences(6)))
     val c3 = new Cluster("c", List(sentences(7), sentences(8), sentences(9), sentences(10), sentences(11)))
@@ -136,7 +136,7 @@ object Evaluation {
   }
 
   def testBCubed2() {
-    val sentences = (0 to 12).map(Sentence(_, Nil))
+    val sentences = (0 to 12).map(Sentence(_, Array()))
     val c1 = new Cluster("a", List(sentences(0), sentences(1), sentences(2), sentences(3), sentences(4)))
     val c2 = new Cluster("b", List(sentences(5), sentences(6)))
     val c3 = new Cluster("c", List(sentences(7), sentences(8), sentences(9), sentences(10), sentences(11)))
@@ -151,7 +151,7 @@ object Evaluation {
   }
 
   def testMUC() {
-    val sentences = (0 to 10).map(Sentence(_, Nil))
+    val sentences = (0 to 10).map(Sentence(_, Array()))
     val c1 = new Cluster("a", List(sentences(0), sentences(1), sentences(2)))
     val c2 = new Cluster("b", List(sentences(3), sentences(4), sentences(5)))
     val c3 = new Cluster("c", List(sentences(6), sentences(7), sentences(8)))
