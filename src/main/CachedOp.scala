@@ -6,7 +6,7 @@ import scala.collection.mutable.ListBuffer
 import edu.stanford.nlp.trees.semgraph.SemanticGraph
 import edu.stanford.nlp.ling.IndexedWord;
 
-abstract class CachedOp[T <: XStreamable](val cacheFile: String, val saveFile: String, val overWrite: Boolean = true, val compression: Int = 0) {
+abstract class CachedOp[T](val cacheFile: String, val saveFile: String, val overWrite: Boolean = true, val compression: Int = 0) {
 
   final val COMPRESSED = 0;
   final val PLAIN_TEXT = 1;
@@ -76,6 +76,7 @@ abstract class CachedOp[T <: XStreamable](val cacheFile: String, val saveFile: S
 
   def read7z(file: File): String = {
     val byteStream = new FileInputStream(file)
+    println("reading lzma stream from : "+ file.getName())
     val length = byteStream.available()
     val b = new Array[Byte](length)
     byteStream.read(b)
@@ -97,7 +98,7 @@ abstract class CachedOp[T <: XStreamable](val cacheFile: String, val saveFile: S
   def write7z(filename: String, text: String) {
     val out = new BufferedOutputStream(new FileOutputStream(filename))
     val bytes = data.SevenZip.encode(text)
-    println(bytes.mkString(" "))
+//    println(bytes.mkString(" "))
     println("writing to " + filename)
     out.write(bytes)
     out.close()
@@ -179,5 +180,28 @@ class StoryNLPParser(val storyList: List[Story], cacheFile: String, overWrite: B
     }
 
     relations.toList
+  }
+}
+
+class DSDSimilarity(val sentList: List[Sentence], cacheFile: String, overWrite:Boolean = true) extends CachedOp[Array[Array[Double]]](cacheFile, cacheFile, overWrite) {
+  def compute():Array[Array[Double]] = {
+    
+    val sim = new SimilarityMetric()
+    val matrix = Array.fill(sentList.length, sentList.length)(0.0)
+    // do the preprocessing once and for all
+    val sents = sentList.map{s => new Sentence(s.id, s.tokens, s.parse, sim.preprocess(s.deps))}
+    
+    for (i <- 0 until sents.length) {
+      println("processing: " + i)
+      for (j <- i + 1 to sents.length - 1) {
+        matrix(i)(j) = sim.sentenceSimilarity(sents(i), sents(j))._1
+      }
+    }
+    
+    // filter the similarities
+    for (i <- 0 until matrix.length; j <- 0 until matrix.length)
+        if (matrix(i)(j) < 0.6) matrix(i)(j) = 0
+    
+    matrix
   }
 }

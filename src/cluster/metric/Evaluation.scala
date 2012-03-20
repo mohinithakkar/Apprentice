@@ -4,7 +4,7 @@ import data._
 import parse._
 import scala.collection.mutable.HashMap
 
-object Evaluation {
+object ClusterMetric {
 
   def bCubed(gold: List[Cluster], actual: List[Cluster]): (Double, Double) =
     {
@@ -74,13 +74,14 @@ object Evaluation {
 
   // this is the test case
   def main(args: Array[String]) {
+    //val storyFile = "movieHierarchical.txt"
     val storyFile = "ResultRebuttal2.txt"
     val clusterFile = "GoldRebuttal.txt"
     println("using story file: " + storyFile)
     var storyList: List[Story] = GoldParser.parseStories(storyFile)
 
     println("using cluster file: " + clusterFile)
-    val clusterList: List[Cluster] = initClusters(storyList, clusterFile)
+    val clusterList: List[Cluster] = GoldParser.parseClusters(clusterFile)
 
     val results = storyList.map(s => new Cluster("a", s.members.toList))
     val (r1, p1) = muc(clusterList, results)

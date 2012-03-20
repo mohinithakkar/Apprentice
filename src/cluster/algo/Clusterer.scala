@@ -3,24 +3,32 @@ package cluster.algo
 import parse._
 import data._
 
-/** The hierarhical clustering algorithm
+/**
+ * The hierarhical clustering algorithm
  * @author Albert Li
  */
-object Clusterer {
+object HierarchicalClusterer {
 
   def main(args: Array[String]) {
     var matrix = readCSV("movieOriginalSimilarity.csv")
-    val sentences: Array[Sentence] = SimpleParser.parseStories("./data/movie/movieSimpleStories.txt").flatMap(_.members).toArray
+    var sentences: Array[Sentence] = SimpleParser.parseStories("./data/movie/movieSimpleStories.txt").flatMap(_.members).toArray
+    sentences = sentences.map{
+        s => 
+          val nt = s.tokens.map(t => Token(t.word, "AB"))
+          Sentence(s.id, nt, null, Nil)
+          }
     val cl: List[List[Int]] = cluster(matrix)
 
     println("final clusters = ")
     cl foreach {
       list =>
         list foreach { index =>
-          println(sentences(index).toShortString())
+          val s = sentences(index)
+          val str = s.toString
+          println(s.id + " " + str.substring(str.indexOf(")") + 2))
         }
 
-        println("*********")
+        println("###")
     }
   }
 
@@ -35,26 +43,12 @@ object Clusterer {
             }
         }
 
-      //      for (i <- 0 to 20) {
-      //        for (j <- 0 to 20)
-      //          print(("%.2f" format matrix(i)(j)) + ", ")
-      //        println
-      //      }
+      for (i <- 0 until matrix.length; j <- 0 until i)
+        matrix(i)(j) = matrix(j)(i)
 
-      for (i <- 0 to matrix.length - 1)
-        for (j <- 0 to i - 1)
-          matrix(i)(j) = matrix(j)(i)
-      //      println("******************")
-      //
-      //      for (i <- 0 to 20) {
-      //        for (j <- 0 to 20)
-      //          print(("%.2f" format matrix(i)(j)) + ", ")
-      //        println
-      //      }
-
-      for (i <- 0 to matrix.length - 1)
-        for (j <- 0 to matrix.length - 1)
-          if (matrix(i)(j) < 0.6) matrix(i)(j) = 0
+      // use a threshold to filter the similarity values
+      for (i <- 0 until matrix.length; j <- 0 until matrix.length)
+        if (matrix(i)(j) < 0.6) matrix(i)(j) = 0
 
       for (i <- 0 to 20) {
         for (j <- 0 to 20)
@@ -114,7 +108,7 @@ object Clusterer {
           similarity(x._1)(x._2)
       }
 
-      sim.foldRight(100.0) { (x, y) => if (x < y) x else y } 
+      sim.foldRight(100.0) { (x, y) => if (x < y) x else y }
     }
 
   def productNonEqual[T](a: List[T], b: List[T]): List[(T, T)] =

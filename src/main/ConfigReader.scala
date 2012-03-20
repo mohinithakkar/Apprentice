@@ -245,7 +245,14 @@ object ConfigReader {
     val zero = s.storyList(0)
     println(zero)
     println(zero.members.mkString("\n"))
-
+    
+    val sentList = s.storyList.flatMap(_.members)
+    val simi = new DSDSimilarity(sentList, "movieSimilarity.txt")
+    val matrix = simi()
+    
+    utils.Matrix.prettyPrint(matrix)
+    println("sents = " + sentList.length)
+    println("matrix length = " + matrix.length)
   }
 
   def xml() {
