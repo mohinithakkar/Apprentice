@@ -16,7 +16,7 @@ object Main {
     //println(sents.map { _.toShortString }.mkString("\n"))
     
     // do the preprocessing once and for all
-    sents = sents.map{s => new Sentence(s.id, s.tokens, s.parse, sim.preprocess(s.deps))}
+    sents = sents.map{s => Sentence(s.id, s.tokens, s.parse, sim.preprocess(s.deps))}
     
     for (i <- 0 to sents.length - 1) {
       println("processing: " + i)
@@ -83,7 +83,7 @@ object Main {
           new Dependency(tokens(govID), tokens(depID), relation, specific, depth)
         }.toList
 
-        val newSentence = new Sentence(id, tokens, null, deps)
+        val newSentence = Sentence(id, tokens, null, deps)
 
         newSentence
       }

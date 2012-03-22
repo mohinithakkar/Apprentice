@@ -53,6 +53,18 @@ class Cluster(
   }
 
   override def hashCode(): Int = ("Cluster" + name).hashCode
+
+  def toHexSeparatedString() =
+    {
+      var text =
+        members map { s =>
+          val str = s.toString
+          s.id + " " + str.substring(str.indexOf(")") + 2)
+        } mkString("\n")
+
+      text += "\n###\n"
+      text
+    }
 }
 
 class Story(

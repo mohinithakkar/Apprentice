@@ -243,16 +243,37 @@ object ConfigReader {
     val parser = new StoryNLPParser(stories, "movieParsed.txt", true)
     val s = parser()
     val zero = s.storyList(0)
-    println(zero)
-    println(zero.members.mkString("\n"))
-    
+    //    println(zero)
+    //    println(zero.members.mkString("\n"))
+
     val sentList = s.storyList.flatMap(_.members)
     val simi = new DSDSimilarity(sentList, "movieSimilarity.txt")
     val matrix = simi()
+
+    //    utils.Matrix.prettyPrint(matrix)
+    //    println("sents = " + sentList.length)
+    //    println("matrix length = " + matrix.length)
+
+    var max:Double = 0
+    val distance = matrix.map { a =>
+      a.map { value =>
+        if (value != 0) {
+          val v = 1 / value
+          if (v > max) max = v
+          v
+        }
+        else Double.PositiveInfinity
+      }
+    }
     
-    utils.Matrix.prettyPrint(matrix)
-    println("sents = " + sentList.length)
-    println("matrix length = " + matrix.length)
+    println("v = " + max)
+    //utils.Matrix.prettyPrint(distance)
+    val clusterList = cluster.algo.OPTICS.cluster(distance, 0.7, 3, sentList)
+    
+    val text = clusterList.map(_.toHexSeparatedString()).mkString
+    println()
+    
+    println(text)
   }
 
   def xml() {

@@ -27,11 +27,11 @@ object ClusterMetric {
          * sum over partition {sum over each sentence in a partition {cluster.length - partition.length}}
          */
         val partitions = partition(cluster, overlay)
-        println("partitions: " + partitions)
+        //println("partitions: " + partitions)
         for (curPar <- partitions) {
-          println("cur par = " + curPar)
+          //println("cur par = " + curPar)
           val item = curPar.length * (cluster.members.length - curPar.length)
-          println("item = " + item)
+          //println("item = " + item)
           numerator += item
         }
         sum += numerator.toDouble / cluster.members.length
@@ -75,7 +75,7 @@ object ClusterMetric {
   // this is the test case
   def main(args: Array[String]) {
     //val storyFile = "movieHierarchical.txt"
-    val storyFile = "ResultRebuttal2.txt"
+    val storyFile = "optics1.txt"
     val clusterFile = "GoldRebuttal.txt"
     println("using story file: " + storyFile)
     var storyList: List[Story] = GoldParser.parseStories(storyFile)

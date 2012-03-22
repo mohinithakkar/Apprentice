@@ -7,7 +7,7 @@ import data._
 import data._
 
 object GoldParser extends JavaTokenParsers {
-  protected def word: Parser[String] = """[-’\w\.,]+""".r
+  protected def word: Parser[String] = """[-’\w\.,']+""".r
   protected def pos: Parser[String] = """[A-Z\$\.,]+""".r
   protected def token: Parser[Token] = word ~ "/" ~ pos ^^ {
     case word ~ "/" ~ pos => Token(word, pos)
@@ -42,6 +42,25 @@ object GoldParser extends JavaTokenParsers {
 
   protected def stories: Parser[List[Story]] = rep(story)
 
+  def parseStoryText(text: String): List[Story] =
+    {
+      val storiesText = text
+
+      val result = parseAll(stories, storiesText)
+
+      result match {
+        case Success(x, _) => return x
+        case NoSuccess(err, next) => {
+          println("failed to parse input " +
+            "(line " + next.pos.line + ", column " + next.pos.column + "):\n" +
+            err + "\n" +
+            next.pos.longString)
+          System.exit(1)
+          Nil
+        }
+      }
+    }
+
   def parseStories(filename: String): List[Story] =
     {
       val storiesText = scala.io.Source.fromFile(filename).mkString
@@ -66,7 +85,7 @@ object GoldParser extends JavaTokenParsers {
     {
       val clusterText = scala.io.Source.fromFile(filename).mkString
       val result = parseAll(rep(cluster), clusterText)
-      
+
       result match {
         case Success(x, _) => return x
         case NoSuccess(err, next) => {

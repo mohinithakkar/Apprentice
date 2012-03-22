@@ -195,6 +195,7 @@ class DSDSimilarity(val sentList: List[Sentence], cacheFile: String, overWrite:B
       println("processing: " + i)
       for (j <- i + 1 to sents.length - 1) {
         matrix(i)(j) = sim.sentenceSimilarity(sents(i), sents(j))._1
+        matrix(j)(i) = matrix(i)(j)
       }
     }
     
