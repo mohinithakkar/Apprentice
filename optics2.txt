@@ -1,0 +1,432 @@
+2 John/AB and/AB Sally/AB waited/AB in/AB line/AB for/AB ticket/AB ./.
+123 John/AB and/AB Sally/AB waited/AB in/AB line/AB outside/AB the/AB theater/AB ./.
+184 John/AB and/AB Sally/AB waited/AB in/AB line/AB at/AB the/AB concession/AB stand/AB ./.
+125 John/AB and/AB Sally/AB waited/AB in/AB line/AB at/AB the/AB the/AB concession/AB stand/AB ./.
+195 John/AB and/AB Sally/AB stood/AB in/AB line/AB at/AB the/AB concession/AB stand/AB ./.
+398 John/AB and/AB Sally/AB waited/AB in/AB line/AB at/AB the/AB concession/AB stand/AB ./.
+241 John/AB and/AB Sally/AB waited/AB in/AB line/AB at/AB the/AB concession/AB stand/AB ./.
+407 John/AB and/AB Sally/AB waited/AB in/AB line/AB at/AB the/AB ticket/AB booth/AB ./.
+28 Sally/AB and/AB John/AB stood/AB in/AB line/AB at/AB the/AB movie/AB theater/AB ./.
+286 John/AB and/AB Sally/AB were/AB waiting/AB in/AB line/AB at/AB the/AB movie/AB theater/AB ./.
+363 John/AB and/AB Sally/AB stood/AB in/AB the/AB concession/AB line/AB ./.
+###
+40 John/AB and/AB Sally/AB got/AB snack/AB at/AB the/AB concession/AB stand/AB ./.
+4 John/AB and/AB Sally/AB walked/AB up/AB to/AB the/AB concession/AB stand/AB ./.
+135 John/AB and/AB Sally/AB walked/AB up/AB to/AB the/AB ticket/AB line/AB ./.
+215 Sally/AB and/AB John/AB walked/AB up/AB to/AB the/AB concession/AB stand/AB ./.
+276 John/AB decided/AB to/AB walked/AB up/AB to/AB the/AB ticket/AB counter/AB ./.
+384 John/AB and/AB Sally/AB walked/AB up/AB to/AB the/AB concession/AB stand/AB ./.
+###
+171 John/AB and/AB Sally/AB got/AB popcorn/AB and/AB a/AB drink/AB from/AB the/AB concession/AB stand/AB ./.
+148 John/AB and/AB Sally/AB bought/AB popcorn/AB and/AB drink/AB ./.
+138 John/AB and/AB Sally/AB bought/AB popcorn/AB and/AB soda/AB ./.
+30 Sally/AB bought/AB popcorn/AB and/AB an/AB orange/AB soda/AB ./.
+399 Sally/AB bought/AB popcorn/AB and/AB soda/AB ./.
+205 John/AB and/AB Sally/AB bought/AB popcorn/AB and/AB soda/AB ./.
+415 John/AB and/AB Sally/AB bought/AB popcorn/AB and/AB soda/AB ./.
+126 John/AB bought/AB Sally/AB popcorn/AB and/AB soda/AB ./.
+434 John/AB bought/AB popcorn/AB and/AB soda/AB for/AB Sally/AB and/AB John/AB ./.
+395 John/AB bought/AB tickets/AB for/AB John/AB and/AB Sally/AB ./.
+228 John/AB and/AB Sally/AB bought/AB popcorn/AB and/AB drink/AB ./.
+313 John/AB bought/AB popcorn/AB and/AB drink/AB ./.
+385 John/AB bought/AB popcorn/AB and/AB coke/AB ./.
+364 John/AB bought/AB soda/AB and/AB popcorn/AB ./.
+102 John/AB bought/AB chocolate/AB and/AB popcorn/AB ./.
+242 John/AB and/AB Sally/AB purchased/AB popcorn/AB and/AB soda/AB ./.
+401 John/AB and/AB Sally/AB ate/AB the/AB popcorn/AB and/AB soda/AB ./.
+164 John/AB and/AB Sally/AB ate/AB the/AB popcorn/AB ./.
+176 John/AB and/AB Sally/AB threw/AB away/AB their/AB leftover/AB popcorn/AB and/AB drink/AB ./.
+46 John/AB and/AB Sally/AB threw/AB away/AB their/AB empty/AB snack/AB box/AB and/AB drink/AB cup/AB ./.
+185 John/AB and/AB Sally/AB each/AB ordered/AB a/AB large/AB popcorn/AB and/AB soda/AB ./.
+78 John/AB and/AB Sally/AB ordered/AB popcorn/AB and/AB soda/AB ./.
+91 John/AB and/AB Sally/AB walked/AB up/AB to/AB theater/AB to/AB buy/AB movie/AB ticket/AB ./.
+299 John/AB and/AB Sally/AB walked/AB up/AB to/AB stand/AB in/AB line/AB for/AB ticket/AB ./.
+309 John/AB asked/AB to/AB buy/AB two/AB movie/AB ticket/AB ./.
+84 John/AB and/AB Sally/AB walked/AB to/AB the/AB movie/AB ticket/AB counter/AB one/AB evening/AB ./.
+###
+3 John/AB purchased/AB two/AB movie/AB ticket/AB ./.
+147 John/AB and/AB Sally/AB purchased/AB movie/AB ticket/AB ./.
+227 John/AB bought/AB two/AB ticket/AB ./.
+278 John/AB purchased/AB two/AB ticket/AB ./.
+###
+374 John/AB purchased/AB two/AB ticket/AB for/AB the/AB movie/AB ./.
+29 John/AB purchased/AB two/AB ticket/AB from/AB the/AB clerk/AB for/AB the/AB four/AB o'clock/AB show/AB ./.
+75 John/AB and/AB Sally/AB purchased/AB the/AB ticket/AB for/AB the/AB movie/AB ./.
+###
+420 Sally/AB bought/AB two/AB ticket/AB ./.
+16 John/AB and/AB Sally/AB bought/AB the/AB ticket/AB ./.
+###
+39 John/AB and/AB Sally/AB purchased/AB their/AB ticket/AB at/AB the/AB box/AB office/AB ./.
+41 John/AB and/AB Sally/AB gave/AB their/AB ticket/AB to/AB the/AB person/AB at/AB the/AB entrance/AB ./.
+67 John/AB and/AB Sally/AB handed/AB their/AB ticket/AB to/AB the/AB theater/AB employee/AB ./.
+310 John/AB and/AB Sally/AB hand/AB their/AB ticket/AB to/AB the/AB attendant/AB ./.
+324 John/AB and/AB Sally/AB gave/AB their/AB ticket/AB to/AB an/AB usher/AB ./.
+161 John/AB and/AB Sally/AB handed/AB their/AB ticket/AB to/AB the/AB ticket/AB taker/AB ./.
+240 John/AB and/AB Sally/AB purchased/AB their/AB ticket/AB ./.
+250 John/AB and/AB Sally/AB purchased/AB the/AB ticket/AB ./.
+136 John/AB and/AB Sally/AB bought/AB their/AB ticket/AB ./.
+53 John/AB and/AB Sally/AB bought/AB the/AB ticket/AB ./.
+204 John/AB and/AB Sally/AB bought/AB two/AB ticket/AB ./.
+70 John/AB went/AB to/AB buy/AB popcorn/AB ./.
+87 Sally/AB went/AB to/AB buy/AB popcorn/AB ./.
+261 John/AB and/AB Sally/AB waited/AB in/AB line/AB to/AB buy/AB ticket/AB ./.
+65 John/AB and/AB Sally/AB stood/AB in/AB line/AB to/AB purchase/AB ticket/AB ./.
+181 John/AB and/AB Sally/AB stood/AB in/AB line/AB to/AB purchase/AB their/AB ticket/AB ./.
+###
+89 John/AB and/AB Sally/AB left/AB the/AB theater/AB when/AB the/AB movie/AB had/AB ended/AB ./.
+26 John/AB and/AB Sally/AB left/AB the/AB movie/AB theater/AB ./.
+82 John/AB and/AB Sally/AB left/AB the/AB movie/AB theater/AB ./.
+96 Sally/AB and/AB John/AB left/AB the/AB movie/AB theater/AB ./.
+178 John/AB and/AB Sally/AB left/AB the/AB movie/AB theater/AB ./.
+297 John/AB and/AB Sally/AB left/AB the/AB movie/AB theater/AB ./.
+307 John/AB and/AB Sally/AB left/AB the/AB movie/AB theater/AB ./.
+190 John/AB and/AB Sally/AB left/AB the/AB movie/AB theater/AB ,/AB having/AB enjoyed/AB a/AB great/AB night/AB together/AB ./.
+211 John/AB and/AB Sally/AB left/AB the/AB movie/AB theater/AB when/AB the/AB movie/AB is/AB over/AB ./.
+259 John/AB and/AB Sally/AB left/AB the/AB movie/AB theater/AB ./.
+320 John/AB and/AB Sally/AB left/AB the/AB movie/AB theater/AB ./.
+392 John/AB and/AB Sally/AB left/AB the/AB movie/AB theater/AB ./.
+144 John/AB and/AB Sally/AB left/AB the/AB theater/AB when/AB the/AB movie/AB end/AB ./.
+###
+396 John/AB and/AB Sally/AB entered/AB the/AB movie/AB theater/AB ./.
+110 John/AB and/AB Sally/AB entered/AB the/AB movie/AB theater/AB ./.
+50 John/AB and/AB Sally/AB entered/AB the/AB movie/AB theater/AB ./.
+192 John/AB and/AB Sally/AB entered/AB the/AB movie/AB theater/AB ./.
+379 John/AB and/AB Sally/AB left/AB the/AB theater/AB in/AB John/AB car/AB ./.
+###
+108 Sally/AB and/AB John/AB left/AB the/AB theater/AB ./.
+167 John/AB and/AB Sally/AB left/AB the/AB theater/AB ./.
+133 John/AB and/AB Sally/AB left/AB the/AB theater/AB ./.
+271 John/AB and/AB Sally/AB left/AB the/AB theater/AB ./.
+200 John/AB and/AB Sally/AB left/AB the/AB theater/AB ./.
+430 John/AB and/AB Sally/AB left/AB the/AB theater/AB ./.
+405 John/AB and/AB Sally/AB left/AB the/AB theater/AB ./.
+246 John/AB and/AB Sally/AB left/AB the/AB theater/AB ./.
+284 John/AB and/AB Sally/AB left/AB the/AB theater/AB ./.
+331 John/AB and/AB Sally/AB left/AB the/AB theater/AB ./.
+370 John/AB and/AB Sally/AB left/AB the/AB theater/AB ./.
+236 John/AB and/AB Sally/AB left/AB the/AB theater/AB separately/AB ./.
+344 John/AB and/AB Sally/AB left/AB the/AB theater/AB ./.
+6 John/AB and/AB Sally/AB entered/AB the/AB dark/AB theater/AB ./.
+1366 John/AB and/AB Sally/AB entered/AB the/AB theater/AB ./.
+224 John/AB and/AB Sally/AB nibbled/AB on/AB popcorn/AB when/AB the/AB movie/AB begin/AB ./.
+###
+206 John/AB and/AB Sally/AB entered/AB the/AB movie/AB auditorium/AB ./.
+22 John/AB and/AB Sally/AB entered/AB the/AB auditorium/AB ./.
+42 John/AB and/AB Sally/AB entered/AB the/AB auditorium/AB ./.
+79 John/AB and/AB Sally/AB entered/AB the/AB auditorium/AB ./.
+139 John/AB and/AB Sally/AB entered/AB the/AB auditorium/AB ./.
+149 John/AB and/AB Sally/AB entered/AB the/AB auditorium/AB ./.
+118 John/AB and/AB Sally/AB entered/AB the/AB auditorium/AB ./.
+315 John/AB and/AB Sally/AB entered/AB the/AB auditorium/AB ./.
+337 John/AB and/AB Sally/AB entered/AB the/AB auditorium/AB ./.
+424 John/AB and/AB Sally/AB entered/AB the/AB auditorium/AB ./.
+121 John/AB and/AB Sally/AB left/AB the/AB auditorium/AB ./.
+175 John/AB and/AB Sally/AB left/AB the/AB auditorium/AB ./.
+61 John/AB and/AB Sally/AB left/AB the/AB cinema/AB ./.
+###
+165 John/AB and/AB Sally/AB watched/AB the/AB preview/AB and/AB the/AB movie/AB ./.
+25 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+34 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+45 John/AB and/AB Sally/AB watched/AB the/AB movie/AB until/AB the/AB end/AB credit/AB ./.
+120 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+142 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+150 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+208 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+81 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+174 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+317 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+257 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+328 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+402 John/AB and/AB Sally/AB watched/AB the/AB movie/AB ./.
+428 John/AB and/AB Sally/AB watched/AB the/AB movie/AB in/AB silence/AB ./.
+437 John/AB offered/AB Sally/AB popcorn/AB ./.
+###
+95 Sally/AB and/AB John/AB enjoyed/AB the/AB movie/AB very/AB much/AB ./.
+21 John/AB and/AB Sally/AB found/AB the/AB movie/AB ./.
+58 John/AB and/AB Sally/AB enjoyed/AB the/AB movie/AB ./.
+245 John/AB and/AB Sally/AB enjoyed/AB the/AB movie/AB ./.
+258 John/AB and/AB Sally/AB enjoyed/AB the/AB movie/AB ./.
+15 John/AB and/AB Sally/AB got/AB in/AB line/AB for/AB the/AB movie/AB ticket/AB ./.
+###
+381 John/AB and/AB Sally/AB stood/AB in/AB line/AB for/AB ticket/AB ./.
+98 John/AB made/AB Sally/AB giggle/AB while/AB they/AB stood/AB in/AB line/AB for/AB ticket/AB ./.
+213 Sally/AB and/AB John/AB stood/AB in/AB line/AB for/AB ticket/AB ./.
+273 John/AB and/AB Sally/AB stood/AB in/AB line/AB for/AB ticket/AB ./.
+322 John/AB and/AB Sally/AB stood/AB in/AB line/AB for/AB ticket/AB ./.
+169 John/AB and/AB Sally/AB stood/AB in/AB line/AB for/AB ticket/AB to/AB their/AB movie/AB ./.
+151 John/AB and/AB Sally/AB exited/AB the/AB auditorium/AB ./.
+154 John/AB and/AB Sally/AB exited/AB the/AB theater/AB ./.
+###
+146 John/AB and/AB Sally/AB arrived/AB at/AB the/AB movie/AB theater/AB ./.
+37 John/AB and/AB Sally/AB arrived/AB at/AB the/AB theater/AB ./.
+63 John/AB and/AB Sally/AB arrived/AB at/AB the/AB theater/AB ./.
+238 John/AB and/AB Sally/AB arrived/AB at/AB the/AB theater/AB ./.
+182 John/AB and/AB Sally/AB discussed/AB what/AB food/AB to/AB buy/AB at/AB the/AB food/AB stand/AB before/AB viewing/AB the/AB movie/AB ./.
+359 John/AB and/AB Sally/AB met/AB at/AB the/AB theater/AB ./.
+333 John/AB waited/AB for/AB Sally/AB to/AB arrive/AB at/AB the/AB theater/AB ./.
+411 Sally/AB bought/AB nice/AB dress/AB and/AB shoe/AB ./.
+389 John/AB and/AB Sally/AB finished/AB the/AB movie/AB ./.
+418 John/AB and/AB Sally/AB left/AB the/AB theater/AB fighting/AB ./.
+220 John/AB picked/AB out/AB seats/AB directly/AB in/AB the/AB middle/AB of/AB the/AB movie/AB theater/AB ./.
+252 John/AB and/AB Sally/AB bought/AB a/AB large/AB popcorn/AB ./.
+287 John/AB and/AB Sally/AB saw/AB their/AB friend/AB Steve/AB in/AB line/AB for/AB the/AB ticket/AB booth/AB ./.
+13 Sally/AB and/AB John/AB left/AB when/AB the/AB movie/AB finished/AB ./.
+173 John/AB and/AB Sally/AB waited/AB for/AB the/AB movie/AB to/AB start/AB ./.
+202 John/AB and/AB Sally/AB walked/AB to/AB the/AB ticket/AB booth/AB ./.
+390 John/AB and/AB Sally/AB walked/AB to/AB the/AB lobby/AB ./.
+155 John/AB and/AB Sally/AB walked/AB to/AB the/AB car/AB ./.
+72 John/AB and/AB Sally/AB walked/AB back/AB to/AB the/AB car/AB ./.
+311 John/AB and/AB Sally/AB entered/AB the/AB concession/AB area/AB ./.
+64 John/AB and/AB sally/AB walked/AB to/AB the/AB ticket/AB booth/AB ./.
+193 John/AB and/AB Sally/AB went/AB to/AB the/AB ticket/AB booth/AB ./.
+20 John/AB and/AB Sally/AB looked/AB for/AB the/AB movie/AB ./.
+###
+162 John/AB and/AB Sally/AB walked/AB down/AB the/AB hall/AB to/AB the/AB movie/AB ./.
+19 John/AB and/AB Sally/AB walked/AB down/AB the/AB theater/AB corridor/AB ./.
+219 Sally/AB and/AB John/AB walked/AB to/AB the/AB auditorium/AB ./.
+197 John/AB and/AB Sally/AB went/AB to/AB the/AB auditorium/AB ./.
+59 John/AB and/AB Sally/AB went/AB to/AB the/AB foyer/AB ./.
+243 John/AB and/AB Sally/AB went/AB to/AB the/AB auditorium/AB ./.
+366 John/AB and/AB Sally/AB went/AB to/AB the/AB auditorium/AB ./.
+77 John/AB and/AB Sally/AB went/AB to/AB the/AB snack/AB stand/AB ./.
+293 John/AB and/AB Sally/AB told/AB Steve/AB the/AB name/AB of/AB the/AB movie/AB ./.
+436 John/AB and/AB Sally/AB watched/AB the/AB beginning/AB of/AB movie/AB ./.
+68 John/AB and/AB Sally/AB located/AB the/AB correct/AB auditorium/AB ./.
+###
+172 John/AB and/AB Sally/AB walked/AB into/AB the/AB movie/AB auditorium/AB ./.
+31 John/AB and/AB Sally/AB walked/AB into/AB the/AB auditorium/AB ./.
+103 John/AB and/AB Sally/AB walked/AB into/AB the/AB auditorium/AB ./.
+254 John/AB and/AB Sally/AB walked/AB into/AB the/AB auditorium/AB ./.
+386 John/AB and/AB Sally/AB walked/AB into/AB the/AB auditorium/AB ./.
+375 John/AB and/AB Sally/AB walked/AB into/AB the/AB theater/AB ./.
+421 John/AB and/AB Sally/AB went/AB into/AB the/AB theater/AB ./.
+35 John/AB and/AB Sally/AB clapped/AB at/AB the/AB end/AB of/AB the/AB movie/AB ./.
+###
+214 John/AB paid/AB for/AB the/AB movie/AB ticket/AB with/AB cash/AB ./.
+85 Sally/AB payed/AB for/AB the/AB movie/AB ticket/AB ./.
+218 Sally/AB paid/AB for/AB the/AB food/AB and/AB drink/AB ./.
+323 John/AB paid/AB for/AB the/AB ticket/AB ./.
+160 Sally/AB paid/AB for/AB the/AB popcorn/AB ./.
+17 John/AB and/AB Sally/AB got/AB in/AB line/AB for/AB popcorn/AB ./.
+###
+361 John/AB and/AB Sally/AB stood/AB in/AB line/AB ./.
+124 John/AB and/AB Sally/AB bought/AB ticket/AB ./.
+170 John/AB and/AB Sally/AB walked/AB inside/AB the/AB theater/AB ./.
+159 John/AB bought/AB the/AB ticket/AB ./.
+92 Sally/AB and/AB John/AB went/AB inside/AB the/AB auditorium/AB to/AB watch/AB the/AB movie/AB ./.
+433 John/AB and/AB Sally/AB bought/AB ticket/AB ./.
+440 John/AB and/AB Sally/AB finished/AB watching/AB movie/AB ./.
+394 John/AB and/AB Sally/AB waited/AB in/AB line/AB for/AB tickets/AB ./.
+346 John/AB and/AB Sally/AB waited/AB in/AB line/AB ./.
+422 Sally/AB bought/AB popcorn/AB ./.
+226 John/AB and/AB Sally/AB stood/AB in/AB line/AB ./.
+158 John/AB and/AB Sally/AB stood/AB in/AB line/AB ./.
+54 John/AB and/AB Sally/AB bought/AB popcorn/AB ./.
+294 Steve/AB was/AB going/AB to/AB watch/AB the/AB same/AB movie/AB ./.
+438 John/AB and/AB Sally/AB ate/AB popcorn/AB ./.
+409 John/AB and/AB Sally/AB bought/AB ticket/AB for/AB late/AB time/AB ./.
+101 Sally/AB bought/AB drink/AB ./.
+382 John/AB bought/AB ticket/AB ./.
+18 John/AB and/AB Sally/AB bought/AB popcorn/AB ./.
+239 John/AB and/AB Sally/AB stood/AB in/AB line/AB ./.
+362 John/AB bought/AB ticket/AB ./.
+113 John/AB and/AB Sally/AB bought/AB ticket/AB ./.
+300 John/AB and/AB Sally/AB stood/AB in/AB line/AB ./.
+203 John/AB and/AB Sally/AB waited/AB in/AB line/AB ./.
+367 John/AB and/AB Sally/AB watched/AB movie/AB ./.
+432 John/AB and/AB Sally/AB stood/AB in/AB line/AB ./.
+51 John/AB and/AB Sally/AB stood/AB in/AB line/AB ./.
+209 John/AB and/AB Sally/AB ate/AB popcorn/AB ./.
+###
+194 John/AB and/AB Sally/AB paid/AB for/AB their/AB ticket/AB ./.
+9 Sally/AB ate/AB the/AB popcorn/AB ./.
+216 Sally/AB ordered/AB popcorn/AB ./.
+426 John/AB ate/AB some/AB popcorn/AB ./.
+368 John/AB ate/AB popcorn/AB ./.
+5 John/AB bought/AB Sally/AB a/AB large/AB popcorn/AB ./.
+183 John/AB and/AB Sally/AB finally/AB purchased/AB their/AB tickets/AB ./.
+196 John/AB and/AB Sally/AB paid/AB for/AB their/AB food/AB ./.
+217 John/AB ordered/AB a/AB soda/AB ./.
+32 John/AB and/AB Sally/AB took/AB their/AB seats/AB in/AB the/AB fifth/AB row/AB ./.
+###
+23 John/AB and/AB Sally/AB found/AB their/AB seats/AB ./.
+43 John/AB and/AB Sally/AB found/AB seats/AB ./.
+80 John/AB and/AB Sally/AB found/AB good/AB seats/AB ./.
+93 Sally/AB and/AB John/AB found/AB seats/AB on/AB the/AB right/AB side/AB corner/AB ./.
+263 Sally/AB found/AB good/AB seats/AB ./.
+325 John/AB and/AB Sally/AB found/AB seats/AB in/AB the/AB auditorium/AB ./.
+376 John/AB and/AB Sally/AB found/AB two/AB adjacent/AB seats/AB ./.
+104 John/AB and/AB Sally/AB found/AB their/AB seats/AB ./.
+351 John/AB and/AB Sally/AB got/AB the/AB bad/AB seats/AB ./.
+127 John/AB and/AB Sally/AB made/AB their/AB way/AB into/AB the/AB auditorium/AB ./.
+301 John/AB and/AB Sally/AB reached/AB the/AB front/AB of/AB the/AB line/AB ./.
+7 Sally/AB chose/AB seated/AB at/AB the/AB front/AB of/AB the/AB auditorium/AB ./.
+373 John/AB and/AB Sally/AB finally/AB reached/AB the/AB front/AB of/AB the/AB line/AB ./.
+114 John/AB bought/AB a/AB glass/AB of/AB wine/AB and/AB a/AB coffee/AB ./.
+397 The/AB ticket/AB taker/AB taked/AB John/AB and/AB Sally's/AB tickets/AB ./.
+187 John/AB and/AB Sally/AB chose/AB a/AB seat/AB toward/AB the/AB center/AB middle/AB isle/AB ./.
+163 Sally/AB picked/AB out/AB seats/AB in/AB the/AB middle/AB of/AB the/AB auditorium/AB ./.
+283 John/AB asked/AB the/AB lady/AB not/AB to/AB hurt/AB him/AB ./.
+69 John/AB and/AB Sally/AB found/AB seats/AB close/AB to/AB the/AB back/AB of/AB the/AB auditorium/AB ./.
+314 John/AB and/AB Sally/AB met/AB in/AB the/AB concession/AB area/AB ./.
+378 John/AB and/AB Sally/AB walked/AB out/AB of/AB the/AB theater/AB when/AB the/AB film/AB end/AB ./.
+###
+316 John/AB and/AB Sally/AB talked/AB before/AB the/AB movie/AB begin/AB ./.
+60 John/AB and/AB Sally/AB talked/AB about/AB the/AB movie/AB ./.
+129 John/AB and/AB Sally/AB sat/AB as/AB the/AB movie/AB begin/AB ./.
+152 John/AB and/AB Sally/AB talked/AB about/AB the/AB movie/AB ./.
+319 John/AB and/AB Sally/AB talked/AB about/AB the/AB movie/AB afterwards/AB ./.
+137 John/AB and/AB Sally/AB examined/AB the/AB food/AB at/AB the/AB snack/AB bar/AB ./.
+223 Sally/AB and/AB John/AB laughed/AB over/AB the/AB trivium/AB on/AB the/AB screen/AB ./.
+###
+94 Sally/AB asked/AB John/AB to/AB turn/AB off/AB the/AB cellphone/AB ./.
+8 John/AB turned/AB off/AB the/AB cellphone/AB ./.
+222 Sally/AB made/AB sure/AB to/AB turn/AB off/AB their/AB cell/AB phone/AB ./.
+264 John/AB turned/AB off/AB his/AB cellphone/AB ./.
+267 John/AB and/AB Sally/AB could/AB not/AB turn/AB off/AB Sally's/AB cellphone/AB ./.
+279 The/AB lady/AB at/AB the/AB front/AB of/AB the/AB line/AB asked/AB John/AB to/AB step/AB aside/AB ./.
+280 Sally/AB asked/AB John/AB to/AB stop/AB ./.
+33 John/AB turned/AB off/AB his/AB cell/AB phone/AB ./.
+253 John/AB and/AB Sally/AB ordered/AB drink/AB ./.
+262 John/AB bought/AB snack/AB ./.
+100 Sally/AB and/AB John/AB bought/AB some/AB snack/AB ./.
+442 John/AB and/AB Sally/AB got/AB into/AB John/AB car/AB ./.
+38 John/AB and/AB Sally/AB got/AB out/AB of/AB the/AB car/AB ./.
+338 John/AB and/AB Sally/AB decided/AB on/AB the/AB good/AB seats/AB ./.
+47 John/AB and/AB Sally/AB walked/AB out/AB of/AB the/AB theater/AB ./.
+414 John/AB and/AB Sally/AB returned/AB to/AB the/AB theater/AB ./.
+11 John/AB and/AB Sally/AB laughed/AB during/AB the/AB movie/AB ./.
+251 John/AB and/AB Sally/AB walked/AB over/AB to/AB the/AB snack/AB bar/AB ./.
+1066 John/AB and/AB Sally/AB walked/AB inside/AB ./.
+44 John/AB and/AB Sally/AB watched/AB movie/AB trailer/AB ./.
+282 The/AB lady/AB pulled/AB a/AB taser/AB from/AB her/AB purse/AB ./.
+86 John/AB and/AB Sally/AB sat/AB down/AB inside/AB the/AB auditorium/AB ./.
+277 John/AB cut/AB in/AB front/AB of/AB the/AB entire/AB line/AB ./.
+275 John/AB felt/AB impatient/AB waiting/AB in/AB line/AB ./.
+340 Sally/AB jumped/AB in/AB her/AB seat/AB when/AB watching/AB the/AB action/AB movie/AB trailer/AB ./.
+66 John/AB and/AB Sally/AB got/AB ticket/AB ./.
+###
+400 John/AB and/AB Sally/AB sat/AB down/AB in/AB the/AB the/AB auditorium/AB ./.
+24 John/AB and/AB Sally/AB sat/AB down/AB ./.
+56 John/AB and/AB Sally/AB sat/AB down/AB ./.
+119 John/AB and/AB Sally/AB sat/AB down/AB ./.
+199 John/AB and/AB Sally/AB sat/AB down/AB ./.
+229 John/AB and/AB Sally/AB sat/AB down/AB ./.
+255 John/AB and/AB Sally/AB sat/AB down/AB ./.
+141 John/AB and/AB Sally/AB sat/AB down/AB ./.
+207 John/AB and/AB Sally/AB sat/AB down/AB ./.
+435 John/AB and/AB Sally/AB sat/AB down/AB ./.
+131 John/AB and/AB Sally/AB applauded/AB when/AB the/AB movie/AB end/AB ./.
+427 Sally/AB knocked/AB over/AB the/AB popcorn/AB onto/AB the/AB floor/AB ./.
+416 John/AB fell/AB asleep/AB in/AB the/AB movie/AB ./.
+###
+115 Sally/AB went/AB to/AB the/AB toilet/AB ./.
+116 Sally/AB returned/AB from/AB the/AB toilet/AB ./.
+312 Sally/AB went/AB to/AB the/AB restroom/AB ./.
+429 John/AB went/AB to/AB the/AB restroom/AB ./.
+335 John/AB and/AB Sally/AB argued/AB over/AB who/AB should/AB pay/AB for/AB the/AB ticket/AB ./.
+230 John/AB and/AB Sally/AB watched/AB ad/AB ./.
+140 John/AB and/AB Sally/AB walked/AB to/AB their/AB seats/AB ./.
+112 John/AB and/AB Sally/AB chose/AB a/AB movie/AB ./.
+198 John/AB and/AB Sally/AB chose/AB seats/AB ./.
+55 John/AB and/AB Sally/AB looked/AB for/AB their/AB seats/AB ./.
+107 John/AB gave/AB Sally/AB a/AB long/AB kiss/AB ./.
+99 Sally/AB gave/AB John/AB a/AB hug/AB ./.
+117 John/AB gave/AB Sally/AB her/AB wine/AB ./.
+302 Sally/AB asked/AB for/AB two/AB ticket/AB to/AB the/AB movie/AB ./.
+132 John/AB and/AB Sally/AB got/AB up/AB once/AB the/AB credit/AB was/AB finish/AB ./.
+412 John/AB waited/AB for/AB Sally's/AB shopping/AB spree/AB ./.
+52 John/AB and/AB Sally/AB selected/AB a/AB movie/AB ./.
+360 John/AB and/AB Sally/AB picked/AB a/AB movie/AB ./.
+413 John/AB and/AB Sally/AB finished/AB shopping/AB ./.
+329 John/AB tried/AB to/AB put/AB his/AB hand/AB around/AB Sally/AB ./.
+303 John/AB did/AB not/AB wanted/AB to/AB see/AB the/AB same/AB movie/AB ./.
+410 John/AB and/AB Sally/AB visited/AB the/AB nearby/AB shopping/AB mall/AB ./.
+221 John/AB put/AB his/AB arm/AB around/AB Sally/AB ./.
+349 Sally/AB tried/AB to/AB calm/AB the/AB angry/AB patron/AB ./.
+###
+292 Steve/AB asked/AB John/AB and/AB Sally/AB about/AB the/AB movie/AB ./.
+268 The/AB usher/AB kicked/AB John/AB and/AB Sally/AB out/AB of/AB the/AB theater/AB ./.
+289 Steve/AB noticed/AB John/AB and/AB Sally/AB ./.
+291 Steve/AB greeted/AB John/AB and/AB Sally/AB ./.
+295 Steve/AB wanted/AB to/AB sit/AB with/AB John/AB and/AB Sally/AB ./.
+290 Steve/AB walked/AB up/AB to/AB John/AB and/AB Sally/AB ./.
+###
+130 John/AB and/AB Sally/AB held/AB hand/AB during/AB the/AB film/AB ./.
+189 John/AB and/AB Sally/AB held/AB hand/AB ./.
+210 John/AB and/AB Sally/AB held/AB hand/AB ./.
+265 John/AB and/AB Sally/AB held/AB hand/AB ./.
+377 John/AB and/AB Sally/AB held/AB hand/AB ./.
+383 John/AB held/AB Sally's/AB hand/AB ./.
+106 John/AB held/AB Sally/AB hand/AB ./.
+318 John/AB held/AB hand/AB with/AB Sally/AB ./.
+388 John/AB held/AB Sally/AB close/AB ./.
+352 Sally/AB spent/AB the/AB movie/AB avoiding/AB John's/AB advances/AB ./.
+439 John/AB and/AB Sally/AB drank/AB soda/AB ./.
+326 John/AB asked/AB Sally/AB Do/AB you/AB want/AB popcorn/AB ./.
+369 Sally/AB drinked/AB soda/AB ./.
+296 John/AB and/AB Sally/AB wanted/AB a/AB romantic/AB evening/AB alone/AB ./.
+281 John/AB asked/AB for/AB two/AB ticket/AB again/AB ./.
+425 John/AB and/AB Sally/AB sat/AB down/AB together/AB ./.
+73 John/AB and/AB Sally/AB drove/AB out/AB of/AB the/AB theater/AB parking/AB lot/AB ./.
+76 John/AB and/AB Sally/AB looked/AB at/AB showtime/AB print/AB on/AB the/AB ticket/AB ./.
+339 John/AB wondered/AB if/AB he/AB should/AB leave/AB the/AB armrest/AB up/AB or/AB down/AB ./.
+353 John/AB missed/AB the/AB plot/AB ./.
+249 John/AB and/AB Sally/AB decided/AB which/AB movie/AB to/AB see/AB ./.
+306 John/AB and/AB Sally/AB broke/AB up/AB ./.
+387 Sally/AB screamed/AB in/AB reaction/AB to/AB the/AB movie/AB ./.
+423 John/AB chatted/AB with/AB Sally/AB about/AB the/AB weather/AB ./.
+188 John/AB and/AB Sally/AB laughed/AB together/AB at/AB the/AB preview/AB for/AB upcoming/AB movie/AB ./.
+354 Sally/AB prefered/AB the/AB lead/AB actor/AB to/AB John/AB ./.
+57 John/AB and/AB Sally/AB complained/AB about/AB the/AB advertisement/AB ./.
+355 Sally/AB sneaked/AB out/AB early/AB ./.
+231 John/AB grabbed/AB Sally/AB ./.
+143 John/AB and/AB Sally/AB discarded/AB their/AB trash/AB ./.
+177 John/AB and/AB Sally/AB used/AB the/AB restroom/AB ./.
+153 John/AB and/AB Sally/AB used/AB the/AB restroom/AB ./.
+441 Sally/AB used/AB the/AB restroom/AB ./.
+348 John/AB cut/AB in/AB line/AB ./.
+274 Sally/AB noticed/AB the/AB long/AB line/AB for/AB ticket/AB ./.
+334 John/AB opened/AB the/AB door/AB for/AB Sally/AB ./.
+233 John/AB kissed/AB Sally/AB ./.
+357 John/AB ranted/AB about/AB the/AB lead/AB actor/AB ./.
+186 John/AB and/AB Sally/AB headed/AB toward/AB their/AB auditorium/AB ./.
+235 John/AB punched/AB Sally/AB ./.
+244 John/AB and/AB Sally/AB search/AB for/AB good/AB seats/AB ./.
+391 Sally/AB joked/AB about/AB the/AB movie/AB with/AB John/AB ./.
+341 John/AB yawned/AB when/AB the/AB movie/AB was/AB over/AB ./.
+266 Sally's/AB cellphone/AB rang/AB ./.
+365 John/AB and/AB Sally/AB presented/AB ticket/AB ./.
+###
+443 John/AB and/AB Sally/AB drove/AB home/AB ./.
+330 The/AB movie/AB finished/AB ./.
+343 John/AB asked/AB Sally/AB to/AB have/AB dinner/AB with/AB him/AB afterwards/AB ./.
+128 John/AB and/AB Sally/AB argued/AB over/AB seating/AB with/AB another/AB couple/AB ./.
+304 Sally/AB said/AB John/AB had/AB bad/AB taste/AB in/AB movie/AB ./.
+269 John/AB and/AB Sally/AB had/AB a/AB good/AB laugh/AB ./.
+342 John/AB and/AB Sally/AB had/AB an/AB unfruitful/AB conversation/AB about/AB the/AB movie/AB afterwards/AB ./.
+12 Sally/AB was/AB surprised/AB by/AB the/AB movie/AB ending/AB ./.
+270 John/AB and/AB Sally/AB kissed/AB ./.
+232 Sally/AB complained/AB ./.
+111 John/AB and/AB Sally/AB looked/AB at/AB which/AB movie/AB is/AB played/AB ./.
+48 John/AB and/AB Sally/AB drove/AB home/AB ./.
+###
+166 When/AB the/AB movie/AB us/AB over/AB ,/AB John/AB and/AB Sally/AB got/AB up/AB to/AB leave/AB ./.
+156 John/AB and/AB Sally/AB drive/AB home/AB ./.
+404 The/AB movie/AB ended/AB ./.
+71 After/AB the/AB movie/AB was/AB over/AB ,/AB John/AB and/AB Sally/AB stood/AB up/AB ./.
+88 John/AB attempted/AB to/AB kiss/AB Sally/AB ./.
+###
+10 John/AB was/AB bored/AB during/AB coming/AB attraction/AB ./.
+105 Sally/AB tilted/AB her/AB head/AB on/AB John/AB shoulder/AB ./.
+234 Sally/AB slaped/AB John/AB ./.
+256 John/AB and/AB Sally/AB got/AB comfortable/AB ./.
+288 John/AB and/AB Sally/AB hid/AB from/AB Steve/AB ./.
+305 John/AB and/AB Sally/AB fought/AB ./.
+347 John/AB became/AB impatient/AB ./.
+350 John/AB apologized/AB ./.
+356 John/AB realized/AB he/AB is/AB alone/AB ./.
+372 John/AB and/AB Sally/AB scoffed/AB at/AB the/AB mongrel/AB in/AB line/AB ./.
+403 John/AB and/AB Sally/AB expressed/AB affection/AB ./.
+408 The/AB ticket/AB was/AB sold/AB out/AB ./.
+###

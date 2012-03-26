@@ -17,6 +17,8 @@ case class Sentence(
   var next: Sentence = null,
   var cluster: Cluster = null) extends XStreamable {
 
+  var location:Double = 0
+  
   override def toString(): String =
     "(S" + id + ") " + tokens.map { t => t.word + "/" + t.pos }.mkString(" ")
 

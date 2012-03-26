@@ -1,0 +1,360 @@
+123 John and Sally waited in line outside the theater .
+184 John and Sally waited in line at the concession stand .
+
+125 John and Sally waited in line at the the concession stand .
+
+195 John and Sally stood in line at the concession stand .
+
+398 John and Sally waited in line at the concession stand .
+
+241 John and Sally waited in line at the concession stand .
+
+407 John and Sally waited in line at the ticket booth .
+
+28 Sally and John stood in line at the movie theater .
+
+286 John and Sally were waiting in line at the movie theater .
+
+363 John and Sally stood in the concession line .
+###
+135 John and Sally walked up to the ticket line .
+215 Sally and John walked up to the concession stand .
+276 John decided to walked up to the ticket counter .
+384 John and Sally walked up to the concession stand .
+###
+171 John and Sally got popcorn and a drink from the concession stand .
+148 John and Sally bought popcorn and drink .
+138 John and Sally bought popcorn and soda .
+30 Sally bought popcorn and an orange soda .
+399 Sally bought popcorn and soda .
+205 John and Sally bought popcorn and soda .
+415 John and Sally bought popcorn and soda .
+126 John bought Sally popcorn and soda .
+434 John bought popcorn and soda for Sally and John .
+395 John bought tickets for John and Sally .
+228 John and Sally bought popcorn and drink .
+313 John bought popcorn and drink .
+385 John bought popcorn and coke .
+364 John bought soda and popcorn .
+102 John bought chocolate and popcorn .
+242 John and Sally purchased popcorn and soda .
+###
+3 John purchased two movie ticket .
+147 John and Sally purchased movie ticket .
+227 John bought two ticket .
+278 John purchased two ticket .
+374 John purchased two ticket for the movie .
+29 John purchased two ticket from the clerk for the four oclock show .
+75 John and Sally purchased the ticket for the movie .
+420 Sally bought two ticket .
+16 John and Sally bought the ticket .
+39 John and Sally purchased their ticket at the box office .
+41 John and Sally gave their ticket to the person at the entrance .
+67 John and Sally handed their ticket to the theater employee .
+310 John and Sally hand their ticket to the attendant .
+324 John and Sally gave their ticket to an usher .
+161 John and Sally handed their ticket to the ticket taker .
+240 John and Sally purchased their ticket .
+250 John and Sally purchased the ticket .
+136 John and Sally bought their ticket .
+53 John and Sally bought the ticket .
+204 John and Sally bought two ticket .
+###
+26 John and Sally left the movie theater .
+82 John and Sally left the movie theater .
+96 Sally and John left the movie theater .
+178 John and Sally left the movie theater .
+297 John and Sally left the movie theater .
+307 John and Sally left the movie theater .
+190 John and Sally left the movie theater having enjoyed a great night together .
+211 John and Sally left the movie theater when the movie is over .
+259 John and Sally left the movie theater .
+320 John and Sally left the movie theater .
+392 John and Sally left the movie theater .
+144 John and Sally left the theater when the movie end .
+
+###
+396 John and Sally entered the movie theater .
+
+110 John and Sally entered the movie theater .
+
+50 John and Sally entered the movie theater .
+
+192 John and Sally entered the movie theater .
+
+379 John and Sally left the theater in John car .
+
+108 Sally and John left the theater .
+
+167 John and Sally left the theater .
+
+133 John and Sally left the theater .
+
+271 John and Sally left the theater .
+
+200 John and Sally left the theater .
+
+430 John and Sally left the theater .
+
+405 John and Sally left the theater .
+
+246 John and Sally left the theater .
+
+284 John and Sally left the theater .
+
+331 John and Sally left the theater .
+
+370 John and Sally left the theater .
+
+236 John and Sally left the theater separately .
+
+344 John and Sally left the theater .
+
+6 John and Sally entered the dark theater .
+
+1366 John and Sally entered the theater .
+
+###
+206 John and Sally entered the movie auditorium .
+
+22 John and Sally entered the auditorium .
+
+42 John and Sally entered the auditorium .
+
+79 John and Sally entered the auditorium .
+
+139 John and Sally entered the auditorium .
+
+149 John and Sally entered the auditorium .
+
+118 John and Sally entered the auditorium .
+
+315 John and Sally entered the auditorium .
+
+337 John and Sally entered the auditorium .
+
+424 John and Sally entered the auditorium .
+
+###
+165 John and Sally watched the preview and the movie .
+
+25 John and Sally watched the movie .
+
+34 John and Sally watched the movie .
+
+45 John and Sally watched the movie until the end credit .
+
+120 John and Sally watched the movie .
+
+142 John and Sally watched the movie .
+
+150 John and Sally watched the movie .
+
+208 John and Sally watched the movie .
+
+81 John and Sally watched the movie .
+
+174 John and Sally watched the movie .
+
+317 John and Sally watched the movie .
+
+257 John and Sally watched the movie .
+
+328 John and Sally watched the movie .
+
+402 John and Sally watched the movie .
+
+428 John and Sally watched the movie in silence .
+
+###
+381 John and Sally stood in line for ticket .
+
+98 John made Sally giggle while they stood in line for ticket .
+
+213 Sally and John stood in line for ticket .
+
+273 John and Sally stood in line for ticket .
+
+322 John and Sally stood in line for ticket .
+
+169 John and Sally stood in line for ticket to their movie .
+
+###
+146 John and Sally arrived at the movie theater .
+
+37 John and Sally arrived at the theater .
+
+63 John and Sally arrived at the theater .
+
+238 John and Sally arrived at the theater .
+
+###
+
+172 John and Sally walked into the movie auditorium .
+
+31 John and Sally walked into the auditorium .
+
+103 John and Sally walked into the auditorium .
+
+254 John and Sally walked into the auditorium .
+
+386 John and Sally walked into the auditorium .
+###
+
+23 John and Sally found their seats .
+
+43 John and Sally found seats .
+
+80 John and Sally found good seats .
+
+93 Sally and John found seats on the right side corner .
+
+263 Sally found good seats .
+
+325 John and Sally found seats in the auditorium .
+
+376 John and Sally found two adjacent seats .
+
+104 John and Sally found their seats .
+
+351 John and Sally got the bad seats .
+###
+
+316 John and Sally talked before the movie begin .
+
+60 John and Sally talked about the movie .
+
+129 John and Sally sat as the movie begin .
+
+152 John and Sally talked about the movie .
+
+319 John and Sally talked about the movie afterwards .
+
+###
+94 Sally asked John to turn off the cellphone .
+
+8 John turned off the cellphone .
+
+222 Sally made sure to turn off their cell phone .
+
+264 John turned off his cellphone .
+
+267 John and Sally could not turn off Sallys cellphone .
+
+279 The lady at the front of the line asked John to step aside .
+
+280 Sally asked John to stop .
+
+33 John turned off his cell phone .
+###
+
+400 John and Sally sat down in the the auditorium .
+
+24 John and Sally sat down .
+
+56 John and Sally sat down .
+
+119 John and Sally sat down .
+
+199 John and Sally sat down .
+
+229 John and Sally sat down .
+
+255 John and Sally sat down .
+
+141 John and Sally sat down .
+
+207 John and Sally sat down .
+
+435 John and Sally sat down .
+
+###
+131 John and Sally applauded when the movie end .
+
+427 Sally knocked over the popcorn onto the floor .
+
+416 John fell asleep in the movie .
+
+336 Sally went to the bathroom .
+
+115 Sally went to the toilet .
+
+116 Sally returned from the toilet .
+
+312 Sally went to the restroom .
+
+429 John went to the restroom .
+
+335 John and Sally argued over who should pay for the ticket .
+
+230 John and Sally watched ad .
+
+140 John and Sally walked to their seats .
+
+112 John and Sally chose a movie .
+
+198 John and Sally chose seats .
+
+55 John and Sally looked for their seats .
+
+107 John gave Sally a long kiss .
+
+99 Sally gave John a hug .
+
+117 John gave Sally her wine .
+
+302 Sally asked for two ticket to the movie .
+
+132 John and Sally got up once the credit was finish .
+
+412 John waited for Sallys shopping spree .
+
+52 John and Sally selected a movie .
+
+360 John and Sally picked a movie .
+
+413 John and Sally finished shopping .
+
+329 John tried to put his hand around Sally .
+
+303 John did not wanted to see the same movie .
+
+410 John and Sally visited the nearby shopping mall .
+
+221 John put his arm around Sally .
+
+349 Sally tried to calm the angry patron .
+###
+
+292 Steve asked John and Sally about the movie .
+
+268 The usher kicked John and Sally out of the theater .
+
+289 Steve noticed John and Sally .
+
+291 Steve greeted John and Sally .
+
+295 Steve wanted to sit with John and Sally .
+
+290 Steve walked up to John and Sally .
+###
+
+130 John and Sally held hand during the film .
+
+189 John and Sally held hand .
+
+210 John and Sally held hand .
+
+265 John and Sally held hand .
+
+377 John and Sally held hand .
+
+383 John held Sallys hand .
+
+106 John held Sally hand .
+
+318 John held hand with Sally .
+
+388 John held Sally close .
+
+###

@@ -50,11 +50,11 @@ object HierarchicalClusterer {
       for (i <- 0 until matrix.length; j <- 0 until matrix.length)
         if (matrix(i)(j) < 0.6) matrix(i)(j) = 0
 
-      for (i <- 0 to 20) {
-        for (j <- 0 to 20)
-          print(("%.2f" format matrix(i)(j)) + ", ")
-        println
-      }
+//      for (i <- 0 to 20) {
+//        for (j <- 0 to 20)
+//          print(("%.2f" format matrix(i)(j)) + ", ")
+//        println
+//      }
       matrix
     }
 
