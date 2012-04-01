@@ -113,6 +113,7 @@ class StoryNLPParser(val storyList: List[Story], cacheFile: String, overWrite: B
     nlp.getParsed(text)
     val newStories = storyList map { story =>
       val newSents = story.members map { sent =>
+        println(sent.id + " " + sent.toShortString())
         if (!nlp.hasNextSentence()) throw new RuntimeException("parsed sentence exhausted prematurely")
         nlp.processNextSentence();
 
@@ -131,8 +132,8 @@ class StoryNLPParser(val storyList: List[Story], cacheFile: String, overWrite: B
           val graph = nlp.getSemanticGraph()
 
           val relations = graphToRelations(graph, tokens)
-          Sentence(sent.id, tokens, null, relations)
-        } else throw new RuntimeException("empty sentence ")
+          Sentence(sent.id, tokens, null, relations, sent.location)          
+        } else throw new RuntimeException("empty sentence " + sent.id)
       }
       new Story(newSents)
     }
@@ -189,7 +190,7 @@ class DSDSimilarity(val sentList: List[Sentence], cacheFile: String, overWrite:B
     val sim = new SimilarityMetric()
     val matrix = Array.fill(sentList.length, sentList.length)(0.0)
     // do the preprocessing once and for all
-    val sents = sentList.map{s => new Sentence(s.id, s.tokens, s.parse, sim.preprocess(s.deps))}
+    val sents = sentList.map{s => new Sentence(s.id, s.tokens, s.parse, sim.preprocess(s.deps), s.location)}
     
     for (i <- 0 until sents.length) {
       println("processing: " + i)

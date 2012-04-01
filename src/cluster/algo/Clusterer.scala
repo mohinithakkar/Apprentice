@@ -15,7 +15,7 @@ object HierarchicalClusterer {
     sentences = sentences.map{
         s => 
           val nt = s.tokens.map(t => Token(t.word, "AB"))
-          Sentence(s.id, nt, null, Nil)
+          Sentence(s.id, nt, null, Nil, s.location)
           }
     val cl: List[List[Int]] = cluster(matrix)
 

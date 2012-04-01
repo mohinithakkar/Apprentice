@@ -75,7 +75,7 @@ object ClusterMetric {
   // this is the test case
   def main(args: Array[String]) {
     //val storyFile = "movieHierarchical.txt"
-    val storyFile = "optics-strict.txt"
+    val storyFile = "optics-bad-location.txt"
     val clusterFile = "GoldRebuttal.txt"
     println("using story file: " + storyFile)
     var storyList: List[Story] = GoldParser.parseStories(storyFile)
@@ -122,7 +122,7 @@ object ClusterMetric {
     }
 
   def testBCubed1() {
-    val sentences = (0 to 12).map(Sentence(_, Array()))
+    val sentences = (0 to 12).map(Sentence(_, Array(), 0))
     val c1 = new Cluster("a", List(sentences(0), sentences(1), sentences(2), sentences(3), sentences(4)))
     val c2 = new Cluster("b", List(sentences(5), sentences(6)))
     val c3 = new Cluster("c", List(sentences(7), sentences(8), sentences(9), sentences(10), sentences(11)))
@@ -137,7 +137,7 @@ object ClusterMetric {
   }
 
   def testBCubed2() {
-    val sentences = (0 to 12).map(Sentence(_, Array()))
+    val sentences = (0 to 12).map(Sentence(_, Array(), 0))
     val c1 = new Cluster("a", List(sentences(0), sentences(1), sentences(2), sentences(3), sentences(4)))
     val c2 = new Cluster("b", List(sentences(5), sentences(6)))
     val c3 = new Cluster("c", List(sentences(7), sentences(8), sentences(9), sentences(10), sentences(11)))
@@ -152,7 +152,7 @@ object ClusterMetric {
   }
 
   def testMUC() {
-    val sentences = (0 to 10).map(Sentence(_, Array()))
+    val sentences = (0 to 10).map(Sentence(_, Array(), 0))
     val c1 = new Cluster("a", List(sentences(0), sentences(1), sentences(2)))
     val c2 = new Cluster("b", List(sentences(3), sentences(4), sentences(5)))
     val c3 = new Cluster("c", List(sentences(6), sentences(7), sentences(8)))

@@ -14,10 +14,11 @@ case class Sentence(
   val tokens: Array[Token],
   var parse: Tree,
   var deps: List[Dependency],
+  var location:Double,
   var next: Sentence = null,
   var cluster: Cluster = null) extends XStreamable {
 
-  var location:Double = 0
+  //var location:Double = 0
   
   override def toString(): String =
     "(S" + id + ") " + tokens.map { t => t.word + "/" + t.pos }.mkString(" ")
@@ -37,7 +38,8 @@ case class Sentence(
 }
 
 object Sentence {
-  def apply(id: Int, tokens: Array[Token]) = new Sentence(id, tokens, null, null)
+  def apply(id: Int, tokens: Array[Token], loc:Double) = new Sentence(id, tokens, null, null, loc)
+  def apply(id: Int, tokens: Array[Token]) = new Sentence(id, tokens, null, null, 0)
 }
 
 class Cluster(
@@ -85,6 +87,15 @@ class Story(
   }
 
   override def hashCode() = ("Story".hashCode * 29 + members.hashCode * 53) / 107
+  
+  def addStoryLocation() {
+    for(i <- 0 until members.length)
+    {
+      val s = members(i)
+      val location = i.toDouble / (members.length - 1)
+      s.location = location
+    }
+  }
 }
 
 class ClusterLink(val source: Cluster, val target: Cluster, var count: Int = 0) extends Ordered[ClusterLink] with XStreamable {

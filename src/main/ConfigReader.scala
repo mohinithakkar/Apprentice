@@ -55,27 +55,11 @@ class ConfigReader(val configFile: String) {
       val storyFile = properties.getProperty("storyFile")
       val clusterFile = properties.getProperty("clusterFile")
 
-      println("using story file: " + storyFile)
-      var storyList: List[Story] = GoldParser.parseStories(storyFile)
+      //println("using story file: " + storyFile)
+      var storyList: List[Story] = SimpleParser.parseStories("./data/movie/movieSimpleStories.txt")
+      //GoldParser.parseStories(storyFile)
 
-      //      println("old Stories \n " + storyList.map {
-      //        story =>
-      //          story.members.map {
-      //            sentence: Sentence => sentence.id + " " + sentence.tokens.map(_.word).mkString(" ")
-      //          }.mkString("\n")
-      //      }.mkString("\n###\n"))
-
-      // val text = storyList.map(_.members.mkString("\n")).mkString("\n")
-      //println(text)
-
-      //      storyList = parseSentence(storyList)
-      //      
-      //      println("\n new Stories \n " + storyList.map {
-      //        story =>
-      //          story.members.map {
-      //            sentence: Sentence => sentence.tokens.map(_.word).mkString(" ")
-      //          }.mkString("\n")
-      //      }.mkString("\n###\n"))
+      storyList.foreach(_.addStoryLocation())
 
       println("using cluster file: " + clusterFile)
       val clusterList: List[Cluster] = initClusters(storyList, clusterFile)
@@ -250,30 +234,29 @@ object ConfigReader {
     val simi = new DSDSimilarity(sentList, "movieSimilarity.txt")
     val matrix = simi()
 
-    //    utils.Matrix.prettyPrint(matrix)
-    //    println("sents = " + sentList.length)
-    //    println("matrix length = " + matrix.length)
+    //utils.Matrix.prettyPrint(matrix)
+    //        println("sents = " + sentList.length)
+    //        println("matrix length = " + matrix.length)
 
-    var max:Double = 0
+    var max: Double = 0
     val distance = matrix.map { a =>
       a.map { value =>
         if (value != 0) {
           val v = 1 / value
           if (v > max) max = v
           v
-        }
-        else Double.PositiveInfinity
+        } else Double.PositiveInfinity
       }
     }
-    
-    println("v = " + max)
+
+    //println("v = " + max)
     //utils.Matrix.prettyPrint(distance)
-    val clusterList = cluster.algo.OPTICS.cluster(distance, 0.7, 3, sentList)
-    
+    val clusterList = cluster.algo.OPTICS.cluster(distance, max, 4, sentList)
+
     val text = clusterList.map(_.toHexSeparatedString()).mkString
     println()
-    
-    println(text)
+
+    //println(text)
   }
 
   def xml() {

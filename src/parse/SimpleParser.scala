@@ -7,26 +7,32 @@ import data._
 import graph._
 
 object SimpleParser extends JavaTokenParsers {
-  protected def word: Parser[String] = """[-’\w\,'"?!]+""".r
-  protected def token: Parser[Token] = word ^^ 
-  {
-    case word => Token(word, "")
-  }
-
-  protected def sentence: Parser[Sentence] = wholeNumber ~ rep(token) <~ "." ^^
+  
+  override val whiteSpace = """[ \t]+""".r
+  
+  def eol: Parser[Any] = """(\r?\n)+""".r
+  
+  protected def word: Parser[String] = """[-\w\,'"?!\.]+""".r
+  protected def token: Parser[Token] = word ^^
     {
-      case number ~ list =>
-        Sentence(number.toInt, (list ::: List(Token(".", ""))).toArray)
+      case word => Token(word, "")
     }
 
-  protected def cluster: Parser[Cluster] = """@\s""".r ~> """[-\w\s]+\n""".r ~ rep(sentence) <~ "###" ^^
+  protected def sentence: Parser[Sentence] = wholeNumber ~ rep(token) <~ eol ^^
+    {
+      case number ~ list =>
+        //println("parsed: " + list.map(_.word).mkString(" "))
+        Sentence(number.toInt, list.toArray)
+    }
+
+  protected def cluster: Parser[Cluster] = """@\s""".r ~> """[-\w\s]+\n""".r ~ rep(sentence) <~ "###" ~ opt(eol) ^^
     {
       case name ~ list =>
         //println("Parsed cluster " + name.trim)
         new Cluster(name.trim, list)
     }
 
-  protected def story: Parser[Story] = rep(sentence) <~ "###" ^^
+  protected def story: Parser[Story] = rep(sentence) <~ "###" ~ opt(eol) ^^
     {
       case list =>
         val array = list.toArray[Sentence]
@@ -45,20 +51,38 @@ object SimpleParser extends JavaTokenParsers {
   def parseStories(filename: String): List[Story] =
     {
       val storiesText = scala.io.Source.fromFile(filename).mkString
-      try {
-        parseAll(stories, storiesText).get
-      } catch {
-        case e: RuntimeException =>
-          e.printStackTrace()
-          println(e.getLocalizedMessage())
-          throw new RuntimeException()
+
+      val result = parseAll(stories, storiesText)
+
+      result match {
+        case Success(x, _) => return x
+        case NoSuccess(err, next) => {
+          println("failed to parse input as stories from " + filename + 
+            " (line " + next.pos.line + ", column " + next.pos.column + "):\n" +
+            err + "\n" +
+            next.pos.longString)
+          System.exit(1)
+          Nil
+        }
       }
     }
 
   def parseClusters(filename: String): List[Cluster] =
     {
       val clusterText = scala.io.Source.fromFile(filename).mkString
-      parseAll(rep(cluster), clusterText).get
+      val result = parseAll(rep(cluster), clusterText)
+
+      result match {
+        case Success(x, _) => return x
+        case NoSuccess(err, next) => {
+          println("failed to parse input as clusters" +
+            "(line " + next.pos.line + ", column " + next.pos.column + "):\n" +
+            err + "\n" +
+            next.pos.longString)
+          System.exit(1)
+          Nil
+        }
+      }
     }
 
   def main(args: Array[String]) {

@@ -7,7 +7,7 @@ import data._
 import data._
 
 object GoldParser extends JavaTokenParsers {
-  protected def word: Parser[String] = """[-’\w\.,']+""".r
+  protected def word: Parser[String] = """[-’\w\.,'’]+""".r
   protected def pos: Parser[String] = """[A-Z\$\.,]+""".r
   protected def token: Parser[Token] = word ~ "/" ~ pos ^^ {
     case word ~ "/" ~ pos => Token(word, pos)
@@ -83,7 +83,7 @@ object GoldParser extends JavaTokenParsers {
 
   def parseClusters(filename: String): List[Cluster] =
     {
-      val clusterText = scala.io.Source.fromFile(filename).mkString
+      val clusterText = scala.io.Source.fromFile(filename).mkString.replaceAll("â€™", "")
       val result = parseAll(rep(cluster), clusterText)
 
       result match {

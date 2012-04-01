@@ -124,8 +124,15 @@ class SimilarityMetric {
         val idx1 = result(i)(0)
         val idx2 = result(i)(1)
         // the scaling factor = e ^ -0.2x
-        sum += residual(idx1)(idx2) * math.pow(math.E, (deps1(idx1).depth + deps2(idx2).depth) / -20)
+        sum += residual(idx1)(idx2) * math.pow(math.E, (deps1(idx1).depth + deps2(idx2).depth) / -30)
       }
+      
+      //println("loc1 : " + sent1.location + " loc 2: " + sent2.location)
+      val location = 0.3 - 0.6 * math.abs(sent1.location - sent2.location)
+      
+      if (sum < 0.6) sum = 0
+      sum += location 
+      if (sum < 0) sum = 0
 
       (sum, 0)
 

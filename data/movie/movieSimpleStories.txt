@@ -10,7 +10,7 @@
 11 John and Sally laughed during the movie .
 12 Sally was surprised by the movie ending .
 13 Sally and John left when the movie finished .
-###
+### 
 15 John and Sally got in line for the movie ticket .
 16 John and Sally bought the ticket .
 17 John and Sally got in line for popcorn .
@@ -82,7 +82,7 @@
 82 John and Sally left the movie theater .
 ###
 84 John and Sally walked to the movie ticket counter one evening .
-85 Sally payed for the movie ticket .
+85 Sally paid for the movie ticket .
 86 John and Sally sat down inside the auditorium .
 87 Sally went to buy popcorn .
 88 John attempted to kiss Sally .
@@ -324,7 +324,7 @@
 323 John paid for the ticket .
 324 John and Sally gave their ticket to an usher .
 325 John and Sally found seats in the auditorium .
-326 John asked Sally "Do you want popcorn?" .
+326 John asked Sally "Do you want popcorn?"
 327 Sally did not want popcorn .
 328 John and Sally watched the movie .
 329 John tried to put his hand around Sally .
