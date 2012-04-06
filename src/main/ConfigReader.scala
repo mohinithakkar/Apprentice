@@ -69,6 +69,25 @@ class ConfigReader(val configFile: String) {
       (storyList, clusterList)
     }
 
+  def initDataFilterUnused(): (List[Story], List[Cluster]) =
+    {
+      val storyFile = properties.getProperty("storyFile")
+      val clusterFile = properties.getProperty("clusterFile")
+
+      //println("using story file: " + storyFile)
+      var storyList: List[Story] = SimpleParser.parseStories("./data/movie/movieSimpleStories.txt")
+      //GoldParser.parseStories(storyFile)
+
+      storyList.foreach(_.addStoryLocation())
+
+      println("using cluster file: " + clusterFile)
+      val clusterList: List[Cluster] = initClusters(storyList, clusterFile)
+
+      // This filters unused sentences in the stories
+      storyList = filterUnused(storyList, clusterList)
+      (storyList, clusterList)
+    }
+
   def filterUnused(storyList: List[Story], clusterList: List[Cluster]): List[Story] =
     {
       val used = clusterList.flatMap { _.members }
@@ -225,38 +244,174 @@ object ConfigReader {
     val reader = new ConfigReader("configMv3.txt")
     val (stories, clusters) = reader.initData()
     val parser = new StoryNLPParser(stories, "movieParsed.txt", true)
-    val s = parser()
-    val zero = s.storyList(0)
+    // val zero = s.storyList(0)
     //    println(zero)
     //    println(zero.members.mkString("\n"))
 
-    val sentList = s.storyList.flatMap(_.members)
-    val simi = new DSDSimilarity(sentList, "movieSimilarity.txt")
-    val matrix = simi()
+    def sentFn: () => List[Sentence] = () => parser().storyList.flatMap(_.members)
 
+    val simi = new DSDSimilarity(sentFn, "movieSemantic.txt")
+    val matrix1 = simi()
+    //    utils.Matrix.prettyPrint(matrix1)
+    //    System.exit(0)
+    val local = new SimpleLocation(sentFn, 0.9, "movieLocations.txt")
+
+    var addition = new MatrixAddition(() => simi(), () => local(), 0.3, "movie1stSimilarity.txt")
+
+    //val matrix = simi()
+    var matrix = addition()
     //utils.Matrix.prettyPrint(matrix)
     //        println("sents = " + sentList.length)
     //        println("matrix length = " + matrix.length)
 
+    //no-link constraints
+    var count = 0
+    for (story <- stories) {
+      val storyLen = story.members.length
+      for (i <- 0 until storyLen; j <- i + 1 until storyLen) {
+        matrix(i + count)(j + count) = 0
+        matrix(j + count)(i + count) = 0
+      }
+      count = storyLen
+    }
+
     var max: Double = 0
-    val distance = matrix.map { a =>
+    var distance = matrix.map { a =>
       a.map { value =>
         if (value != 0) {
           val v = 1 / value
-          if (v > max) max = v
+          if (v > max) {
+            max = v
+            println("smallest " + value)
+          }
           v
         } else Double.PositiveInfinity
       }
     }
 
-    //println("v = " + max)
-    //utils.Matrix.prettyPrint(distance)
-    val clusterList = cluster.algo.OPTICS.cluster(distance, max, 4, sentList)
+    println("v = " + max)
 
-    val text = clusterList.map(_.toHexSeparatedString()).mkString
-    println()
+    val clusterList = cluster.algo.OPTICS.cluster(distance, max, 4, stories.flatMap(_.members.toList))
 
-    //println(text)
+    
+    // the first 5 big clusters
+    val big = clusterList.sortWith((c1, c2) => c1.members.length > c2.members.length).take(3)
+    //println(big.mkString("\n"))
+    val clusOrder = order(stories, big)
+
+    //println(clusOrder.mkString("\n"))
+    import scala.collection.mutable.HashMap
+    var numbers = new HashMap[Cluster, Int]()
+    for (i <- 0 until clusOrder.length) numbers += (clusOrder(i) -> (i + 1))
+
+    println(numbers.mkString("\n"))
+
+    for (story <- stories) {
+      var interval = ListBuffer[Sentence]()
+      var prev = 0
+      for (sent <- story.members) {
+        sent.location = 0
+        val base = clusOrder.find(_.members.contains(sent))
+        base match {
+          case Some(c: Cluster) =>
+            val cur = numbers(c)
+            sent.location = numbers(c)
+            assignLoc(interval.toList, prev, cur)
+            prev = cur
+            interval.clear()
+          case None => interval += sent
+        }
+      }
+    }
+    
+    val betterDist = new SimpleLocation(() => stories.flatMap(_.members), 1, "movieBetterLocations.txt")
+    addition = new MatrixAddition(() => simi(), () => betterDist(), 0.2, "movie2ndSimilarity.txt")
+
+    matrix = addition()
+
+    // no-link constraints
+    count = 0
+    for (story <- stories) {
+      val storyLen = story.members.length
+      for (i <- 0 until storyLen; j <- i + 1 until storyLen) {
+        matrix(i + count)(j + count) = 0
+        matrix(j + count)(i + count) = 0
+      }
+      count = storyLen
+    }
+
+    max = 0
+    distance = matrix.map { a =>
+      a.map { value =>
+        if (value != 0) {
+          val v = 1 / value
+          if (v > max) {
+            max = v
+            println("smallest " + value)
+          }
+          v
+        } else Double.PositiveInfinity
+      }
+    }
+
+    //cluster.algo.OPTICS.loose = true
+    val fclusters = cluster.algo.OPTICS.cluster(distance, max, 4, stories.flatMap(_.members.toList))
+
+    //fclusters.
+
+  }
+
+  def assignLoc(list: List[Sentence], prev: Int, cur: Int) {
+    val step: Double = (cur - prev).toDouble / (list.length + 1)
+    for (i <- 0 until list.length) {
+      list(i).location = (i + 1) * step + prev
+      println(list(i).toShortString() + " : " + list(i).location)
+    }
+
+    println("\n")
+  }
+
+  def order(stories: List[Story], clusters: List[Cluster]): List[Cluster] = {
+
+    import scala.collection.mutable.HashMap
+    var map = new HashMap[(Cluster, Cluster), (Int, Int)]()
+    var numbers = new HashMap[Cluster, Int]()
+    for (i <- 0 until clusters.length) numbers += (clusters(i) -> i)
+
+    val storyList = stories.map { s =>
+      val memb = s.members.filter(sent => clusters.exists(_.members.contains(sent)))
+      new Story(memb)
+    }.filter { _.members.length > 0 }
+
+    for (story <- storyList) {
+      val members = story.members
+      for (i <- 0 until members.length; j <- i + 1 until members.length if members(i).cluster != members(j).cluster) {
+        val cpair = (members(i).cluster, members(j).cluster)
+        val rpair = (members(j).cluster, members(i).cluster)
+        if (map.contains(cpair)) {
+          val t = map(cpair)
+          map += (cpair -> (t._1 + 1, t._2))
+        } else if (map.contains(rpair)) {
+          val t = map(rpair)
+          map += (rpair -> (t._1, t._2 + 1))
+        } else {
+          map += (cpair -> (1, 0))
+        }
+      }
+    }
+
+    var ordering = List[(Int, Int)]()
+
+    println(map.map(x => x._1._1.name + " -> " + x._1._2.name + " " + x._2).mkString("\n"))
+    map.foreach {
+      case (pair, count) =>
+        if (count._1 > count._2) ordering = (numbers(pair._1), numbers(pair._2)) :: ordering
+        else if (count._2 > count._1) ordering = (numbers(pair._2), numbers(pair._1)) :: ordering
+    }
+
+    val result = new Ordering(ordering.toSet).topsort().map(clusters(_))
+
+    result
   }
 
   def xml() {
@@ -275,13 +430,24 @@ object ConfigReader {
     Thread.sleep(2000)
   }
 
+  def tempGraph(stories: List[Story], clusters: List[Cluster]) = {
+    val reader = new ConfigReader("configMvn.txt")
+    val para = reader.allParameters()(0)
+    val outputPath = new File(reader.properties.getProperty("storyFile")).getParent()
+    para.put("outputFile", outputPath + "\\conft")
+    Relation.init(para)
+
+    val gen = new GraphGenerator(stories, clusters, para)
+    val (prevErr, prevFreedom, afterErr, afterFreedom) = gen.generate()
+  }
+
   def generateGraphs() {
     val reader = new ConfigReader("configMv3.txt")
     val (stories, clusters) = reader.initData()
     for (s <- stories) println(s)
 
     val parameters = reader.allParameters()
-    val outputPath = new File(reader.properties.getProperty("storyFile")).getParent();
+    val outputPath = new File(reader.properties.getProperty("storyFile")).getParent()
     var i = 1;
     val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(outputPath + "\\summary.csv")));
 

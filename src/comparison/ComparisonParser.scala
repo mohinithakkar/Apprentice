@@ -33,23 +33,25 @@ object ComparisonParser extends JavaTokenParsers {
   }
 
   def main(args: Array[String]) {
-    if (args.length < 2) {
-      println("needs two parameters")
-      System.exit(-1)
-    }
-
-    val func = args(0).toInt
-    val path = args(1)
+//    if (args.length < 2) {
+//      println("needs two parameters")
+//      System.exit(-1)
+//    }
+//
+//    val func = args(0).toInt
+//    val path = args(1)
+//    
+//    func match {
+//      case 1 => function1(path)
+//      case 2 => function2(path)
+//      case 3 => function3(path)
+//    }
     
-    func match {
-      case 1 => function1(path)
-      case 2 => function2(path)
-      case 3 => function3(path)
-    }
+    function1()
   }
 
   // average results
-  def function3(path:String = "./comparison data/movie_noweights/") {
+  def function3(path:String = "./comparison data/rest_initial_final/") {
     
     var mucSum = Result(0, 0, 0)
     var homeSum = Result(0, 0, 0)
@@ -65,8 +67,8 @@ object ComparisonParser extends JavaTokenParsers {
         val rest = it.mkString("\n").replaceAll(" /.", "").replaceAll("’", "")
         val (p: Parameters, homeResult: Result) = parseAll(header, head).get
 
-        val clusterFile = "GoldRebuttal.txt"
-        //val clusterFile = "testGoldRestaurant.txt"
+        //val clusterFile = "GoldRebuttal.txt"
+        val clusterFile = "testGoldRestaurant.txt"
 
         var storyList: List[Story] = GoldParser.parseStoryText(rest)
 
@@ -150,7 +152,7 @@ object ComparisonParser extends JavaTokenParsers {
   }
 
   // average of the best of each parameter sweep
-  def function1(path:String = "./comparison data/movie/") {
+  def function1(path:String = "./comparison data/rest_final/") {
     // these are for column 2: location weights == 0
     var mucSum2 = Result(0, 0, 0)
     var homeSum2 = Result(0, 0, 0)
@@ -182,8 +184,8 @@ object ComparisonParser extends JavaTokenParsers {
         val rest = it.mkString("\n").replaceAll(" /.", "").replaceAll("’", "")
         val (p: Parameters, homeResult: Result) = parseAll(header, head).get
 
-        val clusterFile = "GoldRebuttal.txt"
-        //val clusterFile = "testGoldRestaurant.txt"
+        //val clusterFile = "GoldRebuttal.txt"
+        val clusterFile = "testGoldRestaurant.txt"
 
         var storyList: List[Story] = GoldParser.parseStoryText(rest)
 

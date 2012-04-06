@@ -15,7 +15,7 @@ abstract class CachedOp[T](val cacheFile: String, val saveFile: String, val over
   def read(): Option[T] =
     {
       try {
-        
+
         val string =
           {
             val plainFile = new File(cacheFile)
@@ -45,7 +45,6 @@ abstract class CachedOp[T](val cacheFile: String, val saveFile: String, val over
   def compute(): T
 
   def apply(): T = {
-
     var updated = false
 
     val result =
@@ -76,7 +75,7 @@ abstract class CachedOp[T](val cacheFile: String, val saveFile: String, val over
 
   def read7z(file: File): String = {
     val byteStream = new FileInputStream(file)
-    println("reading lzma stream from : "+ file.getName())
+    println("reading lzma stream from : " + file.getName())
     val length = byteStream.available()
     val b = new Array[Byte](length)
     byteStream.read(b)
@@ -98,7 +97,7 @@ abstract class CachedOp[T](val cacheFile: String, val saveFile: String, val over
   def write7z(filename: String, text: String) {
     val out = new BufferedOutputStream(new FileOutputStream(filename))
     val bytes = data.SevenZip.encode(text)
-//    println(bytes.mkString(" "))
+    //    println(bytes.mkString(" "))
     println("writing to " + filename)
     out.write(bytes)
     out.close()
@@ -113,7 +112,7 @@ class StoryNLPParser(val storyList: List[Story], cacheFile: String, overWrite: B
     nlp.getParsed(text)
     val newStories = storyList map { story =>
       val newSents = story.members map { sent =>
-        println(sent.id + " " + sent.toShortString())
+        println(sent.id + " " + sent.tokens.map(_.word).mkString(" "))
         if (!nlp.hasNextSentence()) throw new RuntimeException("parsed sentence exhausted prematurely")
         nlp.processNextSentence();
 
@@ -132,7 +131,7 @@ class StoryNLPParser(val storyList: List[Story], cacheFile: String, overWrite: B
           val graph = nlp.getSemanticGraph()
 
           val relations = graphToRelations(graph, tokens)
-          Sentence(sent.id, tokens, null, relations, sent.location)          
+          Sentence(sent.id, tokens, null, relations, sent.location)
         } else throw new RuntimeException("empty sentence " + sent.id)
       }
       new Story(newSents)
@@ -184,14 +183,15 @@ class StoryNLPParser(val storyList: List[Story], cacheFile: String, overWrite: B
   }
 }
 
-class DSDSimilarity(val sentList: List[Sentence], cacheFile: String, overWrite:Boolean = true) extends CachedOp[Array[Array[Double]]](cacheFile, cacheFile, overWrite) {
-  def compute():Array[Array[Double]] = {
-    
+class DSDSimilarity(sentFn: () => List[Sentence], cacheFile: String, overWrite: Boolean = true) extends CachedOp[Array[Array[Double]]](cacheFile, cacheFile, overWrite) {
+  def compute(): Array[Array[Double]] = {
+
+    val sentList: List[Sentence] = sentFn()
     val sim = new SimilarityMetric()
     val matrix = Array.fill(sentList.length, sentList.length)(0.0)
     // do the preprocessing once and for all
-    val sents = sentList.map{s => new Sentence(s.id, s.tokens, s.parse, sim.preprocess(s.deps), s.location)}
-    
+    val sents = sentList.map { s => new Sentence(s.id, s.tokens, s.parse, sim.preprocess(s.deps), s.location) }
+
     for (i <- 0 until sents.length) {
       println("processing: " + i)
       for (j <- i + 1 to sents.length - 1) {
@@ -199,11 +199,49 @@ class DSDSimilarity(val sentList: List[Sentence], cacheFile: String, overWrite:B
         matrix(j)(i) = matrix(i)(j)
       }
     }
-    
-    // filter the similarities
-    for (i <- 0 until matrix.length; j <- 0 until matrix.length)
-        if (matrix(i)(j) < 0.6) matrix(i)(j) = 0
-    
+
     matrix
   }
+}
+
+class SimpleLocation(sentFn: () => List[Sentence], locWeights:Double, cacheFile: String, overWrite: Boolean = true) extends CachedOp[Array[Array[Double]]](cacheFile, cacheFile, overWrite) {
+  //final val LOC_WTS = 0.8
+
+  def compute(): Array[Array[Double]] = {
+    val sentList = sentFn()
+    val length = sentList.length
+    val matrix = Array.ofDim[Double](length, length)
+    for (
+      i <- 0 until length;
+      j <- i + 1 until length
+    ) {
+      val sent1 = sentList(i)
+      val sent2 = sentList(j)
+      //println(sent1.location + " // " + sent2.location) 
+      var value = (locWeights / 2) - locWeights * math.abs(sent1.location - sent2.location)
+      if (value < 0.01) value = 0
+      matrix(i)(j) = value
+      matrix(j)(i) = value
+    }
+    matrix
+  }
+}
+
+class MatrixAddition(matrix1: () => Array[Array[Double]], matrix2: () => Array[Array[Double]], filter:Double, cacheFile: String, overWrite: Boolean = true) extends CachedOp[Array[Array[Double]]](cacheFile, cacheFile, overWrite) {
+  def compute(): Array[Array[Double]] = {
+    val m1 = matrix1()
+    val m2 = matrix2()
+    val length = m1.length
+    if (m1(0).length != length || m2.length != length || m2(0).length != length)
+      throw new RuntimeException("matrix sizes do not match")
+
+    val result = Array.ofDim[Double](length, length)
+    for (i <- 0 until length; j <- 0 until length) {
+      result(i)(j) = m1(i)(j) + m2(i)(j)
+      if (result(i)(j) < filter) result(i)(j) = 0
+    }
+
+    result
+  }
+
 }

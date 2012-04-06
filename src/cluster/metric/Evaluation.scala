@@ -75,7 +75,7 @@ object ClusterMetric {
   // this is the test case
   def main(args: Array[String]) {
     //val storyFile = "movieHierarchical.txt"
-    val storyFile = "optics-bad-location.txt"
+    val storyFile = "optics-bad-manual.txt"
     val clusterFile = "GoldRebuttal.txt"
     println("using story file: " + storyFile)
     var storyList: List[Story] = GoldParser.parseStories(storyFile)

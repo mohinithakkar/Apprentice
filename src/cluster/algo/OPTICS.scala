@@ -6,6 +6,7 @@ import scala.math.Ordered
 import cluster.gui.ReachPlot
 object OPTICS {
 
+  var loose = false
   final val MAX_DISTANCE = Double.PositiveInfinity
   final val UNDEFINED: Double = Double.PositiveInfinity
   var minClusterSize: Int = 1
@@ -18,6 +19,8 @@ object OPTICS {
     var reachability: Double = UNDEFINED
     var localMaximum = false
     var plotId = 0
+    var previous: Point = null
+    var next: Point = null
 
     override def compare(that: Point): Int = {
       if (this.reachability == UNDEFINED && that.reachability != UNDEFINED) -1 // UNDEFINED is greater than everthing
@@ -101,40 +104,33 @@ object OPTICS {
         }
       }
 
-    val list = ordered.reverse
+    val list = ordered.reverse.toArray
+
+    println("list \n" + list.map(_.reachability).mkString("\n"))
+
+    if (list.length > 1) {
+      list(0).next = list(1)
+      list.last.previous = list(list.length - 2)
+    }
+    for (i <- 1 until list.length - 1) {
+      list(i).previous = list(i - 1)
+      list(i).next = list(i + 1)
+    }
 
     for (p <- list) {
       println("***" + p.id + "/" + sentences(p.id).id + ": " + p.reachability)
-      //println(sentences(p.id))
+      println(sentences(p.id))
     }
 
-    plot = new ReachPlot(list.toArray)
+    plot = new ReachPlot(list)
     plot.show
-    val root = interpret(list.toArray)
+    val root = interpret(list)
 
-    var leaves = List[Node]()
+    //markLeaves(root)
 
-    def findLeaves(r: Node) {
-      if (r.children == Nil) leaves = r :: leaves
-      else r.children.foreach(findLeaves(_))
-    }
-
-    findLeaves(root)
-
-    var regions = List[(Int, Int)]()
-
-    leaves.foreach { leaf =>
-      println(leaf.rArray.map(pt => sentences(pt.id).toString()).mkString("\n"))
-      println("###")
-
-      val start = leaf.rArray.head.plotId
-      val end = leaf.rArray.last.plotId
-      regions = (start, end) :: regions
-    }
-    println(regions)
-
-    plot.markRegions(regions)
-
+    inferClusters(root, sentences)
+    
+    //Nil
     //    var start = 0
     //    var end = 0
     //    var clusterList = List[Cluster]()
@@ -164,7 +160,106 @@ object OPTICS {
     //    //    
     //    clusterList.filter(_.members.length > 1)
 
-    Nil
+  }
+
+  def inferClusters(root: Node, sentences: List[Sentence]): List[Cluster] = {
+    var regions = List[List[Point]]()
+
+    def findLeaves(r: Node) {
+      if (r.children == Nil) {
+
+        val pts = r.rArray
+        val reach = pts.map(_.reachability)
+        val valid =
+          reach.sliding(minClusterSize + 1).exists(l => l.head * 0.98 > l.tail.min) && // head is greater than min
+            reach.sliding(minClusterSize).exists(l => l.max < l.min * 1.05) // a relative flat area
+
+        if (valid) {
+          val max = reach.max
+          val min = reach.min
+          val portion = if (loose) 0.35 else 0.3
+          var goodPortion = pts.filter { x => x.reachability < (min + (max - min) * 0.3) }.toList
+          // divide the portions into continuous parts
+          var additional = List[Point]()
+          var separation = List[(Int, Int)]()
+          var start = 0
+          var end = start
+          for (i <- 0 until goodPortion.length - 1) {
+            if (goodPortion(i).next == goodPortion(i + 1))
+              end += 1
+            else {
+              separation = (start, end) :: separation
+              start = i + 1
+              end = start
+            }
+          }
+          separation = (start, end) :: separation
+          // add the point before the continuous parts only if it is of similar height with the point immediately after the part
+          for (s <- separation) {
+            val endPt = goodPortion(s._2).next
+            val startPt = goodPortion(s._1).previous
+            if (endPt != null && startPt != null && startPt.reachability > goodPortion(s._1).reachability &&
+              endPt.reachability * 1.3 > startPt.reachability &&
+              endPt.reachability * 0.7 < startPt.reachability) {
+              //println("end = " + endPt.reachability + ", start = " + startPt.reachability + " thre = " + endPt.reachability * 1.3)
+              additional = startPt :: additional
+            }
+          }
+          // add the starting points of each segment
+
+          //          for (pt <- goodPortion) {
+          //            if (!goodPortion.contains(pt.previous))
+          //              starts = pt.previous :: starts
+          //          }
+          goodPortion = additional.distinct ::: goodPortion
+          regions = goodPortion :: regions
+        }
+      } else r.children.foreach(findLeaves(_))
+    }
+    //println(minClusterSize)
+    findLeaves(root)
+    //plot.unmarkAll()
+    plot.markRegionalPoints(regions.map { _.map { _.plotId } })
+    
+    var clusterList = List[Cluster]()
+
+    for (r <- regions) {
+      var members = List[Sentence]()
+      for (pt <- r) {
+        println(sentences(pt.id).toString())
+        members = sentences(pt.id) :: members
+      }
+      println("###")
+      val name = members.last.tokens.map(_.word).mkString(" ")
+      val c = new Cluster(name, members)
+      members.foreach(_.cluster = c)
+      clusterList = c :: clusterList
+    }
+
+    clusterList
+  }
+
+  def markLeaves(root: Node) {
+    var leaves = List[Node]()
+
+    def findLeaves(r: Node) {
+      if (r.children == Nil) {
+        leaves = r :: leaves
+      } else r.children.foreach(findLeaves(_))
+    }
+
+    findLeaves(root)
+    var r = List[(Int, Int)]()
+    leaves.foreach { leaf =>
+      //      println(leaf.rArray.map(pt => sentences(pt.id).toString()).mkString("\n"))
+      //      println("###")
+
+      val start = leaf.rArray.head.plotId
+      val end = leaf.rArray.last.plotId
+      r = (start, end) :: r
+    }
+    println("leaves: " + r)
+    plot.markRegions(r)
   }
 
   protected def update(neighbors: List[Point], p: Point, seeds: PriorityQueue[Point], eps: Double, minPts: Int, similarity: Array[Array[Double]]): PriorityQueue[Point] = {
@@ -246,7 +341,7 @@ object OPTICS {
       var localMaxima = new ListBuffer[(Int, Point)]()
 
       minClusterSize = scala.math.ceil(0.005 * rArray.length).toInt
-      println("minimum size = " + minClusterSize)
+      //println("minimum size = " + minClusterSize)
       // first, find all local maximum
       for (idx <- 0 until rArray.length) {
         val point = rArray(idx)
@@ -306,20 +401,22 @@ object OPTICS {
   def clusterTree(n: Node, parent: Node) {
     import scala.collection.mutable.ListBuffer
 
-    println("starting collection")
+    //println("starting collection")
+
+    val id1 = n.rArray.head.plotId
+    val id2 = n.rArray.last.plotId
+    plot.markRegions(List((id1, id2)))
+    plot.sendMessage("processing a node: " + id1 + " - " + id2)
+    plot.unmarkRegions(List((id1, id2)))
+
     if (n.localMaxima.isEmpty) {
-      println("no local maxima in this region")
+      //println("no local maxima in this region")
+      plot.disableRegions(List((id1, id2)))
       parent.children = n :: parent.children
       return
     }
 
     //println("from " + n.rArray.head.id + " to " + n.rArray.last.id)
-    val id1 = n.rArray.head.plotId
-    val id2 = n.rArray.last.plotId
-    plot.markRegions(List((id1, id2)))
-    Thread.sleep(500)
-    //plot.sendMessage("processing a node: " + id1 + " - " + id2)
-    plot.unmarkRegions(List((id1, id2)))
 
     n.splitPt = n.localMaxima.head
 
@@ -329,7 +426,7 @@ object OPTICS {
     val splitPt = n.splitPt
     n.localMaxima = n.localMaxima.tail
 
-    println("split pt = " + splitPt + " " + splitPt.plotId + " split = " + split)
+    //println("split pt = " + splitPt + " " + splitPt.plotId + " split = " + split)
     // cannot use the names N1, N2. Bug?
     var (n1, n2) = n.rArray.splitAt(split)
     //n2 = n2.drop(1)
@@ -341,11 +438,12 @@ object OPTICS {
       else if (pt.plotId > splitPt.plotId) L2 += pt
     }
 
-    println("L1 " + L1.map(_.plotId).mkString(", "))
-    println("L2 " + L2.map(_.plotId).mkString(", "))
+    //println("L1 " + L1.map(_.plotId).mkString(", "))
+    //println("L2 " + L2.map(_.plotId).mkString(", "))
 
-    println("left = " + { if (n1.isEmpty) "()" else n1.head.id + " to " + n1.last.id })
-    println("right = " + { if (n2.isEmpty) "()" else n2.head.id + " to " + n2.last.id })
+    //println("left size = " + n1.size)
+    //println("right size = " + n2.size)
+    //println("right = " + { if (n2.isEmpty) "()" else n2.head.id + " to " + n2.last.id })
     val kid1 = new Node(L1.toList, n1)
     val kid2 = new Node(L2.toList, n2)
     val kids = ListBuffer(kid1, kid2)
@@ -354,77 +452,76 @@ object OPTICS {
     if (!n1.isEmpty) l = (n1.head.plotId, n1.last.plotId) :: l
     if (!n2.isEmpty) l = (n2.head.plotId, n2.last.plotId) :: l
     plot.markRegions(l)
-    //plot.sendMessage("split")
-    Thread.sleep(500)
+    plot.sendMessage("split")
     plot.unmarkRegions(List((id1, id2)))
 
     // average reachability of the left region
-    val leftAvg = {
-      // the next local maximum on the left
-      //val left = (split - 1 to 0 by -1).find {i => reachPlot(i).localMaximum && reachPlot(i).reachability > splitPt.reachability * 0.9}.getOrElse(0)
-      //val region = (left to split - 1).map(rArray(_).reachability)
+    val (leftAvg, leftDev: Double) = {
       val region = (0 until split).map(rArray(_).reachability).filterNot(_ == UNDEFINED)
-      // take care of UNDEFINED values
-      //if (region.contains(UNDEFINED)) UNDEFINED
-      //else 
-      if (region.length > 0)
-        region.sum / region.length
-      else UNDEFINED
+      if (region.length > 0) {
+        val min = region.min
+        val v = region.map(_ - min)
+        (region.sum / region.length, v.sum / v.length)
+      } else (UNDEFINED, 0.0)
     }
 
     // average reachability of the right region
-    val rightAvg = {
-      // the next local maximum on the right
-      //val right = (split + 1 until rArray.length).find { i => rArray(i).localMaximum && rArray(i).reachability > splitPt.reachability * 0.9}.getOrElse(points.length - 1)
-      //val region = (split + 1 to right).map(rArray(_).reachability)
+    val (rightAvg, rightDev: Double) = {
       val region = (split + 1 until rArray.length).map(rArray(_).reachability).filterNot(_ == UNDEFINED)
-      // take care of UNDEFINED values
-      // if (region.contains(UNDEFINED)) UNDEFINED
-      //else 
-      if (region.length > 0)
-        region.sum / region.length
-      else UNDEFINED
+      if (region.length > 0) {
+        val min = region.min
+        val v = region.map(_ - min)
+        (region.sum / region.length, v.sum / v.length)
+      } else (UNDEFINED, 0.0)
     }
-    println(" regions left avg = " + leftAvg + ", right avg = " + rightAvg + ", threshold = " + splitPt.reachability * 0.85)
+    //println(" regions left avg = " + leftAvg + ", right avg = " + rightAvg + ", threshold = " + splitPt.reachability * 0.85)
     // signficance == leftAvg and rightAvg < 75% of split point
-    if (leftAvg > splitPt.reachability * 0.85 && rightAvg > splitPt.reachability * 0.85) {
+    if (leftAvg > splitPt.reachability * 0.98 && rightAvg > splitPt.reachability * 0.98) {
+    //println()
+    //val portion = 0.75
+    //if ((leftAvg + portion * leftDev) > splitPt.reachability && (rightAvg + portion * rightDev) > splitPt.reachability) {
       // this is not significant. Continue to the next
-      println("not significant: " + leftAvg + ", " + rightAvg + " > " + splitPt.reachability * 0.85)
+      //println("not significant: " + leftAvg + ", " + rightAvg + " > " + splitPt.reachability * 0.85)
       if (!n.localMaxima.isEmpty) {
         n.splitPt = n.localMaxima.head
         n.localMaxima = n.localMaxima.tail
         clusterTree(n, parent)
+      } else {
+        /* There is no more maxima 
+         * stop splitting and add this node to its parent
+         */
+        parent.children = n :: parent.children
       }
     } else {
       // remove clusters that are too small
       if (n1.length < minClusterSize) {
-        println("kid 1 too small")
+        //println("kid 1 too small")
         kids -= kid1
       }
       if (n2.length < minClusterSize) {
-        println("kid 2 too small")
+        //println("kid 2 too small")
         kids -= kid2
       }
       if (kids.isEmpty) {
-        println("both kids too small")
+        //println("both kids too small")
         parent.children = n :: parent.children
         return
       }
 
       val nextParent = {
         if (parent != null && approximateHeight(n, parent)) {
-          println("using parent as parent")
+          //println("using parent as parent")
           parent
         } else {
           if (parent != null)
             parent.children = n :: parent.children
-          println("using current node as parent")
+          //println("using current node as parent")
           n
         }
       }
 
       for (kid <- kids) {
-        println("going to kid " + kid.rArray.head.id + " to " + kid.rArray.last.id)
+        //println("going to kid " + kid.rArray.head.id + " to " + kid.rArray.last.id)
         clusterTree(kid, nextParent)
       }
     }

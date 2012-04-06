@@ -3,14 +3,11 @@ import data._
 import utils.HungarianAlgo
 import scala.collection.mutable.Queue
 import scala.collection.mutable.HashMap
-import de.linguatools.disco.DISCO
-import de.linguatools.disco.ReturnDataBN
-import de.linguatools.disco.ReturnDataCol
+import similarity._
 
 class SimilarityMetric {
 
-  val discoDir = "../../en-wikipedia-20080101/"
-  val disco = new DISCO(discoDir, false);
+  val ruler: SimilarityMeasure = DISCO
 
   val simHash = HashMap.empty[(String, String), Double]
 
@@ -27,7 +24,10 @@ class SimilarityMetric {
           if (order2.isDefined) return order2.get
         }
 
-        val value = disco.firstOrderSimilarity(lemma1, lemma2)
+        var value = if (lemma1 == lemma2) 1 else ruler.similarity(lemma1, lemma2)
+        //if (value > 1) throw new Exception(lemma1 + " " + lemma2 + " = " + value)
+        //println(lemma1 + ", " + lemma2 + " = " + value)
+        if (value < 0) value = 0
         simHash.put((lemma1, lemma2), value)
         value
       }
@@ -45,43 +45,42 @@ class SimilarityMetric {
 
         if (head1 == head2 && ((tail1 == "Sally" && tail2 == "John") || (tail2 == "Sally" && tail1 == "John")))
           return 1
+        else if (tail1 == tail2 && ((head1 == "Sally" && head2 == "John") || (head2 == "Sally" && head1 == "John")))
+          return 1
         else {
           val govSim = wordSimilarity(dep1.gov, dep2.gov)
           val depSim = wordSimilarity(dep1.dep, dep2.dep)
-          var base = 0.5 * depSim + 0.5 * govSim
 
-//          if (head1 != head2 && tail1 == tail2) {
-//            val x = existsCollocation(head1, tail1)
-//            val y = existsCollocation(head2, tail1)
-//            if (x.isDefined && y.isDefined) {
-//              val common = (x.get + y.get) / 2
-//              val bonus = 0.3 * govSim * common // scale this bonus with the original similarity of the governor words
-//              base += bonus
-//              println(head1 + " and " + head2 + " have common context: " + tail1 + " adding " + bonus)
-//            }
-//          } else if (head1 == head2 && tail1 != tail2) {
-//            val x = existsCollocation(tail1, head1)
-//            val y = existsCollocation(tail2, head1)
-//            if (x.isDefined && y.isDefined) {
-//              val common = (x.get + y.get) / 2
-//              val bonus = 0.3 * depSim * common // scale this bonus with the original similarity of the dependent words
-//              base += bonus
-//              println(tail1 + " and " + tail2 + " have common context: " + head1 + " adding " + bonus)
-//            }
-//          }
+          var base =
+            if (((tail1 == "Sally" && tail2 == "John") || (tail2 == "Sally" && tail1 == "John")) && govSim < 0.01) 0
+            else if (((head1 == "Sally" && head2 == "John") || (head2 == "Sally" && head1 == "John")) && depSim < 0.01) 0
+            else
+              0.5 * depSim + 0.5 * govSim
+
+          //          if (head1 != head2 && tail1 == tail2) {
+          //            val x = existsCollocation(head1, tail1)
+          //            val y = existsCollocation(head2, tail1)
+          //            if (x.isDefined && y.isDefined) {
+          //              val common = (x.get + y.get) / 2
+          //              val bonus = 0.3 * govSim * common // scale this bonus with the original similarity of the governor words
+          //              base += bonus
+          //              println(head1 + " and " + head2 + " have common context: " + tail1 + " adding " + bonus)
+          //            }
+          //          } else if (head1 == head2 && tail1 != tail2) {
+          //            val x = existsCollocation(tail1, head1)
+          //            val y = existsCollocation(tail2, head1)
+          //            if (x.isDefined && y.isDefined) {
+          //              val common = (x.get + y.get) / 2
+          //              val bonus = 0.3 * depSim * common // scale this bonus with the original similarity of the dependent words
+          //              base += bonus
+          //              println(tail1 + " and " + tail2 + " have common context: " + head1 + " adding " + bonus)
+          //            }
+          //          }
 
           base
         }
       }
     }
-
-  private def existsCollocation(mainWord: String, word2: String): Option[Double] = {
-    val collocation1 = disco.collocations(discoDir, mainWord)
-    if (collocation1 != null)
-      collocation1.find { _.word == word2 }.map { _.value.toDouble }
-    else
-      None
-  }
 
   /**
    * return (Similarity, Dissimilarity). Sentence similarity is a maximum flow problem.
@@ -123,16 +122,17 @@ class SimilarityMetric {
       for (i <- 0 to result.length - 1) {
         val idx1 = result(i)(0)
         val idx2 = result(i)(1)
-        // the scaling factor = e ^ -0.2x
+        // the scaling factor = e ^ -0.33x
         sum += residual(idx1)(idx2) * math.pow(math.E, (deps1(idx1).depth + deps2(idx2).depth) / -30)
       }
-      
+
       //println("loc1 : " + sent1.location + " loc 2: " + sent2.location)
       val location = 0.3 - 0.6 * math.abs(sent1.location - sent2.location)
-      
-      if (sum < 0.6) sum = 0
-      sum += location 
-      if (sum < 0) sum = 0
+
+      //if (sum < 0.501) sum = 0
+      if (sum < 0.1) sum = 0
+      //      sum += location 
+      //      if (sum < 0) sum = 0
 
       (sum, 0)
 
