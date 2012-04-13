@@ -40,3 +40,31 @@ object Lin extends SimilarityMeasure {
     lin.calcRelatednessOfWords(word1, word2)
   }
 }
+
+object Resnik extends SimilarityMeasure {
+  import edu.cmu.lti.lexical_db.NictWordNet
+  import edu.cmu.lti.ws4j.util.WS4JConfiguration;
+  import edu.cmu.lti.ws4j.impl.Resnik
+
+  val db = new NictWordNet();
+  WS4JConfiguration.getInstance().setMFS(true)
+  val lin = new Resnik(db)
+
+  def similarity(word1: String, word2: String): Double = {
+    lin.calcRelatednessOfWords(word1, word2)
+  }
+}
+
+object Vector extends SimilarityMeasure {
+  import edu.cmu.lti.lexical_db.NictWordNet
+  import edu.cmu.lti.ws4j.util.WS4JConfiguration;
+  import edu.cmu.lti.ws4j.impl._
+
+  val db = new NictWordNet();
+  WS4JConfiguration.getInstance().setMFS(true)
+  val vec = new WuPalmer(db)
+
+  def similarity(word1: String, word2: String): Double = {
+    vec.calcRelatednessOfWords(word1, word2)
+  }
+}

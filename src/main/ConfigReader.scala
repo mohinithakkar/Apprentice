@@ -50,13 +50,32 @@ class ConfigReader(val configFile: String) {
       params
     }
 
+  def newInitData(): (List[Story], List[Cluster]) =
+    {
+      val storyFile = properties.getProperty("storyFile")
+      val clusterFile = properties.getProperty("clusterFile")
+
+      //println("using story file: " + storyFile)
+      var storyList: List[Story] = SimpleParser.parseStories(storyFile)
+      //GoldParser.parseStories(storyFile)
+
+      storyList.foreach(_.addStoryLocation())
+
+      //println("using cluster file: " + clusterFile)
+      val clusterList: List[Cluster] = newInitClusters(storyList, clusterFile)
+
+      // This filters unused sentences in the stories
+      //storyList = filterUnused(storyList, clusterList)
+      (storyList, clusterList)
+    }
+
   def initData(): (List[Story], List[Cluster]) =
     {
       val storyFile = properties.getProperty("storyFile")
       val clusterFile = properties.getProperty("clusterFile")
 
       //println("using story file: " + storyFile)
-      var storyList: List[Story] = SimpleParser.parseStories("./data/movie/movieSimpleStories.txt")
+      var storyList: List[Story] = GoldParser.parseStories(storyFile)
       //GoldParser.parseStories(storyFile)
 
       storyList.foreach(_.addStoryLocation())
@@ -98,6 +117,36 @@ class ConfigReader(val configFile: String) {
         new Story(newMembers)
       }
     }
+
+  def newInitClusters(storyList: List[Story], clusterFile: String) =
+    {
+      val hashmap = new HashMap[Int, Sentence]
+      storyList foreach {
+        story =>
+          story.members foreach
+            {
+              sentence =>
+                if (hashmap.contains(sentence.id)) throw new ParsingException("sentence repeated" + sentence.id)
+                hashmap += ((sentence.id, sentence))
+            }
+      }
+
+      SimpleParser.parseClusters(clusterFile) map {
+        c =>
+          val newMembers = c.members map
+            {
+              sentence =>
+                // make sure we get the same sentence 
+                hashmap.get(sentence.id).get
+            }
+          val newC = new Cluster(c.name, newMembers)
+          newC.members foreach { s =>
+            s.cluster = newC
+          }
+          newC
+      }
+    }
+
   /**
    * initializing the clusters. assigning the sentences to the right story and cluster, so we
    *  do not create duplicate sentence objects.
@@ -241,8 +290,8 @@ object ConfigReader {
     //    val string = scala.io.Source.fromFile("movieParsed.txt").mkString    
     //    val obj = XStream.fromXML(string).asInstanceOf[StorySet]
     //    println(obj.storyList.mkString("\n"))
-    val reader = new ConfigReader("configMv3.txt")
-    val (stories, clusters) = reader.initData()
+    val reader = new ConfigReader("configMvS.txt")
+    val (stories, gold) = reader.newInitData()
     val parser = new StoryNLPParser(stories, "movieParsed.txt", true)
     // val zero = s.storyList(0)
     //    println(zero)
@@ -251,12 +300,12 @@ object ConfigReader {
     def sentFn: () => List[Sentence] = () => parser().storyList.flatMap(_.members)
 
     val simi = new DSDSimilarity(sentFn, "movieSemantic.txt")
-    val matrix1 = simi()
+    //var simiMatrix = simi()
     //    utils.Matrix.prettyPrint(matrix1)
     //    System.exit(0)
-    val local = new SimpleLocation(sentFn, 0.9, "movieLocations.txt")
+    val local = new SimpleLocation(sentFn, 0.6, "movieLocations.txt")
 
-    var addition = new MatrixAddition(() => simi(), () => local(), 0.3, "movie1stSimilarity.txt")
+    var addition = new MatrixAddition(() => simi(), () => local(), 0.2, "movie1stSimilarity.txt")
 
     //val matrix = simi()
     var matrix = addition()
@@ -265,103 +314,175 @@ object ConfigReader {
     //        println("matrix length = " + matrix.length)
 
     //no-link constraints
-    var count = 0
-    for (story <- stories) {
-      val storyLen = story.members.length
-      for (i <- 0 until storyLen; j <- i + 1 until storyLen) {
-        matrix(i + count)(j + count) = 0
-        matrix(j + count)(i + count) = 0
-      }
-      count = storyLen
-    }
+//    var count = 0
+//    for (story <- stories) {
+//      val storyLen = story.members.length
+//      for (i <- 0 until storyLen; j <- i + 1 until storyLen) {
+//        matrix(i + count)(j + count) = 0
+//        matrix(j + count)(i + count) = 0
+//      }
+//      count = storyLen
+//    }
 
-    var max: Double = 0
-    var distance = matrix.map { a =>
-      a.map { value =>
-        if (value != 0) {
-          val v = 1 / value
-          if (v > max) {
-            max = v
-            println("smallest " + value)
-          }
-          v
-        } else Double.PositiveInfinity
-      }
-    }
+    val (distance, max) = similarityToDistance(matrix)
 
-    println("v = " + max)
-
-    val clusterList = cluster.algo.OPTICS.cluster(distance, max, 4, stories.flatMap(_.members.toList))
-
-    
-    // the first 5 big clusters
-    val big = clusterList.sortWith((c1, c2) => c1.members.length > c2.members.length).take(3)
-    //println(big.mkString("\n"))
-    val clusOrder = order(stories, big)
-
-    //println(clusOrder.mkString("\n"))
-    import scala.collection.mutable.HashMap
-    var numbers = new HashMap[Cluster, Int]()
-    for (i <- 0 until clusOrder.length) numbers += (clusOrder(i) -> (i + 1))
-
-    println(numbers.mkString("\n"))
-
-    for (story <- stories) {
-      var interval = ListBuffer[Sentence]()
-      var prev = 0
-      for (sent <- story.members) {
-        sent.location = 0
-        val base = clusOrder.find(_.members.contains(sent))
-        base match {
-          case Some(c: Cluster) =>
-            val cur = numbers(c)
-            sent.location = numbers(c)
-            assignLoc(interval.toList, prev, cur)
-            prev = cur
-            interval.clear()
-          case None => interval += sent
-        }
-      }
-    }
-    
-    val betterDist = new SimpleLocation(() => stories.flatMap(_.members), 1, "movieBetterLocations.txt")
-    addition = new MatrixAddition(() => simi(), () => betterDist(), 0.2, "movie2ndSimilarity.txt")
-
-    matrix = addition()
-
-    // no-link constraints
-    count = 0
-    for (story <- stories) {
-      val storyLen = story.members.length
-      for (i <- 0 until storyLen; j <- i + 1 until storyLen) {
-        matrix(i + count)(j + count) = 0
-        matrix(j + count)(i + count) = 0
-      }
-      count = storyLen
-    }
-
-    max = 0
-    distance = matrix.map { a =>
-      a.map { value =>
-        if (value != 0) {
-          val v = 1 / value
-          if (v > max) {
-            max = v
-            println("smallest " + value)
-          }
-          v
-        } else Double.PositiveInfinity
-      }
-    }
-
-    //cluster.algo.OPTICS.loose = true
-    val fclusters = cluster.algo.OPTICS.cluster(distance, max, 4, stories.flatMap(_.members.toList))
-
-    //fclusters.
-
+    var clusterList = cluster.algo.OPTICS.cluster(distance, max, 4, stories.flatMap(_.members.toList))
+    iterativeRestrain(clusterList, stories, simi())
+    //evaluate(clusterList, gold)
   }
 
-  def assignLoc(list: List[Sentence], prev: Int, cur: Int) {
+  def evaluate(clusters: List[Cluster], gold: List[Cluster]) {
+    import cluster.metric.ClusterMetric
+
+    val (r1, p1) = ClusterMetric.muc(gold, clusters)
+    val (r2, p2) = ClusterMetric.bCubed(gold, clusters)
+    println("MUC: recall " + r1 + " precision " + p1 + " f1 " + 2 * p1 * r1 / (p1 + r1))
+
+    println("B Cubed: recall " + r2 + " precision " + p2 + " f1 " + 2 * p2 * r2 / (p2 + r2))
+  }
+
+  def iterativeRestrain(cList: List[Cluster], stories: List[Story], simiMatrix: Array[Array[Double]]) {
+
+    var clusterList = cList
+    val sentences = stories.flatMap(_.members)
+    writeClusters(0, clusterList)
+    for (iteration <- 1 to 4) {
+
+      val sizes = clusterList.map(_.size)
+      val maxSize = sizes.max
+      val minSize = sizes.min
+
+      def weight(c: Cluster): Double = c.coherence(simiMatrix) * (c.size - minSize) / (maxSize - minSize)
+      // the first N big clusters
+      val big = clusterList.sortWith((c1, c2) => weight(c1) > weight(c2)).take(2 + iteration)
+      println(big.mkString("\n"))
+
+      //Thread.sleep(5000)
+      val clusOrder = order(stories, big)
+
+      //println(clusOrder.mkString("\n"))
+      import scala.collection.mutable.HashMap
+      var numbers = new HashMap[Cluster, Double]()
+      for (i <- 0 until clusOrder.length) numbers += (clusOrder(i) -> i / (2 + iteration - 1).toDouble)
+
+      println(numbers.mkString("\n"))
+
+      for (story <- stories) {
+        var interval = ListBuffer[Sentence]()
+        var prev = 0.0
+        for (sent <- story.members) {
+          sent.location = 0
+          val base = clusOrder.find(_.members.contains(sent))
+          base match {
+            case Some(c: Cluster) =>
+              val cur = numbers(c)
+              sent.location = numbers(c)
+              println("anchor: " + sent.toShortString + ": " + sent.location)
+              assignLoc(interval.toList, prev, cur)
+              prev = cur
+              interval.clear()
+            case None => interval += sent
+          }
+        }
+        if (!interval.isEmpty)
+          assignLoc(interval.toList, prev, 1)
+      }
+
+      val betterDist = new SimpleLocation(() => sentences, 0.6 + iteration * 0.2, "movie" + iteration + "BetterLocations.txt", false)
+      val addition = new MatrixAddition(() => simiMatrix, () => betterDist(), 0.2, "movie" + iteration + "Similarity.txt", false)
+
+      val matrix = addition()
+
+      // no-link constraints
+      var count = 0
+      for (story <- stories) {
+        val storyLen = story.members.length
+        for (i <- 0 until storyLen; j <- i + 1 until storyLen) {
+          matrix(i + count)(j + count) = 0
+          matrix(j + count)(i + count) = 0
+        }
+        count = storyLen
+      }
+
+      // no-links between all
+      //    for (
+      //      i <- 0 until clusterList.length;
+      //      j <- i + 1 until clusterList.length
+      //    ) {
+      //      for (m <- clusterList(i).members)
+      //      {
+      //        val id1 = m.id
+      //        m.location = 300
+      //        for (id2 <- clusterList(j).members.map(_.id)) {
+      //          matrix1(id1)(id2) = 0
+      //          matrix1(id2)(id1) = 0
+      //        }
+      //        
+      //        for(id3 <- clusterList(i).members.map(_.id)) {
+      //          matrix1(id1)(id3) = matrix(id1)(id3)
+      //          matrix1(id3)(id1) = matrix1(id1)(id3)  
+      //        }
+      //      }
+      //    }
+
+      //      
+      //      var distance = matrix.map { a =>
+      //        a.map { value =>
+      //          if (value != 0) {
+      //            val v = 1 / value
+      //            if (v > max) {
+      //              max = v
+      //              println("smallest " + value)
+      //            }
+      //            v
+      //          } else Double.PositiveInfinity
+      //        }
+      //      }
+
+      val (distance, max) = similarityToDistance(matrix)
+
+      //cluster.algo.OPTICS.loose = true
+      clusterList = cluster.algo.OPTICS.cluster(distance, max, 4, stories.flatMap(_.members.toList))
+      writeClusters(iteration, clusterList)
+    }
+  }
+
+  def similarityToDistance(matrix: Array[Array[Double]]): (Array[Array[Double]], Double) =
+    {
+      var max = 0.0
+      for (a <- matrix; b <- a) {
+        if (b > max) max = b
+      }
+
+      val top = max + 0.1
+
+      var distance = matrix map {
+        _ map { value =>
+          top - value
+        }
+      }
+
+      (distance, max)
+    }
+
+  def writeClusters(i: Int, clusters: List[Cluster]) {
+    import java.io._
+    val name = "mv-cl-" + i + ".txt"
+    val clusterOut = new PrintWriter(new BufferedOutputStream(new FileOutputStream(name)))
+
+    for (c <- clusters) {
+      clusterOut.println("@ aaa")
+      for (sent <- c.members) {
+        clusterOut.print(sent.id + " ")
+        clusterOut.println(sent.tokens.map(_.word).mkString(" "))
+      }
+      clusterOut.println("###")
+    }
+
+    clusterOut.close()
+  }
+
+  def assignLoc(list: List[Sentence], prev: Double, cur: Double) {
     val step: Double = (cur - prev).toDouble / (list.length + 1)
     for (i <- 0 until list.length) {
       list(i).location = (i + 1) * step + prev

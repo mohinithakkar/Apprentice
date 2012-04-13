@@ -104,9 +104,9 @@ object OPTICS {
         }
       }
 
-    val list = ordered.reverse.toArray
+    var list = ordered.reverse
 
-    println("list \n" + list.map(_.reachability).mkString("\n"))
+    //println("list \n" + list.map(_.reachability).mkString("\n"))
 
     if (list.length > 1) {
       list(0).next = list(1)
@@ -116,20 +116,27 @@ object OPTICS {
       list(i).previous = list(i - 1)
       list(i).next = list(i + 1)
     }
+    //println(list.size)
+//    val min = list.map(_.reachability).min
+//    val max = list.map(_.reachability).filterNot(_ == Double.PositiveInfinity).max
+//    val cutoff = (max - min) * 0.5 + min 
+//    list = list.head :: list.tail.filter(_.reachability < cutoff)
+    //println(list.size)
+    
 
-    for (p <- list) {
-      println("***" + p.id + "/" + sentences(p.id).id + ": " + p.reachability)
-      println(sentences(p.id))
+    for (p <- list) {      
+      println(sentences(p.id).toShortString + ": " +  p.reachability)
     }
 
-    plot = new ReachPlot(list)
+    val larray = list.toArray
+    plot = new ReachPlot(larray)
     plot.show
-    val root = interpret(list)
+    val root = interpret(larray)
 
-    //markLeaves(root)
+    //markLeaves(root, sentences)
 
     inferClusters(root, sentences)
-    
+
     //Nil
     //    var start = 0
     //    var end = 0
@@ -168,8 +175,10 @@ object OPTICS {
     def findLeaves(r: Node) {
       if (r.children == Nil) {
 
-        val pts = r.rArray
+        var pts = r.rArray
+        
         val reach = pts.map(_.reachability)
+
         val valid =
           reach.sliding(minClusterSize + 1).exists(l => l.head * 0.98 > l.tail.min) && // head is greater than min
             reach.sliding(minClusterSize).exists(l => l.max < l.min * 1.05) // a relative flat area
@@ -182,6 +191,7 @@ object OPTICS {
           // divide the portions into continuous parts
           var additional = List[Point]()
           var separation = List[(Int, Int)]()
+          // these indices are w.r.t in this region
           var start = 0
           var end = start
           for (i <- 0 until goodPortion.length - 1) {
@@ -194,15 +204,33 @@ object OPTICS {
             }
           }
           separation = (start, end) :: separation
+          
           // add the point before the continuous parts only if it is of similar height with the point immediately after the part
           for (s <- separation) {
-            val endPt = goodPortion(s._2).next
+            var endInd = s._2 + 1
+            var endPt = goodPortion(s._2).next
             val startPt = goodPortion(s._1).previous
+            // the is the heigh cutoff
+            var height = goodPortion(s._1).reachability
+            
             if (endPt != null && startPt != null && startPt.reachability > goodPortion(s._1).reachability &&
-              endPt.reachability * 1.3 > startPt.reachability &&
-              endPt.reachability * 0.7 < startPt.reachability) {
+              ((endPt.reachability * 1.3 > startPt.reachability &&
+              endPt.reachability * 0.7 < startPt.reachability) || startPt.reachability == UNDEFINED)) {
               //println("end = " + endPt.reachability + ", start = " + startPt.reachability + " thre = " + endPt.reachability * 1.3)
               additional = startPt :: additional
+              height = startPt.reachability
+            }
+            
+            //now try to add some points after the end point
+            var break = false;
+            while(endInd < pts.length && !break)
+            {
+            	if (pts(endInd).reachability <= height && pts(endInd).reachability >= pts(endInd).previous.reachability)
+            	{
+            	  additional = pts(endInd)::additional
+            	  endInd += 1;
+            	}
+            	else break = true;
             }
           }
           // add the starting points of each segment
@@ -211,8 +239,8 @@ object OPTICS {
           //            if (!goodPortion.contains(pt.previous))
           //              starts = pt.previous :: starts
           //          }
-          goodPortion = additional.distinct ::: goodPortion
-          regions = goodPortion :: regions
+          goodPortion = additional ::: goodPortion
+          regions = goodPortion.distinct :: regions
         }
       } else r.children.foreach(findLeaves(_))
     }
@@ -220,13 +248,15 @@ object OPTICS {
     findLeaves(root)
     //plot.unmarkAll()
     plot.markRegionalPoints(regions.map { _.map { _.plotId } })
-    
+
     var clusterList = List[Cluster]()
 
     for (r <- regions) {
       var members = List[Sentence]()
+      println("@ a")
       for (pt <- r) {
-        println(sentences(pt.id).toString())
+        val text = sentences(pt.id).toShortString().replaceAll("\\(S", "").replaceAll("\\)", "") 
+        println(text)// + " : " + sentences(pt.id).location)
         members = sentences(pt.id) :: members
       }
       println("###")
@@ -239,7 +269,7 @@ object OPTICS {
     clusterList
   }
 
-  def markLeaves(root: Node) {
+  def markLeaves(root: Node, sentences:List[Sentence]) {
     var leaves = List[Node]()
 
     def findLeaves(r: Node) {
@@ -256,9 +286,14 @@ object OPTICS {
 
       val start = leaf.rArray.head.plotId
       val end = leaf.rArray.last.plotId
+      for (p <- leaf.rArray)
+        println(sentences(p.id).toShortString())
+        
+      println("###")
       r = (start, end) :: r
     }
-    println("leaves: " + r)
+    //println("leaves: " + r)
+
     plot.markRegions(r)
   }
 
@@ -378,7 +413,7 @@ object OPTICS {
 
       val lm = localMaxima.sortBy(_._2).toList
 
-      println(lm.map(p => p._2.plotId + " " + p._2.reachability).mkString("\n"))
+      //println(lm.map(p => p._2.plotId + " " + p._2.reachability).mkString("\n"))
       val real = lm.map(_._2)
       val root = new Node(real, rArray, null)
       clusterTree(root, null)
@@ -476,10 +511,10 @@ object OPTICS {
     }
     //println(" regions left avg = " + leftAvg + ", right avg = " + rightAvg + ", threshold = " + splitPt.reachability * 0.85)
     // signficance == leftAvg and rightAvg < 75% of split point
-    if (leftAvg > splitPt.reachability * 0.98 && rightAvg > splitPt.reachability * 0.98) {
-    //println()
-    //val portion = 0.75
-    //if ((leftAvg + portion * leftDev) > splitPt.reachability && (rightAvg + portion * rightDev) > splitPt.reachability) {
+    if (leftAvg > splitPt.reachability * 0.85 && rightAvg > splitPt.reachability * 0.85) {
+      //println()
+      //val portion = 0.75
+      //if ((leftAvg + portion * leftDev) > splitPt.reachability && (rightAvg + portion * rightDev) > splitPt.reachability) {
       // this is not significant. Continue to the next
       //println("not significant: " + leftAvg + ", " + rightAvg + " > " + splitPt.reachability * 0.85)
       if (!n.localMaxima.isEmpty) {

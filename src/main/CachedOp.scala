@@ -6,7 +6,7 @@ import scala.collection.mutable.ListBuffer
 import edu.stanford.nlp.trees.semgraph.SemanticGraph
 import edu.stanford.nlp.ling.IndexedWord;
 
-abstract class CachedOp[T](val cacheFile: String, val saveFile: String, val overWrite: Boolean = true, val compression: Int = 0) {
+abstract class CachedOp[T](val cacheFile: String, val saveFile: String, val overWrite: Boolean = true, val compression: Int = 0, val cached: Boolean = true) {
 
   final val COMPRESSED = 0;
   final val PLAIN_TEXT = 1;
@@ -45,32 +45,35 @@ abstract class CachedOp[T](val cacheFile: String, val saveFile: String, val over
   def compute(): T
 
   def apply(): T = {
-    var updated = false
 
-    val result =
-      read() match {
-        case s: Some[T] => s.get
-        case None => {
-          updated = true
-          compute()
+    if (cached) {
+      var updated = false
+
+      val result =
+        read() match {
+          case s: Some[T] => s.get
+          case None => {
+            updated = true
+            compute()
+          }
+        }
+
+      val save = new File(saveFile)
+      if (updated && (overWrite || (!save.exists))) {
+        val str = XStream.toXML(result)
+
+        if (compression == PLAIN_TEXT || compression == BOTH) {
+          val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(save)))
+          pw.println(str)
+          pw.close()
+        }
+
+        if (compression == COMPRESSED || compression == BOTH) {
+          write7z(save + ".lzma", str)
         }
       }
-
-    val save = new File(saveFile)
-    if (updated && (overWrite || (!save.exists))) {
-      val str = XStream.toXML(result)
-
-      if (compression == PLAIN_TEXT || compression == BOTH) {
-        val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(save)))
-        pw.println(str)
-        pw.close()
-      }
-
-      if (compression == COMPRESSED || compression == BOTH) {
-        write7z(save + ".lzma", str)
-      }
-    }
-    result
+      result
+    } else compute()
   }
 
   def read7z(file: File): String = {
@@ -190,13 +193,26 @@ class DSDSimilarity(sentFn: () => List[Sentence], cacheFile: String, overWrite: 
     val sim = new SimilarityMetric()
     val matrix = Array.fill(sentList.length, sentList.length)(0.0)
     // do the preprocessing once and for all
-    val sents = sentList.map { s => new Sentence(s.id, s.tokens, s.parse, sim.preprocess(s.deps), s.location) }
+    val sents = sentList.map { s => 
+      val n = new Sentence(s.id, s.tokens, s.parse, sim.preprocess(s.deps), s.location) 
+//      val v = sim.preprocess(s.deps)
+//      if (v != s.deps) println(s.toShortString + "\n" + v.mkString("\n") + "\n\n")
+      n}
+    
+    //System.exit(-0)
+    for (i <- 0 until sents.length) {
+      for (j <- i + 1 to sents.length - 1) {
+        sim.sentenceSimilarity(sents(i), sents(j))._1
+      }
+    }
+
+    sim.normalize()
 
     for (i <- 0 until sents.length) {
-      println("processing: " + i)
       for (j <- i + 1 to sents.length - 1) {
         matrix(i)(j) = sim.sentenceSimilarity(sents(i), sents(j))._1
         matrix(j)(i) = matrix(i)(j)
+        //if (matrix(i)(j) > 1) throw new Exception(sents(i).toString() + " " + sents(j).toString + " " + matrix(i)(j)) 
       }
     }
 
@@ -204,7 +220,7 @@ class DSDSimilarity(sentFn: () => List[Sentence], cacheFile: String, overWrite: 
   }
 }
 
-class SimpleLocation(sentFn: () => List[Sentence], locWeights:Double, cacheFile: String, overWrite: Boolean = true) extends CachedOp[Array[Array[Double]]](cacheFile, cacheFile, overWrite) {
+class SimpleLocation(sentFn: () => List[Sentence], locWeights: Double, cacheFile: String, cached: Boolean = true, overWrite: Boolean = true) extends CachedOp[Array[Array[Double]]](cacheFile, cacheFile, overWrite, 0, cached) {
   //final val LOC_WTS = 0.8
 
   def compute(): Array[Array[Double]] = {
@@ -227,13 +243,13 @@ class SimpleLocation(sentFn: () => List[Sentence], locWeights:Double, cacheFile:
   }
 }
 
-class MatrixAddition(matrix1: () => Array[Array[Double]], matrix2: () => Array[Array[Double]], filter:Double, cacheFile: String, overWrite: Boolean = true) extends CachedOp[Array[Array[Double]]](cacheFile, cacheFile, overWrite) {
+class MatrixAddition(matrix1: () => Array[Array[Double]], matrix2: () => Array[Array[Double]], filter: Double, cacheFile: String, cached: Boolean = true, overWrite: Boolean = true) extends CachedOp[Array[Array[Double]]](cacheFile, cacheFile, overWrite, 0, cached) {
   def compute(): Array[Array[Double]] = {
     val m1 = matrix1()
     val m2 = matrix2()
     val length = m1.length
     if (m1(0).length != length || m2.length != length || m2(0).length != length)
-      throw new RuntimeException("matrix sizes do not match")
+      throw new RuntimeException("matrix sizes do not match: " + m1(0).length + " " + m2(0).length)
 
     val result = Array.ofDim[Double](length, length)
     for (i <- 0 until length; j <- 0 until length) {

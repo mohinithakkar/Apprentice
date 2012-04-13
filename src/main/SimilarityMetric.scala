@@ -7,9 +7,23 @@ import similarity._
 
 class SimilarityMetric {
 
-  val ruler: SimilarityMeasure = DISCO
+  val ruler: SimilarityMeasure = Resnik
 
-  val simHash = HashMap.empty[(String, String), Double]
+  var simHash = HashMap.empty[(String, String), Double]
+
+  def normalize() {
+    var min = Double.PositiveInfinity
+    var max = 0.0
+    simHash.foreach { x =>
+      if (x._2 < min) min = x._2
+      if (x._2 > max) max = x._2
+    }
+
+    simHash = simHash.map { x =>
+      val value = (x._2 - min) / (max - min) * 0.8
+      (x._1 -> value)
+    }
+  }
 
   def wordSimilarity(word1: Token, word2: Token): Double =
     {
@@ -122,12 +136,16 @@ class SimilarityMetric {
       for (i <- 0 to result.length - 1) {
         val idx1 = result(i)(0)
         val idx2 = result(i)(1)
-        // the scaling factor = e ^ -0.33x
-        sum += residual(idx1)(idx2) * math.pow(math.E, (deps1(idx1).depth + deps2(idx2).depth) / -30)
+        // the scaling factor = e ^ -0.2x
+        // -2 because the minimum depth is 1
+        sum += residual(idx1)(idx2) * math.pow(math.E, (deps1(idx1).depth + deps2(idx2).depth - 2) / -50)
       }
+      
+      sum = sum / math.min(deps1.length, deps2.length)
+      sum -= math.abs(deps1.length - deps2.length) * 0.1
 
       //println("loc1 : " + sent1.location + " loc 2: " + sent2.location)
-      val location = 0.3 - 0.6 * math.abs(sent1.location - sent2.location)
+      //val location = 0.3 - 0.6 * math.abs(sent1.location - sent2.location)
 
       //if (sum < 0.501) sum = 0
       if (sum < 0.1) sum = 0
@@ -142,10 +160,11 @@ class SimilarityMetric {
     {
       var result = deps
       val suspect = deps.filter { d =>
-        d.dep.word == "John" && d.relation == "nsubj"
-      }.filter { dep1 => deps.exists { dep2 => dep2.gov == dep1.gov && dep2.dep.word == "Sally" && dep2.relation == "nsubj" } }
+        d.dep.word == "John" 
+      }.filter { dep1 => deps.exists { dep2 => dep2.gov == dep1.gov && dep2.dep.word == "Sally" && dep2.relation == dep1.relation } }
 
       if (suspect != Nil) {
+        //println(deps.mkString("\n") + "\n\n")
         // remove sally's dependencies
         suspect.foreach { d =>
           result = result.filterNot(dr => dr.gov == d.gov && dr.dep.word == "Sally")

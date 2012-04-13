@@ -46,6 +46,18 @@ class Cluster(
   val name: String,
   val members: List[Sentence]) extends XStreamable {
 
+  def size():Int = members.size
+  
+  def coherence(matrix:Array[Array[Double]]):Double = {
+    var sum = 0.0
+    val combinations = members.combinations(2).toArray
+    for(comb <- combinations)
+    {
+      val sim = matrix(comb(0).id)(comb(1).id)
+      sum += sim
+    }    
+    sum / combinations.size
+  }
   override def toString(): String =
     {
       "Cluster \"" + name + "\": [" + members.map(_.id).mkString(",") + "]"

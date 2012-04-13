@@ -75,21 +75,26 @@ object ClusterMetric {
   // this is the test case
   def main(args: Array[String]) {
     //val storyFile = "movieHierarchical.txt"
-    val storyFile = "optics-bad-manual.txt"
-    val clusterFile = "GoldRebuttal.txt"
-    println("using story file: " + storyFile)
-    var storyList: List[Story] = GoldParser.parseStories(storyFile)
 
-    println("using cluster file: " + clusterFile)
-    val clusterList: List[Cluster] = GoldParser.parseClusters(clusterFile)
+    for (i <- 0 to 4) {
+      //val tested = "optics1.txt"
+      val tested = "mv-cl-"+i+".txt"
+      //val tested = "manual-step1.txt"
+      val clusterFile = "./data/movie/movieSemanticGold.txt"
+      
+      var results: List[Cluster] = SimpleParser.parseClusters(tested)
 
-    val results = storyList.map(s => new Cluster("a", s.members.toList))
-    val (r1, p1) = muc(clusterList, results)
-    val (r2, p2) = bCubed(clusterList, results)
-    println("MUC: recall " + r1 + " precision " + p1 + " f1 " + 2*p1*r1/(p1+r1))
+      println("using cluster file: " + clusterFile)
+      val clusterList: List[Cluster] = SimpleParser.parseClusters(clusterFile)
 
-    println("B Cubed: recall " + r2 + " precision " + p2 + " f1 " + 2*p2*r2/(p2+r2))
-    
+      //val results = storyList.map(s => new Cluster("a", s.members.toList))
+      val (r1, p1) = muc(clusterList, results)
+      val (r2, p2) = bCubed(clusterList, results)
+      println("MUC: precision " + p1 + " recall " + r1 + " f1 " + 2 * p1 * r1 / (p1 + r1))
+
+      println("B Cubed: precision " + p2 + " recall " + r2 + " f1 " + 2 * p2 * r2 / (p2 + r2))
+    }
+
   }
 
   def initClusters(storyList: List[Story], clusterFile: String) =

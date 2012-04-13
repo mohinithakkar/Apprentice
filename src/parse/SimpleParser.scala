@@ -85,7 +85,7 @@ object SimpleParser extends JavaTokenParsers {
       }
     }
 
-  def main(args: Array[String]) {
+ /* def main(args: Array[String]) {
 
     val storyList = parseStories("stories.txt")
 
@@ -329,6 +329,6 @@ object SimpleParser extends JavaTokenParsers {
 
     finalLinks.toList
   }
-
+*/
 }
 
