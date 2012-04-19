@@ -9,6 +9,7 @@ import scala.collection.mutable.ListBuffer
 object Causality {
 
   val MAX_OR = 2
+  
 
   def findCausal(storyList: List[Story], graph: Graph): Graph = {
     val usedClusters = graph.usedClusters()
@@ -74,7 +75,7 @@ object Causality {
           val storyNotAB = ORNotStories(AorBList, storyList)
           val prob2 = storyNotAB.intersect(storyNotC).length / storyNotAB.length.toDouble
           //println(" " + pnA + " " + pnAB)
-          if (prob2 > 0.9 && prob1 > 0.9 && storyNotAB.length > 3 && storyC.length > 3) {
+          if (prob2 > 0.85 && prob1 > 0.85 && storyNotAB.length > 3 && storyC.length > 3) {
             val betterExplanations = result.getOrElse(c, Nil)
             if (!betterExplanations.exists(x => x.filterNot(AorBList.contains(_)) isEmpty)) // no better explanation exists
             {

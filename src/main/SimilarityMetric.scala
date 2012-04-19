@@ -141,8 +141,8 @@ class SimilarityMetric {
         sum += residual(idx1)(idx2) * math.pow(math.E, (deps1(idx1).depth + deps2(idx2).depth - 2) / -50)
       }
       
-      sum = sum / math.min(deps1.length, deps2.length)
-      sum -= math.abs(deps1.length - deps2.length) * 0.1
+      sum = ( sum / math.min(deps1.length, deps2.length) + sum ) / 2
+      //sum -= math.abs(deps1.length - deps2.length) * 0.1
 
       //println("loc1 : " + sent1.location + " loc 2: " + sent2.location)
       //val location = 0.3 - 0.6 * math.abs(sent1.location - sent2.location)

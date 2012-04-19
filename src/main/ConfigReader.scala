@@ -327,7 +327,7 @@ object ConfigReader {
     val (distance, max) = similarityToDistance(matrix)
 
     var clusterList = cluster.algo.OPTICS.cluster(distance, max, 4, stories.flatMap(_.members.toList))
-    iterativeRestrain(clusterList, stories, simi())
+    //iterativeRestrain(clusterList, stories, simi())
     //evaluate(clusterList, gold)
   }
 
