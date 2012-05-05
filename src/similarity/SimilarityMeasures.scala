@@ -1,5 +1,9 @@
 package similarity
 
+import edu.cmu.lti.lexical_db.NictWordNet
+import edu.cmu.lti.ws4j.util.WS4JConfiguration;
+import edu.cmu.lti.ws4j.impl._
+
 abstract class SimilarityMeasure {
 
   //def init()
@@ -28,10 +32,7 @@ object DISCO extends SimilarityMeasure {
 }
 
 object Lin extends SimilarityMeasure {
-  import edu.cmu.lti.lexical_db.NictWordNet
-  import edu.cmu.lti.ws4j.util.WS4JConfiguration;
-  import edu.cmu.lti.ws4j.impl._
-
+  
   val db = new NictWordNet();
   WS4JConfiguration.getInstance().setMFS(true)
   val lin = new Lin(db)
@@ -42,9 +43,6 @@ object Lin extends SimilarityMeasure {
 }
 
 object Resnik extends SimilarityMeasure {
-  import edu.cmu.lti.lexical_db.NictWordNet
-  import edu.cmu.lti.ws4j.util.WS4JConfiguration;
-  import edu.cmu.lti.ws4j.impl.Resnik
 
   val db = new NictWordNet();
   WS4JConfiguration.getInstance().setMFS(true)
@@ -55,14 +53,34 @@ object Resnik extends SimilarityMeasure {
   }
 }
 
+// Vector is not implemented in the library
 object Vector extends SimilarityMeasure {
-  import edu.cmu.lti.lexical_db.NictWordNet
-  import edu.cmu.lti.ws4j.util.WS4JConfiguration;
-  import edu.cmu.lti.ws4j.impl._
+
+  val db = new NictWordNet();
+  WS4JConfiguration.getInstance().setMFS(true)
+  val vec = new Vector(db)
+
+  def similarity(word1: String, word2: String): Double = {
+    vec.calcRelatednessOfWords(word1, word2)
+  }
+}
+
+object WuPalmer extends SimilarityMeasure {
 
   val db = new NictWordNet();
   WS4JConfiguration.getInstance().setMFS(true)
   val vec = new WuPalmer(db)
+
+  def similarity(word1: String, word2: String): Double = {
+    vec.calcRelatednessOfWords(word1, word2)
+  }
+}
+
+object JiangConrath extends SimilarityMeasure {
+
+  val db = new NictWordNet();
+  WS4JConfiguration.getInstance().setMFS(true)
+  val vec = new JiangConrath(db)
 
   def similarity(word1: String, word2: String): Double = {
     vec.calcRelatednessOfWords(word1, word2)

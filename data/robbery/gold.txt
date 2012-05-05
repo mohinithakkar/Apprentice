@@ -1,0 +1,397 @@
+@ John enters bank
+0 John walked into the bank.
+16 John went in the open bank door.
+30 John walked into the bank.
+40 John went into the bank.
+53 John entered the bank .
+61 John entered the bank.
+75 John entered the bank.
+87 John entered the bank.
+101 John went in the bank.
+113 John walked into the bank.
+126 John walked into the bank.
+140 John walked into the bank with a handgun underneath his jacket.
+154 John entered the bank.
+163 John walked into the bank.
+191 John walked into the bank.
+198 John entered the bank.
+207 John opened the bank door and entered the lobby area.
+216 John entered the bank.
+226 John walked into the bank.
+239 John entered the bank.
+251 John entered the bank.
+265 John entered the bank.
+280 John entered the bank.
+291 John entered the bank.
+304 John entered the front door of the bank.
+318 John walked into the bank.
+328 John walked into the bank.
+342 John entered the bank.
+361 John entered the bank.
+374 John entered the banking facility.
+388 John went in the bank.
+400 John entered the bank.
+414 John entered the bank.
+427 John walked into the bank.
+438 John entered the bank.
+468 John entered the bank.
+481 John entered the bank.
+491 John entered the bank.
+499 John entered the bank.
+535 John entered the bank.
+549 John entered the bank.
+559 John entered the bank.
+571 John walked into the bank.
+582 John quietly entered the bank.
+595 John entered the bank.
+611 John entered the bank.
+619 John entered the bank.
+632 John entered the bank.
+641 John entered inside the bank.
+650 John entered the Yes bank at 1 pm.
+662 John walked into the front door of the bank.
+672 John entered the bank lobby.
+682 John entered the bank.
+697 John entered the bank.
+###
+@ John sees Sally
+88 John noticed Sally, the bank teller.
+141 John saw Sally behind the second teller window with a customer.
+2 John watched Sally.
+241 John recognized Sally.
+305 John saw Sally standing behind the counter.
+141 John saw Sally behind the second teller window with a customer.
+###
+@ John scans the bank
+17 John looked around the bank.
+240 John scanned the bank lobby.
+583 John scanned the inside of the bank for cameras.
+663 John looked to see which teller was available.
+###
+@ John approaches Sally
+3 John walked over to Sally.
+19 John approached Sally.
+31 John went up to the counter.
+41 John walked to the teller window.
+54 John approached the only available teller whose name was Sally.
+65 John approached Sally's window.
+76 John approached Sally, the bank teller.
+89 Quietly and calmly John walked up to Sally's window.
+114 John walked up to the teller counter.
+128 John walked up to Sally's window.
+164 John walked to Sally.
+200 John approached Sally.
+242 John approached Sally.
+266 John approached Sally's window.
+281 John walked up to Sally, a teller.
+293 John approached Sally.
+306 Sally saw John coming toward Sally.
+329 John went to Sally's booth.
+344 John stepped up to the teller booth.
+352 John approached the counter
+364 John approached the counter.
+376 John encountered sally at the counter.
+389 John walked up to Sally.
+404 John walked up to Sally's station.
+420 John walked up to Sally's window.
+428 John walked up to Sally.
+469 John walked to Sally's counter.
+500 John walked to the counter.
+512 John walked to Sally the teller.
+524 John approached Sally.
+536 John walked to Sally's teller window.
+550 John walked up to the counter.
+562 John walked over to Sally.
+584 John approached Sally, the bank teller.
+596 John approached Sally's window.
+620 John walked up to Sally's window.
+664 John approached the availble teller.
+698 John walked over to Sally's bank window.
+###
+@ Sally greets John
+20 Sally smiled at John.
+42 The teller said "hello, my name is Sally, how can I help you"
+55 Sally asked John if she could help him.
+66 Sally asked if she could help John.
+103 Sally greeted John.
+155 Sally helped John.
+165 Sally smiled at John.
+243 Sally greeted John.
+294 Sally said hello.
+377 Sally greeted John as a bank customer.
+390 Sally greeted John.
+501 Sally smiled at John.
+513 Sally said Hello.
+537 Sally greeted John.
+551 Sally greeted John.
+634 Sally greeted John.
+683 Sally greeted John.
+###
+@ John demands money
+5 John asked Sally to give her all of the money.
+24 John demanded money from Sally.
+33 John asked Sally for the money.
+44 John told Sally to put the money into a bag
+56 John demanded Sally to give him all the money she had.
+67 John said give me all your money.
+78 John demanded the money.
+106 John demanded all the money.
+129 John demanded money.
+194 John demanded money from Sally.
+201 John asked for the money.
+211 John told Sally to hand over a million dollars.
+221 John asked for all the money in the bank.
+231 John demanded money.
+321 John demanded money.
+346 John demanded Sally give him the money.
+354 John demanded money from the safe
+421 John told Sally to give him $5000 cash.
+430 John asked for all the money in the drawer.
+462 John demanded money.
+473 John demanded $1,000,000 from Sally.
+485 John demaned money.
+493 John told Sally to give him the money.
+574 John demanded money.
+586 John demanded that Sally give him all the money.
+657 John told people to collect the money in one bag.
+666 John demanded that Sally give him all the money she had.
+686 John demanded money.
+###
+@ Sally screams
+6 Sally screamed.
+645 Sally screamed very loudly.
+685 Sally screamed.
+157 Sally screamed.
+472 Sally screamed.
+645 Sally screamed very loudly.
+674 Sally screamed at John.
+###
+@ John pulls out gun
+4 John pulled out a gun.
+32 John pulled out his gun.
+104 John pulled out a gun.
+156 John pulled out a gun.
+167 John pulled out a gun.
+219 John pulled out a gun.
+229 John pulled out a gun.
+345 John pulled out a gun.
+391 John brought out his gun.
+470 John took his gun out of his pocket.
+483 John pulled a gun.
+504 John pulled out a gun.
+539 John pulled a gun from inside his coat.
+561 John took out a gun.
+572 John pulled out his gun.
+585 John pulled his gun out and pointed it at Sally.
+597 John pulled out a gun.
+643 John pulled out the gun.
+684 John pulled out a gun.
+###
+@ John shows gun
+43 John showed Sally his gun.
+77 John showed Sally his gun.
+185 John showed his gun to Sally.
+253 John showed Sally a gun.
+268 John showed Sally his gun.
+296 John showed Sally a gun.
+332 John pointed to his gun.
+442 John showed Sally his gun.
+460 John showed a gun to Sally.
+492 John showed Sally the gun.
+654 John brought out hand gun.
+###
+@ John points gun at Sally
+93 John pointed a gun at Sally.
+193 John pointed a gun at Sally.
+353 John pointed the gun at Sally
+429 John pointed a gun at Sally.
+471 John pointed the gun at Sally's face.
+505 John pointed the gun at Sally.
+525 John pointed gun at Sally.
+552 John pointed a gun at Sally.
+598 John pointed the gun at Sally.
+614 John pointed the gun at Sally.
+655 John pointed gun towards Sally.
+658 Meanwhile John was pointing gun towards Sally.
+673 John pointed his gun at Sally the teller.
+###
+@ Joh claims to own gun
+22 John told Sally he had a gun.
+68 John said he had a gun under his jacket.
+###
+@ Sally sees a gun
+57 Sally saw a gun in John's hand.
+147 Sally saw the buldge of the handgun underneath John's jacket.
+644 Sally saw the gun.
+###
+@ John hands Sally a note
+90 John handed Sally a note.
+115 John slipped Sally a note.
+145 John handed Sally the note demanding money.
+184 John handed his note to Sally.
+245 John slipped Sally a note.
+252 John gave Sally a note.
+267 John handed Sally a note.
+282 John handed Sally a note.
+295 John handed Sally a note.
+308 John handed Sally a note.
+330 John showed Sally a note.
+366 John passed a note to Sally.
+378 John presented a robbery note to Sally.
+406 John handed the note to Sally.
+440 John handed a note to Sally.
+451 John gave Sally a handwritten note demanding all of the money in her cash drawer.
+502 John handed Sally a note.
+514 John gave Sally a note.
+613 John gave the note to Sally.
+621 John handed Sally a note.
+635 John handed Sally a note.
+699 John showed Sally a note.
+526 John gave Sally a paper.
+###
+@ Sally reads note
+91 Sally read the note.
+146 Sally read the note.
+246 Sally read the note.
+254 Sally read the note.
+297 Sally read the note.
+331 Sally read the note.
+407 Sally read the note.
+441 Sally read the note.
+515 Sally read the note.
+622 Sally read the note.
+527 Sally read the paper.
+540 Sally looked at the paper from John.
+###
+@ the note demands money
+367 The note demanded 10,000 dollars.
+283 The note demanded money.
+379 The robbery note demanded an amount of money not to john's posession
+700 The note demanded money.
+###
+@ John takes out a note
+538 John removed a piece of paper from his pocket.
+405 John took a note out of his pocket.
+###
+@ John takes the note away
+532 John snatched the paper.
+260 John took the note from Sally.
+###
+@ John writes a note
+182 John wrote a note on a piece of paper.
+608 John wrote a note for the teller.
+###
+@ Sally presses alarm
+7 Sally tried to hit the panic button.
+108 Sally pressed a panic button.
+125 Sally pushed the panic button under the counter.
+209 Sally pushed the secret help button under the counter.
+269 Sally pressed the secret panic button.
+413 Sally pushed the panic button.
+439 Sally pushed the panic button behind the desk.
+494 Sally pushed the police emergency button.
+623 Sally pushed the panic button under her counter.
+188 Sally pressed the emergency button.
+94 Quickly, Sally pressed the silent alarm.
+148 Sally activated the silent bank alarm on the ground with her foot.
+28 Sally pressed the alarm button.
+262 Sally pushed the alarm button.
+287 Sally pushed the alarm.
+300 Sally triggered the silent alarm.
+310 Sally secretly pressed the silent alarm.
+324 Sally raised an alarm.
+463 Sally pressed the silent alarm.
+548 Sally pushed the alarm button.
+603 Sally pressed the alarm button.
+647 Sally turned on the silent alarm.
+707 Sally sounded an alarm.
+###
+@ John pulls out bag
+675 John pulled out a plastic bag.
+###
+@ John gives Sally bag
+10 John gave Sally a bag for the money.
+25 John handed Sally a bag.
+170 John gave a bag to Sally.
+255 John handed Sally a bag.
+599 John passed a bag to Sally.
+624 John handed Sally a bag.
+676 John threw the bag at Sally.
+309 John then handed Sally an empty sack.
+###
+@ Sally puts money in bag
+26 Sally emptied her cash drawer into the bag.
+71 Sally put the money into a bag.
+107 Sally put money in a bag.
+58 Sally stuffed a bunch of bills into a bag and gave it to John.
+120 Sally put the money into a bag.
+173 Sally put money into the bag.
+195 Sally put the money in a bag.
+202 Sally put money in his bag.
+248 Sally placed the money into the bag.
+256 Sally put money in the bag.
+284 Sally put money in a bag.
+299 Sally put money into a bag.
+334 Sally put the money in a bag.
+369 Sally loaded the money into a bag.
+383 Sally contained the cash in a bag
+432 Sally put the money in a bag.
+443 Sally filled a bag with cash.
+454 Sally put the cash in a bag.
+478 Sally put $1,000,000 in a bag.
+506 Sally put cash in a bag.
+518 Sally filled the bag with money.
+555 Sally put the money into a bag.
+577 Sally put the money in the bag.
+600 Sally filled the bag with money.
+627 Sally put the money in the bag.
+677 Sally filled the bag with money.
+689 Sally put the money in a bag.
+703 Sally put the money in a bag.
+311 Sally began to fill the sack with money.
+###
+@ Sally gives bag to John
+46 Sally handed John the bag containing the money
+121 Sally handed the bag to John.
+174 Sally gave the bag to John.
+196 Sally gave the bag to John.
+212 Sally handed John a bag of money.
+223 Sally gave John the money in a bag.
+249 Sally handed the bag to John.
+257 Sally gave John the bag.
+285 Sally handed the bag to John.
+301 Sally handed John the bag.
+370 Sally handed the bag to John.
+384 Sally delivered the bag to John.
+444 Sally handed the bag to John.
+455 Sally handed the bag to John.
+479 Sally handed the bag to John.
+507 Sally handed the bag to John.
+519 Sally gave John the bag.
+556 Sally gave the bag to John.
+601 Sally gave the bag to John.
+628 Sally gave the bag to John.
+678 Sally threw the bag back at John.
+704 Sally handed the bag to John.
+###
+@ John takes the bag
+47 John picked up the bag.
+122 John took the bag.
+175 John took the bag.
+213 John grabbed the bag of money and ran out the door.
+315 John grabbed the bag.
+371 John grabbed the bag.
+456 John grabbed the bag.
+508 John took the bag from Sally.
+520 John grabbed the bag.
+557 John took the bag of money.
+578 John grabbed the bag.
+629 John took the bag.
+679 John picked up the bag.
+690 John took the bag from Sally.
+705 John took the bag.
+###
+@ John takes money
+###
+@ Sally gives John money
+###

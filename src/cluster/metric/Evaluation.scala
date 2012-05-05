@@ -78,7 +78,7 @@ object ClusterMetric {
 
     for (i <- 0 to 4) {
       //val tested = "optics1.txt"
-      val tested = "mv-cl-"+i+".txt"
+      val tested = "mv-cl-"+i+".txt" // cluster to be tested
       //val tested = "manual-step1.txt"
       val clusterFile = "./data/movie/movieSemanticGold.txt"
       

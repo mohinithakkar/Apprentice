@@ -1,0 +1,398 @@
+@ look for movie
+17 John and Sally look for the movie .
+100 John and Sally look at which movie be play .
+18 John and Sally find the movie .
+###
+@ walk into theater
+155 John and Sally walk inside the theater .
+343 John and Sally walk into the theater .
+27 John and Sally walk into the auditorium .
+157 John and Sally walk into the movie auditorium .
+232 John and Sally walk into the auditorium .
+353 John and Sally walk into the auditorium .
+60 John and Sally walk inside .
+###
+@ enter
+4 John and Sally enter the dark theater .
+44 John and Sally enter the movie theater .
+99 John and Sally enter the movie theater .
+124 John and Sally enter the theater .
+175 John and Sally enter the movie theater .
+362 John and Sally enter the movie theater .
+385 John and Sally go into the theater .
+19 John and Sally enter the auditorium .
+37 John and Sally enter the auditorium .
+72 John and Sally enter the auditorium .
+83 Sally and John go inside the auditorium to watch the movie .
+107 John and Sally enter the auditorium .
+127 John and Sally enter the auditorium .
+136 John and Sally enter the auditorium .
+188 John and Sally enter the movie auditorium .
+288 John and Sally enter the auditorium .
+388 John and Sally enter the auditorium .
+###
+@ get in line box office
+12 John and Sally get in line for the movie ticket .
+226 John and Sally get in the ticket line .
+0 John and Sally wait in line for ticket .
+111 John and Sally wait in line outside the theater .
+185 John and Sally wait in line .
+238 John and Sally wait in line to buy ticket .
+360 John and Sally wait in line for ticket .
+372 John and Sally wait in line at the ticket booth .
+24 Sally and John stand in line at the movie theater .
+45 John and Sally stand in line .
+58 John and Sally stand in line to purchase ticket .
+144 John and Sally stand in line .
+154 John and Sally stand in line for ticket to their movie .
+165 John and Sally stand in line to purchase their ticket .
+194 Sally and John stand in line for ticket .
+206 John and Sally stand in line .
+218 John and Sally stand in line .
+294 John and Sally stand in line for ticket .
+330 John and Sally stand in line .
+348 John and Sally stand in line for ticket .
+395 John and Sally stand in line .
+14 John and Sally get in line for popcorn .
+113 John and Sally wait in line at the the concession stand .
+168 John and Sally wait in line at the concession stand .
+220 John and Sally wait in line at the concession stand .
+364 John and Sally wait in line at the concession stand .
+178 John and Sally stand in line at the concession stand .
+332 John and Sally stand in the concession line .
+###
+@ talk about movie
+54 John and Sally talk about the movie .
+139 John and Sally talk about the movie .
+292 John and Sally talk about the movie afterwards .
+289 John and Sally talk before the movie begin .
+###
+@ us toilet
+104 Sally goes to the toilet .
+140 John and Sally use the restroom .
+162 John and Sally use the restroom .
+285 Sally goes to the restroom .
+393 John go to the restroom .
+404 Sally use the restroom .
+###
+@ return from
+105 Sally returns from the toilet .
+###
+@ arrive at theater
+32 John and Sally arrive at the theater .
+56 John and Sally arrive at the theater .
+133 John and Sally arrive at the movie theater .
+164 John and Sally arrive happily at the movie theater .
+217 John and Sally arrive at the theater .
+###
+@ go to ticket booth
+76 John and Sally walk to the movie ticket counter one evening .
+122 John and Sally walk up to the ticket line .
+57 John and sally walk to the ticket booth .
+176 John and Sally go to the ticket booth .
+184 John and Sally walk to the ticket booth .
+82 John and Sally walk up to theater to buy movie ticket .
+###
+@ choose movie
+46 John and Sally select a movie .
+101 John and Sally choose a movie .
+227 John and Sally decide which movie to see .
+329 John and Sally pick a movie .
+###
+@ buy tickets
+1 John purchases two movie ticket .
+13 John and Sally buy the ticket .
+25 John purchases two ticket from the clerk for the four oclock show .
+34 John and Sally purchase their ticket at the box office .
+47 John and Sally buy the ticket .
+68 John and Sally purchase the ticket for the movie .
+77 Sally pays for the movie ticket .
+102 John and Sally buy ticket .
+112 John and Sally buy ticket .
+123 John and Sally buy their ticket .
+134 John and Sally purchase movie ticket .
+145 John buys the ticket .
+167 John and Sally finally purchase their ticket .
+177 John and Sally pay for their ticket .
+186 John and Sally buy two ticket .
+195 John pays for the movie ticket with cash .
+207 John buys two ticket .
+219 John and Sally purchase their ticket .
+228 John and Sally purchase the ticket .
+295 John pays for the ticket .
+331 John buy ticket .
+342 John purchase two ticket for the movie .
+349 John buy ticket .
+361 John buy ticket for John and Sally .
+374 John and Sally buy ticket for late time .
+384 Sally buy two ticket .
+396 John and Sally buy ticket .
+282 John asks to buy two movie ticket .
+59 John and Sally get ticket .
+###
+@ enter concession
+2 John and Sally walk up to the concession stand .
+70 John and Sally go to the snack stand .
+196 Sally and John walk up to the concession stand .
+284 John and Sally enter the concession area .
+351 John and Sally walk up to the concession stand .
+###
+@ go to buy
+64 John goes to buy popcorn .
+79 Sally goes to buy popcorn .
+###
+@ buy popcorn
+3 John buys Sally a large popcorn .
+15 John and Sally buy popcorn .
+48 John and Sally buy popcorn .
+146 Sally pays for the popcorn .
+230 John and Sally buy a large popcorn .
+26 Sally buys popcorn and an orange soda .
+114 John buys Sally popcorn and soda .
+126 John and Sally buy popcorn and soda .
+187 John and Sally buy popcorn and soda .
+221 John and Sally purchase popcorn and soda .
+333 John buy soda and popcorn .
+365 Sally buy popcorn and soda .
+380 John and Sally buy popcorn and soda .
+386 Sally buy popcorn .
+397 John buy popcorn and soda for Sally and John .
+352 John buy popcorn and coke .
+135 John and Sally buy popcorn and drink .
+208 John and Sally buy popcorn and drink .
+286 John buys popcorn and drink .
+###
+@ buy wine and coffee
+103 John buys a glass of wine and a coffee .
+###
+@ pay for food
+179 John and Sally pay for their food .
+199 Sally pays for the food and drink .
+###
+@ order popcorn and soda
+71 John and Sally order popcorn and soda .
+169 John and Sally each order a large popcorn and soda .
+197 Sally orders popcorn .
+198 John orders a soda .
+231 John and Sally order drink .
+156 John and Sally get popcorn and a drink from the concession stand .
+###
+@ buy snacks
+35 John and Sally get snack at the concession stand .
+239 John buys snack .
+###
+@ give tickets
+36 John and Sally give their ticket to the person at the entrance .
+61 John and Sally hand their ticket to the theater employee .
+147 John and Sally hand their ticket to the ticket taker .
+283 John and Sally hand their ticket to the attendant .
+296 John and Sally give their ticket to an usher .
+363 The ticket taker taked John and Sally's tickets .
+###
+@ takes tickets
+363 The ticket taker take John and Sally ticket .
+###
+@ present tickets
+334 John and Sally present ticket .
+###
+@ walk corridor hall
+16 John and Sally walk down the theater corridor .
+148 John and Sally walk down the hall to the movie .
+###
+@ locate auditorium
+62 John and Sally locate the correct auditorium .
+###
+@ walk go to auditorium
+180 John and Sally go to the auditorium .
+200 Sally and John walk to the auditorium .
+222 John and Sally go to the auditorium .
+335 John and Sally go to the auditorium .
+###
+@ find search for seats
+20 John and Sally find their seat .
+38 John and Sally find seat .
+63 John and Sally find seat close to the back of the auditorium .
+73 John and Sally find good seat .
+84 Sally and John find seat on the right side corner .
+223 John and Sally search for good seat .
+240 Sally finds good seat .
+297 John and Sally find seat in the auditorium .
+344 John and Sally find two adjacent seat .
+5 Sally chooses seat at the front of the auditorium .
+149 Sally picks out seat in the middle of the auditorium .
+171 John and Sally choose a seat toward the center middle isle .
+181 John and Sally choose seat .
+201 John picks out seat directly in the middle of the movie theater .
+49 John and Sally look for their seat .
+###
+@ walk to seats
+128 John and Sally walk to their seat .
+###
+@ take seat
+28 John and Sally take their seat in the fifth row .
+###
+@ sit down
+21 John and Sally sit down .
+50 John and Sally sit down .
+78 John and Sally sit down inside the auditorium .
+108 John and Sally sit down .
+117 John and Sally sit as the movie begin .
+129 John and Sally sit down .
+182 John and Sally sit down .
+189 John and Sally sit down .
+209 John and Sally sit down .
+233 John and Sally sit down .
+366 John and Sally sit down in the the auditorium .
+389 John and Sally sit down together .
+398 John and Sally sit down .
+###
+@ watch trailers
+39 John and Sally watch movie trailer .
+###
+@ bored by trailers
+8 John is bored during come attraction .
+###
+@ complain about advertisements
+51 John and Sally complain about the advertisement .
+###
+@ wait for movie
+158 John and Sally wait for the movie to start .
+###
+@ laugh at previews trivia
+172 John and Sally laugh together at the preview for upcoming movie .
+204 Sally and John laugh over the trivium on the screen .
+###
+@ watch ads
+210 John and Sally watch ad .
+###
+@ turn off cellphone
+6 John turns off the cellphone .
+29 John turns off his cell phone .
+85 Sally asks John to turn off the cellphone .
+203 Sally make sure to turn off their cell phone .
+241 John turns off his cellphone .
+###
+@ eat nibble popcorn
+7 Sally eats the popcorn .
+150 John and Sally eat the popcorn .
+191 John and Sally eat popcorn .
+205 John and Sally nibble on popcorn when the movie begin .
+337 John eat popcorn .
+367 John and Sally eat the popcorn and soda .
+390 John eat some popcorn .
+401 John and Sally eat popcorn .
+###
+@ drink soda
+338 Sally drink soda .
+402 John and Sally drink soda .
+###
+@ attempt kiss
+80 John attempts to kiss Sally .
+###
+@ hold hands
+118 John and Sally hold hand during the film .
+173 John and Sally hold hand .
+192 John and Sally hold hand .
+242 John and Sally hold hand .
+291 John holds hand with Sally .
+345 John and Sally hold hand .
+350 John hold Sally hand .
+###
+@ put hands around
+301 John tries to put his hand around Sally .
+###
+@ watch movie
+22 John and Sally watch the movie .
+30 John and Sally watch the movie .
+40 John and Sally watch the movie until the end credit .
+74 John and Sally watch the movie .
+109 John and Sally watch the movie .
+130 John and Sally watch the movie .
+137 John and Sally watch the movie .
+159 John and Sally watch the movie .
+190 John and Sally watch the movie .
+235 John and Sally watch the movie .
+290 John and Sally watch the movie .
+300 John and Sally watches the movie .
+336 John and Sally watch movie .
+368 John and Sally watch the movie .
+392 John and Sally watch the movie in silence .
+399 John and Sally watch the beginning of movie .
+403 John and Sally finish watch movie .
+###
+@ enjoy movie
+52 John and Sally enjoy the movie .
+86 Sally and John enjoy the movie very much .
+224 John and Sally enjoy the movie .
+236 John and Sally enjoy the movie .
+###
+@ laugh at movie
+9 John and Sally laugh during the movie .
+###
+@ surprised by ending
+10 Sally is surprised by the movie ending .
+###
+@ clap applaud movie
+31 John and Sally clap at the end of the movie .
+119 John and Sally applaud when the movie end .
+###
+@ stand get up
+65 After the movie is over , John and Sally stand up .
+120 John and Sally get up once the credit be finish .
+152 When the movie us over , John and Sally get up to leave .
+###
+@ go to foyer
+53 John and Sally go to the foyer .
+###
+@ throw away discard trash leftover
+41 John and Sally throw away their empty snack box and drink cup .
+131 John and Sally discard their trash .
+161 John and Sally throw away their leftover popcorn and drink .
+###
+@ leave movie
+11 Sally and John leave when the movie finish .
+293 John and Sally leave the movie theater .
+23 John and Sally leave the movie theater .
+42 John and Sally walk out of the theater .
+75 John and Sally leave the movie theater .
+81 John and Sally leaves the theater when the movie have end .
+87 Sally and John leave the movie theater .
+121 John and Sally leave the theater .
+132 John and Sally leave the theater when the movie end .
+141 John and Sally exit the theater .
+153 John and Sally leave the theater .
+163 John and Sally leave the movie theater .
+174 John and Sally leave the movie theater , having enjoy a great night together .
+183 John and Sally leave the theater .
+193 John and Sally leave the movie theater when the movie be over .
+216 John and Sally leave the theater separately .
+225 John and Sally leave the theater .
+237 John and Sally leave the movie theater .
+248 John and Sally leave the theater .
+303 John and Sally leave the theater .
+339 John and Sally leave the theater .
+347 John and Sally leave the theater in John car .
+359 John and Sally leave the movie theater .
+371 John and Sally leave the theater .
+383 John and Sally leave the theater fighting .
+394 John and Sally leave the theater .
+55 John and Sally leave the cinema .
+110 John and Sally leave the auditorium .
+138 John and Sally exit the auditorium .
+160 John and Sally leave the auditorium .
+###
+@ walk to car
+66 John and Sally walk back to the car .
+142 John and Sally walk to the car .
+###
+@ get into car
+405 John and Sally get into John car .
+###
+@ drive home
+43 John and Sally drive home .
+143 John and Sally drive home .
+406 John and Sally drive home .
+###
+@ drive out of parking lot
+67 John and Sally drive out of the theater parking lot .
+###

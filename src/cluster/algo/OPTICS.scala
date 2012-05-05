@@ -104,7 +104,7 @@ object OPTICS {
         }
       }
 
-    var list = ordered.reverse
+    var list = ordered.reverse // this is the reachability plot
 
     //println("list \n" + list.map(_.reachability).mkString("\n"))
 
@@ -112,6 +112,7 @@ object OPTICS {
       list(0).next = list(1)
       list.last.previous = list(list.length - 2)
     }
+    
     for (i <- 1 until list.length - 1) {
       list(i).previous = list(i - 1)
       list(i).next = list(i + 1)
