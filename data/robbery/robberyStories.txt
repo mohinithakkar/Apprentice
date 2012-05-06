@@ -375,7 +375,6 @@
 346 John demanded Sally give him the money.
 347 Sally gave him the money.
 348 John ran out of the bank.
-349 John ran out of the bank.
 350 John got in his car.
 351 John drove away with the money.
 ###
@@ -684,7 +683,7 @@
 631 Police met John outside the door.
 ###
 632 John entered the bank.
-633 John waited in line
+633 John waited in line.
 634 Sally greeted John.
 635 John handed Sally a note.
 636 Sally handed over the cash.

@@ -185,6 +185,7 @@
 585 John pulled his gun out and pointed it at Sally.
 597 John pulled out a gun.
 643 John pulled out the gun.
+654 John brought out hand gun.
 684 John pulled out a gun.
 ###
 @ John shows gun
@@ -198,7 +199,7 @@
 442 John showed Sally his gun.
 460 John showed a gun to Sally.
 492 John showed Sally the gun.
-654 John brought out hand gun.
+452 John showed Sally that he had an old Winchester rifle under the counter.
 ###
 @ John points gun at Sally
 93 John pointed a gun at Sally.
@@ -319,6 +320,10 @@
 676 John threw the bag at Sally.
 309 John then handed Sally an empty sack.
 ###
+@ Sally collects money
+70 Sally collected the money.
+79 Sally got the money.
+###
 @ Sally puts money in bag
 26 Sally emptied her cash drawer into the bag.
 71 Sally put the money into a bag.
@@ -350,7 +355,7 @@
 703 Sally put the money in a bag.
 311 Sally began to fill the sack with money.
 ###
-@ Sally gives bag to John
+@ Sally gives John bag
 46 Sally handed John the bag containing the money
 121 Sally handed the bag to John.
 174 Sally gave the bag to John.
@@ -391,7 +396,177 @@
 690 John took the bag from Sally.
 705 John took the bag.
 ###
-@ John takes money
+@ John pockets money
+546 John put the money in his pocket.
+411 John put the money in his pocket.
+###
+@ Sally puts money on counter
+409 Sally put the money on the counter.
+545 Sally placed a large stack of bills on the counter.
 ###
 @ Sally gives John money
+80 Sally gave the money to John.
+159 Sally gave John money.
+335 Sally gave the money to John.
+355 Sally handed John all the money
+486 Sally gave John money.
+667 Sally handed John all the money in her till.
+###
+@ police arrived
+13 Sally saw he cops coming.
+35 The police arrived.
+83 The police arrived.
+96 The police burst into the bank.
+214 The police pulled up just as John was leaving.
+605 The police arrived.
+631 Police met John outside the door.
+648 The police came to the bank.
+694 The cops showed up.
+###
+@ police arrests John
+36 The police handcuffed John.
+84 The police caught John.
+111 John got arrested.
+162 John was arrested.
+176 John ran out of the bank.
+190 The police came to arrest John.
+215 John was arrested.
+317 John was arrested outside the bank.
+326 Police caught John.
+399 John got caught by the police.
+498 John was arrested.
+649 The police arrested John.
+###
+@ put John in custody
+37 The police took John away.
+100 The police took John away.
+###
+@ John leaves bank
+48 John walked out of the bank.
+60 John left the bank.
+74 John left the bank.
+81 John left the bank.
+110 John ran out of the bank.
+124 John walked out of the bank.
+137 John left the bank.
+152 John left the bank quietly.
+160 John ran outside.
+176 John ran out of the bank.
+189 John turned around to leave the building.
+197 John ran out of the bank.
+204 John ran out the door.
+224 John ran out of the bank fast.
+233 John ran away.
+261 John ran out of the bank.
+274 John ran outside.
+303 John exited the bank.
+316 John ran out of the bank.
+336 John walked out of the bank.
+348 John ran out of the bank.
+357 John ran from the bank
+372 John ran out the door.
+385 John exited the banking facility
+396 John walked out of the bank.
+412 John walked out of the bank.
+425 John left the bank.
+434 John ran out the door.
+445 John ran out the door.
+457 John ran out of the bank.
+466 John ran outside.
+480 John exited the bank with the money.
+487 John ran away.
+495 John ran from the bank.
+509 John ran to the exit.
+523 John walked out.
+533 John escaped from the scene.
+547 John quickly walked out of the bank.
+558 John ran out of the bank.
+567 John ran out of the bank with the money.
+591 John ran out of the building.
+602 John ran out of the bank.
+617 John ran out the door.
+659 John went out from back door of the bank with money.
+669 John walked out of the front door.
+681 John ran out of the bank lobby.
+692 John ran out of the bank.
+706 John walked out the bank's door.
+###
+@ John shoots Sally
+270 John shot Sally with his gun.
+###
+@ John drives to bank
+39 John drove to the bank.
+277 John drove to the bank.
+568 John drove to the bank.
+610 John drove to the bank.
+###
+@ park car
+50 John parked his car one block away from the bank.
+278 John parked a block from the bank.
+569 John parked the car.
+###
+@ get off car
+51 John got out of his car.
+###
+@ John drives away
+49 John drove away.
+264 John drove away from the bank.
+289 John drove away.
+359 The car drove away from the bank
+449 John drove away.
+581 John drove away.
+639 John escaped in the car.
+###
+@ John runs to car
+579 John ran to the car.
+288 John ran to his car.
+###
+@ John gets in car
+263 John got into a car.
+275 John got into a car.
+350 John got in his car.
+358 John got into a car
+446 John ran to his car.
+592 John entered the get away car.
+638 John got in a car.
+###
+@ John convicted
+86 John was convicted of robbery.
+238 John went to jail.
+327 John went to prison.
+###
+@ Sally calls police
+82 Sally called the police.
+139 Sally's supervisor called the police.
+153 Sally quickly notified police.
+161 Sally called the police.
+205 Sally called the police.
+225 Sally called the police.
+337 Sally called the police.
+337 Sally called the police.
+373 Sally called the police.
+435 Sally called the police.
+510 Sally called the police.
+618 Sally called the police.
+640 Sally called the police.
+###
+@ Sally calls for help
+534 Sally cried for help.
+426 Sally called security to make sure nothing was wrong.
+###
+@ Sally cries
+34 Sally started to cry.
+467 Sally started to cry.
+691 Sally cried.
+###
+@ waits in line
+142 John waited in line until his turn.
+183 John stood in the teller line.
+362 John stood in line.
+375 John queued into the teller line.
+402 John stood in the teller line.
+416 John waited for the customer in front of him to finish.
+450 John moved to the next place in Sally's line at the bank.
+482 John waited in line.
+633 John waited in line.
 ###
