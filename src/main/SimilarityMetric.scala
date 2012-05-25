@@ -57,18 +57,19 @@ class SimilarityMetric {
         val tail1 = dep1.dep.lemma
         val tail2 = dep2.dep.lemma
 
-        if (head1 == head2 && ((tail1 == "Sally" && tail2 == "John") || (tail2 == "Sally" && tail1 == "John")))
-          return 1
-        else if (tail1 == tail2 && ((head1 == "Sally" && head2 == "John") || (head2 == "Sally" && head1 == "John")))
-          return 1
-        else {
+        // this part treats John and Sally as the same person. May not apply to all situations.
+//        if (head1 == head2 && ((tail1 == "Sally" && tail2 == "John") || (tail2 == "Sally" && tail1 == "John")))
+//          return 1
+//        else if (tail1 == tail2 && ((head1 == "Sally" && head2 == "John") || (head2 == "Sally" && head1 == "John")))
+//          return 1
+//        else {
           val govSim = wordSimilarity(dep1.gov, dep2.gov)
           val depSim = wordSimilarity(dep1.dep, dep2.dep)
 
           var base =
-            if (((tail1 == "Sally" && tail2 == "John") || (tail2 == "Sally" && tail1 == "John")) && govSim < 0.01) 0
-            else if (((head1 == "Sally" && head2 == "John") || (head2 == "Sally" && head1 == "John")) && depSim < 0.01) 0
-            else
+//            if (((tail1 == "Sally" && tail2 == "John") || (tail2 == "Sally" && tail1 == "John")) && govSim < 0.01) 0
+//            else if (((head1 == "Sally" && head2 == "John") || (head2 == "Sally" && head1 == "John")) && depSim < 0.01) 0
+//            else
               0.5 * depSim + 0.5 * govSim
 
           //          if (head1 != head2 && tail1 == tail2) {
@@ -92,7 +93,7 @@ class SimilarityMetric {
           //          }
 
           base
-        }
+        //}
       }
     }
 
@@ -132,6 +133,7 @@ class SimilarityMetric {
       val result = HungarianAlgo.hgAlgorithm(residual, "max");
 
       var sum: Double = 0
+      var count:Double = 0
 
       for (i <- 0 to result.length - 1) {
         val idx1 = result(i)(0)
@@ -139,9 +141,10 @@ class SimilarityMetric {
         // the scaling factor = e ^ -0.2x
         // -2 because the minimum depth is 1
         sum += residual(idx1)(idx2) * math.pow(math.E, (deps1(idx1).depth + deps2(idx2).depth - 2) / -50)
+        count += math.pow(math.E, (deps1(idx1).depth + deps2(idx2).depth - 2) / -50)
       }
       
-      sum = ( sum / math.min(deps1.length, deps2.length) + sum ) / 2
+      sum = ( sum / count + sum ) / 2
       //sum -= math.abs(deps1.length - deps2.length) * 0.1
 
       //println("loc1 : " + sent1.location + " loc 2: " + sent2.location)

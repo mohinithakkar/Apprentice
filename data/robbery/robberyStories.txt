@@ -43,7 +43,7 @@
 39 John drove to the bank.
 40 John went into the bank.
 41 John walked to the teller window.
-42 The teller said "hello, my name is Sally, how can I help you"
+42 The teller said "hello, my name is Sally, how can I help you?"
 43 John showed Sally his gun.
 44 John told Sally to put the money into a bag.
 45 John told Sally not to hit the alarm.
@@ -375,393 +375,393 @@
 346 John demanded Sally give him the money.
 347 Sally gave him the money.
 348 John ran out of the bank.
-350 John got in his car.
-351 John drove away with the money.
+349 John got in his car.
+350 John drove away with the money.
 ###
-352 John approached the counter
-353 John pointed the gun at Sally
-354 John demanded money from the safe
-355 Sally handed John all the money
-356 John put the money into a bag
-357 John ran from the bank
-358 John got into a car
-359 The car drove away from the bank
+351 John approached the counter.
+352 John pointed the gun at Sally.
+353 John demanded money from the safe.
+354 Sally handed John all the money.
+355 John put the money into a bag.
+356 John ran from the bank.
+357 John got into a car.
+358 The car drove away from the bank.
 ###
-360 John opened the door.
-361 John entered the bank.
-362 John stood in line.
-363 Sally called the next customer.
-364 John approached the counter.
-365 Sally offered help to John.
-366 John passed a note to Sally.
-367 The note demanded 10,000 dollars.
-368 Sally counted the money.
-369 Sally loaded the money into a bag.
-370 Sally handed the bag to John.
-371 John grabbed the bag.
-372 John ran out the door.
-373 Sally called the police.
+359 John opened the door.
+360 John entered the bank.
+361 John stood in line.
+362 Sally called the next customer.
+363 John approached the counter.
+364 Sally offered help to John.
+365 John passed a note to Sally.
+366 The note demanded 10,000 dollars.
+367 Sally counted the money.
+368 Sally loaded the money into a bag.
+369 Sally handed the bag to John.
+370 John grabbed the bag.
+371 John ran out the door.
+372 Sally called the police.
 ###
-374 John entered the banking facility.
-375 John queued into the teller line.
-376 John encountered Sally at the counter.
-377 Sally greeted John as a bank customer.
-378 John presented a robbery note to Sally.
-379 The robbery note demanded an amount of money not to john's posession
-380 John demanded Sally to act as normal.
-381 Sally went to the supervisor with the request
-382 Sally obtained a satisfactory amount of cash.
-383 Sally contained the cash in a bag
-384 Sally delivered the bag to John
-385 John exited the banking facility
+373 John entered the banking facility.
+374 John queued into the teller line.
+375 John encountered Sally at the counter.
+376 Sally greeted John as a bank customer.
+377 John presented a robbery note to Sally.
+378 The robbery note demanded an amount of money not to John's posession.
+379 John demanded Sally to act as normal.
+380 Sally went to the supervisor with the request.
+381 Sally obtained a satisfactory amount of cash.
+382 Sally contained the cash in a bag.
+383 Sally delivered the bag to John.
+384 John exited the banking facility.
 ###
-386 John walked by a bank.
-387 John stared at the bank.
-388 John went in the bank.
-389 John walked up to Sally.
-390 Sally greeted John.
-391 John brought out his gun.
-392 John threatened Sally.
-393 John kept everyone hostage.
-394 John walked to the safe.
-395 John stole the money.
-396 John walked out of the bank.
-397 John saw a police car.
-398 John ran.
-399 John got caught by the police.
+385 John walked by a bank.
+386 John stared at the bank.
+387 John went in the bank.
+388 John walked up to Sally.
+389 Sally greeted John.
+390 John brought out his gun.
+391 John threatened Sally.
+392 John kept everyone hostage.
+393 John walked to the safe.
+394 John stole the money.
+395 John walked out of the bank.
+396 John saw a police car.
+397 John ran.
+398 John got caught by the police.
 ###
-400 John entered the bank.
-401 John walked up to the teller line.
-402 John stood in the teller line.
-403 It was John's turn to move up.
-404 John walked up to Sally's station.
-405 John took a note out of his pocket.
-406 John handed the note to Sally.
-407 Sally read the note.
-408 Sally opened the cash drawer.
-409 Sally put the money on the counter.
-410 John picked up the money.
-411 John put the money in his pocket.
-412 John walked out of the bank.
-413 Sally pushed the panic button.
+399 John entered the bank.
+400 John walked up to the teller line.
+401 John stood in the teller line.
+402 It was John's turn to move up.
+403 John walked up to Sally's station.
+404 John took a note out of his pocket.
+405 John handed the note to Sally.
+406 Sally read the note.
+407 Sally opened the cash drawer.
+408 Sally put the money on the counter.
+409 John picked up the money.
+410 John put the money in his pocket.
+411 John walked out of the bank.
+412 Sally pushed the panic button.
 ###
-414 John entered the bank.
-415 Sally processed the customer's transaction.
-416 John waited for the customer in front of him to finish.
-417 Sally asked who was next on line.
-418 John said he was after the customer at the end of the line.
-419 Sally waited on all the customers in the line.
-420 John walked up to Sally's window.
-421 John told Sally to give him $5000 cash.
-422 Sally said she would have to call security.
-423 John said that he was a security officer himself.
-424 Sally gave John the $5000.
-425 John left the bank.
-426 Sally called security to make sure nothing was wrong.
+413 John entered the bank.
+414 Sally processed the customer's transaction.
+415 John waited for the customer in front of him to finish.
+416 Sally asked who was next on line.
+417 John said he was after the customer at the end of the line.
+418 Sally waited on all the customers in the line.
+419 John walked up to Sally's window.
+420 John told Sally to give him $5000 cash.
+421 Sally said she would have to call security.
+422 John said that he was a security officer himself.
+423 Sally gave John the $5000.
+424 John left the bank.
+425 Sally called security to make sure nothing was wrong.
 ###
-427 John walked into the bank.
-428 John walked up to Sally.
-429 John pointed a gun at Sally.
-430 John asked for all the money in the drawer.
-431 Sally took a deep breath.
-432 Sally put the money in a bag.
-433 John took the money.
-434 John ran out the door.
-435 Sally called the police.
+426 John walked into the bank.
+427 John walked up to Sally.
+428 John pointed a gun at Sally.
+429 John asked for all the money in the drawer.
+430 Sally took a deep breath.
+431 Sally put the money in a bag.
+432 John took the money.
+433 John ran out the door.
+434 Sally called the police.
 ###
-436 John adjusted his fake beard.
-437 Sally watched John outside the window.
-438 John entered the bank.
-439 Sally pushed the panic button behind the desk.
-440 John handed a note to Sally.
-441 Sally read the note.
-442 John showed Sally his gun.
-443 Sally filled a bag with cash.
-444 Sally handed the bag to John.
-445 John ran out the door.
-446 John ran to his car.
-447 John opened his car door.
-448 John got into his car.
-449 John drove away.
+435 John adjusted his fake beard.
+436 Sally watched John outside the window.
+437 John entered the bank.
+438 Sally pushed the panic button behind the desk.
+439 John handed a note to Sally.
+440 Sally read the note.
+441 John showed Sally his gun.
+442 Sally filled a bag with cash.
+443 Sally handed the bag to John.
+444 John ran out the door.
+445 John ran to his car.
+446 John opened his car door.
+447 John got into his car.
+448 John drove away.
 ###
-450 John moved to the next place in Sally's line at the bank.
-451 John gave Sally a handwritten note demanding all of the money in her cash drawer.
-452 John showed Sally that he had an old Winchester rifle under the counter.
-453 Sally grabbed the cash in her drawer.
-454 Sally put the cash in a bag.
-455 Sally handed the bag to John.
-456 John grabbed the bag.
-457 John ran out of the bank.
+449 John moved to the next place in Sally's line at the bank.
+450 John gave Sally a handwritten note demanding all of the money in her cash drawer.
+451 John showed Sally that he had an old Winchester rifle under the counter.
+452 Sally grabbed the cash in her drawer.
+453 Sally put the cash in a bag.
+454 Sally handed the bag to John.
+455 John grabbed the bag.
+456 John ran out of the bank.
 ###
-458 John put on sunglasses.
-459 Sally looked at John.
-460 John showed a gun to Sally.
-461 Sally did not panic.
-462 John demanded money.
-463 Sally pressed the silent alarm.
-464 Sally gave John money.
-465 John took money from Sally.
-466 John ran outside.
-467 Sally started to cry.
+457 John put on sunglasses.
+458 Sally looked at John.
+459 John showed a gun to Sally.
+460 Sally did not panic.
+461 John demanded money.
+462 Sally pressed the silent alarm.
+463 Sally gave John money.
+464 John took money from Sally.
+465 John ran outside.
+466 Sally started to cry.
 ###
-468 John entered the bank.
-469 John walked to Sally's counter.
-470 John took his gun out of his pocket.
-471 John pointed the gun at Sally's face.
-472 Sally screamed.
-473 John demanded $1,000,000 from Sally.
-474 Sally took out the key for the vault.
-475 John and Sally walked to the vault.
-476 Sally opened the door.
-477 Sally entered the vault.
-478 Sally put $1,000,000 in a bag.
-479 Sally handed the bag to John
-480 John exited the bank with the money.
+467 John entered the bank.
+468 John walked to Sally's counter.
+469 John took his gun out of his pocket.
+470 John pointed the gun at Sally's face.
+471 Sally screamed.
+472 John demanded $1,000,000 from Sally.
+473 Sally took out the key for the vault.
+474 John and Sally walked to the vault.
+475 Sally opened the door.
+476 Sally entered the vault.
+477 Sally put $1,000,000 in a bag.
+478 Sally handed the bag to John.
+479 John exited the bank with the money.
 ###
-481 John entered the bank.
-482 John waited in line.
-483 John pulled a gun.
-484 Sally put her hands up.
-485 John demaned money.
-486 Sally gave John money.
-487 John ran away.
+480 John entered the bank.
+481 John waited in line.
+482 John pulled a gun.
+483 Sally put her hands up.
+484 John demaned money.
+485 Sally gave John money.
+486 John ran away.
 ###
-488 Sally stood at the bank teller's desk.
-489 John stood outside.
-490 John had a gun in his pocket.
-491 John entered the bank.
-492 John showed Sally the gun.
-493 John told Sally to give him the money.
-494 Sally pushed the police emergency button.
-495 John ran from the bank.
-496 The police came.
-497 Sally described John for the police.
-498 John was arrested.
+487 Sally stood at the bank teller's desk.
+488 John stood outside.
+489 John had a gun in his pocket.
+490 John entered the bank.
+491 John showed Sally the gun.
+492 John told Sally to give him the money.
+493 Sally pushed the police emergency button.
+494 John ran from the bank.
+495 The police came.
+496 Sally described John for the police.
+497 John was arrested.
 ###
-499 John entered the bank.
-500 John walked to the counter.
-501 Sally smiled at John.
-502 John handed Sally a note.
-503 Sally looked over at her boss.
-504 John pulled out a gun.
-505 John pointed the gun at Sally.
-506 Sally put cash in a bag.
-507 Sally handed the bag to John.
-508 John took the bag from Sally.
-509 John ran to the exit.
-510 Sally called the police.
+498 John entered the bank.
+499 John walked to the counter.
+500 Sally smiled at John.
+501 John handed Sally a note.
+502 Sally looked over at her boss.
+503 John pulled out a gun.
+504 John pointed the gun at Sally.
+505 Sally put cash in a bag.
+506 Sally handed the bag to John. 
+507 John took the bag from Sally.
+508 John ran to the exit.
+509 Sally called the police.
 ###
-511 John opened the door to the bank.
-512 John walked to Sally the teller.
-513 Sally said Hello.
-514 John gave Sally a note.
-515 Sally read the note.
-516 Sally turned pale.
-517 Sally git a bag.
-518 Sally filled the bag with money.
-519 Sally gave John the bag.
-520 John grabbed the bag.
-521 John walked to the bank door.
-522 John opened the door.
-523 John walked out.
+510 John opened the door to the bank.
+511 John walked to Sally the teller.
+512 Sally said Hello.
+513 John gave Sally a note.
+514 Sally read the note.
+515 Sally turned pale.
+516 Sally git a bag.
+517 Sally filled the bag with money.
+518 Sally gave John the bag.
+519 John grabbed the bag.
+520 John walked to the bank door.
+521 John opened the door.
+522 John walked out.
 ###
-524 John approached Sally.
-525 John pointed gun at Sally.
-526 John gave Sally a paper.
-527 Sally read the paper.
-528 Sally started to palpitate.
-529 Sally went to the locker.
-530 Sally opened the locker.
-531 John picked bags of money.
-532 John snatched the paper.
-533 John escaped from the scene.
-534 Sally cried for help.
+523 John approached Sally.
+524 John pointed gun at Sally.
+525 John gave Sally a paper.
+526 Sally read the paper.
+527 Sally started to palpitate.
+528 Sally went to the locker.
+529 Sally opened the locker.
+530 John picked bags of money.
+531 John snatched the paper.
+532 John escaped from the scene.
+533 Sally cried for help.
 ###
-535 John entered the bank.
-536 John walked to Sally's teller window.
-537 Sally greeted John.
-538 John removed a piece of paper from his pocket.
-539 John pulled a gun from inside his coat.
-540 Sally looked at the paper from John.
-541 Sally gasped.
-542 Sally's hands started to shake.
-543 Sally reached in to the cash drawer.
-544 John said, "Hurry up!"
-545 Sally placed a large stack of bills on the counter.
-546 John put the money in his pocket.
-547 John quickly walked out of the bank.
-548 Sally pushed the alarm button.
+534 John entered the bank.
+535 John walked to Sally's teller window.
+536 Sally greeted John.
+537 John removed a piece of paper from his pocket.
+538 John pulled a gun from inside his coat.
+539 Sally looked at the paper from John.
+540 Sally gasped.
+541 Sally's hands started to shake.
+542 Sally reached in to the cash drawer.
+543 John said, "Hurry up!"
+544 Sally placed a large stack of bills on the counter.
+545 John put the money in his pocket.
+546 John quickly walked out of the bank.
+547 Sally pushed the alarm button.
 ###
-549 John entered the bank.
-550 John walked up to the counter.
-551 Sally greeted John.
-552 John pointed a gun at Sally.
-553 John asked for all the money.
-554 Sally looked frightened.
-555 Sally put the money into a bag.
-556 Sally gave the bag to John.
-557 John took the bag of money.
-558 John ran out of the bank.
+548 John entered the bank.
+549 John walked up to the counter.
+550 Sally greeted John.
+551 John pointed a gun at Sally.
+552 John asked for all the money.
+553 Sally looked frightened.
+554 Sally put the money into a bag.
+555 Sally gave the bag to John.
+556 John took the bag of money.
+557 John ran out of the bank.
 ###
-559 John entered the bank.
-560 John pulled a mask over his face.
-561 John took out a gun.
-562 John walked over to Sally.
-563 John asked Sally for money.
-564 Sally looked scared.
-565 Sally gave John the money.
-566 John heard police sirens.
-567 John ran out of the bank with the money.
+558 John entered the bank.
+559 John pulled a mask over his face.
+560 John took out a gun.
+561 John walked over to Sally.
+562 John asked Sally for money.
+563 Sally looked scared.
+564 Sally gave John the money.
+565 John heard police sirens.
+566 John ran out of the bank with the money.
 ###
-568 John drove to the bank.
-569 John parked the car.
-570 John covered his face.
-571 John walked into the bank.
-572 John pulled out his gun.
-573 John went to the teller.
-574 John demanded money.
-575 Sally opened the register.
-576 Sally took out money.
-577 Sally put the money in the bag.
-578 John grabbed the bag.
-579 John ran to the car.
-580 John got in the car.
-581 John drove away.
+567 John drove to the bank.
+568 John parked the car.
+569 John covered his face.
+570 John walked into the bank.
+571 John pulled out his gun.
+572 John went to the teller.
+573 John demanded money.
+574 Sally opened the register.
+575 Sally took out money.
+576 Sally put the money in the bag.
+577 John grabbed the bag.
+578 John ran to the car.
+579 John got in the car.
+580 John drove away.
 ###
-582 John quietly entered the bank.
-583 John scanned the inside of the bank for cameras.
-584 John approached Sally, the bank teller.
-585 John pulled his gun out and pointed it at Sally.
-586 John demanded that Sally give him all the money.
-587 Sally quickly handed a large amount of money to John.
-588 John struggled to stuff the money in his satchel.
-589 John fired one shot at the surveillance camera.
-590 John's shot destroyed the camera.
-591 John ran out of the building.
-592 John entered the get away car.
-593 John escaped.
+581 John quietly entered the bank.
+582 John scanned the inside of the bank for cameras.
+583 John approached Sally, the bank teller.
+584 John pulled his gun out and pointed it at Sally.
+585 John demanded that Sally give him all the money.
+586 Sally quickly handed a large amount of money to John.
+587 John struggled to stuff the money in his satchel.
+588 John fired one shot at the surveillance camera.
+589 John's shot destroyed the camera.
+590 John ran out of the building.
+591 John entered the get away car.
+592 John escaped.
 ###
-594 Sally waited for the next customer in the bank.
-595 John entered the bank.
-596 John approached Sally's window.
-597 John pulled out a gun.
-598 John pointed the gun at Sally.
-599 John passed a bag to Sally.
-600 Sally filled the bag with money.
-601 Sally gave the bag to John.
-602 John ran out of the bank.
-603 Sally pressed the alarm button.
-604 Sally waited for the police.
-605 The police arrived.
+593 Sally waited for the next customer in the bank.
+594 John entered the bank.
+595 John approached Sally's window.
+596 John pulled out a gun.
+597 John pointed the gun at Sally.
+598 John passed a bag to Sally.
+599 Sally filled the bag with money.
+600 Sally gave the bag to John.
+601 John ran out of the bank.
+602 Sally pressed the alarm button.
+603 Sally waited for the police.
+604 The police arrived.
 ###
-606 Sally worked as a bank teller.
-607 John worked as a bank robber.
-608 John wrote a note for the teller.
-609 John grabbed his gun.
-610 John drove to the bank.
-611 John entered the bank.
-612 John walked up to Sally.
-613 John gave the note to Sally.
-614 John pointed the gun at Sally.
-615 Sally gave John the money.
-616 John turned around.
-617 John ran out the door.
-618 Sally called the police.
+605 Sally worked as a bank teller.
+606 John worked as a bank robber.
+607 John wrote a note for the teller.
+608 John grabbed his gun.
+609 John drove to the bank.
+610 John entered the bank.
+611 John walked up to Sally.
+612 John gave the note to Sally.
+613 John pointed the gun at Sally.
+614 Sally gave John the money.
+615 John turned around.
+616 John ran out the door.
+617 Sally called the police.
 ###
-619 John entered the bank.
-620 John walked up to Sally's window.
-621 John handed Sally a note.
-622 Sally read the note.
-623 Sally pushed the panic button under her counter.
-624 John handed Sally a bag.
-625 Sally opened her cash drawer.
-626 Sally took the money out of the drawer.
-627 Sally put the money in the bag.
-628 Sally gave the bag to John.
-629 John took the bag.
-630 John walked to the door.
-631 Police met John outside the door.
+618 John entered the bank.
+619 John walked up to Sally's window.
+620 John handed Sally a note.
+621 Sally read the note.
+622 Sally pushed the panic button under her counter.
+623 John handed Sally a bag.
+624 Sally opened her cash drawer.
+625 Sally took the money out of the drawer.
+626 Sally put the money in the bag.
+627 Sally gave the bag to John.
+628 John took the bag.
+629 John walked to the door.
+630 Police met John outside the door.
 ###
-632 John entered the bank.
-633 John waited in line.
-634 Sally greeted John.
-635 John handed Sally a note.
-636 Sally handed over the cash.
-637 John walked out of the bank.
-638 John got in a car.
-639 John escaped in the car.
-640 Sally called the police.
+631 John entered the bank.
+632 John waited in line.
+633 Sally greeted John.
+634 John handed Sally a note.
+635 Sally handed over the cash.
+636 John walked out of the bank.
+637 John got in a car.
+638 John escaped in the car.
+639 Sally called the police.
 ###
-641 John entered inside the bank.
-642 Sally was working behind her desk.
-643 John pulled out the gun.
-644 Sally saw the gun.
-645 Sally screamed very loudly.
-646 John asked Sally for money.
-647 Sally turned on the silent alarm.
-648 The police came to the bank.
-649 The police arrested John.
+640 John entered inside the bank.
+641 Sally was working behind her desk.
+642 John pulled out the gun.
+643 Sally saw the gun.
+644 Sally screamed very loudly.
+645 John asked Sally for money.
+646 Sally turned on the silent alarm.
+647 The police came to the bank.
+648 The police arrested John.
 ###
-650 John entered the Yes bank at 1 pm.
-651 Sally was counting cash as a teller.
-652 John behaved like normal customer for long time.
-653 Security could guess about John's behavior.
-654 John brought out hand gun.
-655 John pointed gun towards Sally.
-656 John shouted at Sally.
-657 John told people to collect the money in one bag.
-658 Meanwhile John was pointing gun towards Sally.
-659 John went out from back door of the bank with money.
-660 Sally and his colleagues could not do anything till that time.
-661 John's robbery was successful.
+649 John entered the Yes bank at 1 pm.
+650 Sally was counting cash as a teller.
+651 John behaved like normal customer for long time.
+652 Security could guess about John's behavior.
+653 John brought out hand gun.
+654 John pointed gun towards Sally.
+655 John shouted at Sally.
+656 John told people to collect the money in one bag.
+657 Meanwhile John was pointing gun towards Sally.
+658 John went out from back door of the bank with money.
+659 Sally and his colleagues could not do anything till that time.
+660 John's robbery was successful.
 ###
-662 John walked into the front door of the bank.
-663 John looked to see which teller was available.
-664 John approached the availble teller.
-665 John noticed her name tag read Sally.
-666 John demanded that Sally give him all the money she had.
-667 Sally handed John all the money in her till.
-668 John thanked Sally.
-669 John walked out of the front door.
+661 John walked into the front door of the bank.
+662 John looked to see which teller was available.
+663 John approached the availble teller.
+664 John noticed her name tag read Sally.
+665 John demanded that Sally give him all the money she had.
+666 Sally handed John all the money in her till.
+667 John thanked Sally.
+668 John walked out of the front door.
 ###
-670 John removed his ski mask from his pocket.
-671 John put his mask on.
-672 John entered the bank lobby.
-673 John pointed his gun at Sally the teller.
-674 Sally screamed at John.
-675 John pulled out a plastic bag.
-676 John threw the bag at Sally.
-677 Sally filled the bag with money.
-678 Sally threw the bag back at John.
-679 John picked up the bag.
-680 John stuffed the bag in his pocket.
-681 John ran out of the bank lobby.
+669 John removed his ski mask from his pocket.
+670 John put his mask on.
+671 John entered the bank lobby.
+672 John pointed his gun at Sally the teller.
+673 Sally screamed at John.
+674 John pulled out a plastic bag.
+675 John threw the bag at Sally.
+676 Sally filled the bag with money.
+677 Sally threw the bag back at John.
+678 John picked up the bag.
+679 John stuffed the bag in his pocket.
+680 John ran out of the bank lobby.
 ###
-682 John entered the bank.
-683 Sally greeted John.
-684 John pulled out a gun.
-685 Sally screamed.
-686 John demanded money.
-687 Sally ran to the vault.
-688 John followed Sally.
-689 Sally put the money in a bag.
-690 John took the bag from Sally.
-691 Sally cried.
-692 John ran out of the bank.
-693 Sally called the cops.
-694 The cops showed up.
-695 John got away.
+681 John entered the bank.
+682 Sally greeted John.
+683 John pulled out a gun.
+684 Sally screamed.
+685 John demanded money.
+686 Sally ran to the vault.
+687 John followed Sally.
+688 Sally put the money in a bag.
+689 John took the bag from Sally.
+690 Sally cried.
+691 John ran out of the bank.
+692 Sally called the cops.
+693 The cops showed up.
+694 John got away.
 ###
-696 Sally arrived at the bank for work.
-697 John entered the bank.
-698 John walked over to Sally's bank window.
-699 John showed Sally a note.
-700 The note demanded money.
-701 Sally was scared.
-702 Sally took the money from the drawer.
-703 Sally put the money in a bag.
-704 Sally handed the bag to John.
-705 John took the bag.
-706 John walked out the bank's door.
-707 Sally sounded an alarm.
+695 Sally arrived at the bank for work.
+696 John entered the bank.
+697 John walked over to Sally's bank window.
+698 John showed Sally a note.
+699 The note demanded money.
+700 Sally was scared.
+701 Sally took the money from the drawer.
+702 Sally put the money in a bag.
+703 Sally handed the bag to John.
+704 John took the bag.
+705 John walked out the bank's door.
+706 Sally sounded an alarm.
 ###

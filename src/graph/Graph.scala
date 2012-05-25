@@ -12,7 +12,14 @@ class Graph(val nodes: List[Cluster], val links: List[Link]) extends XStreamable
   def causalLinks() = links.filter(_.isCausal)
   def temporalLinks() = links.filter(_.isTemporal)
   def usedClusters() = links.flatMap { link => List(link.source, link.target) }.distinct
-
+  
+ 
+  def toEfficient():EfficientGraph =
+  {
+    new EfficientGraph(nodes, links)
+  }
+  
+  
   /**
    * returns if cluster1 and 2 are ordered on the given graph, which is described by the links
    *

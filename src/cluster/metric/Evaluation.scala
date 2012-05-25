@@ -76,11 +76,11 @@ object ClusterMetric {
   def main(args: Array[String]) {
     //val storyFile = "movieHierarchical.txt"
 
-    for (i <- 0 to 4) {
-      //val tested = "optics1.txt"
-      val tested = "mv-cl-"+i+".txt" // cluster to be tested
-      //val tested = "manual-step1.txt"
-      val clusterFile = "./data/movie/movieSemanticGold.txt"
+    for (i <- 1 to 3) {
+      //val tested = "robberyTotalManualClusters.txt"
+      //val tested = "mv-cl-"+i+".txt" // cluster to be tested
+      val tested = "robberyManualClusters" + i + ".txt"
+      val clusterFile = "./data/robbery/robberyGold.txt"
       
       var results: List[Cluster] = SimpleParser.parseClusters(tested)
 

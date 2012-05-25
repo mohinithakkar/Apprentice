@@ -7,12 +7,22 @@ import java.io._
 object Main extends App {
 
   generateGraphs()
+  //countClusterFreq()
   Thread.sleep(5000)
   
+  def countClusterFreq()
+  {
+    val reader = new ConfigReader("configMvS.txt")
+    val (stories, clusters) = reader.initDataFiltered()
+    val sorted = clusters.sortWith((a, b) => a.members.length > b.members.length)
+    val text = sorted.map(x => x.name + ": " + x.members.length).mkString("\n")
+    println(text)
+  }
+  
   def generateGraphs() {
-    val reader = new ConfigReader("configMvn.txt")
-    val (stories, clusters) = reader.initDataFilterUnused()
-    for (s <- stories) println(s)
+    val reader = new ConfigReader("configMvS.txt")
+    val (stories, clusters) = reader.initDataFiltered()
+    //for (s <- stories) println(s)
 
     val parameters = reader.allParameters()
     val outputPath = new File(reader.properties.getProperty("storyFile")).getParent()

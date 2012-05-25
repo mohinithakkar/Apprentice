@@ -12,7 +12,7 @@ object SimpleParser extends JavaTokenParsers {
   
   def eol: Parser[Any] = """(\r?\n)+""".r
   
-  protected def word: Parser[String] = """[-\w\,'"?!\.]+""".r
+  protected def word: Parser[String] = """[-\w\,'"?!\.\$]+""".r
   protected def token: Parser[Token] = word ^^
     {
       case word => Token(word, "")
@@ -25,11 +25,11 @@ object SimpleParser extends JavaTokenParsers {
         Sentence(number.toInt, list.toArray)
     }
 
-  protected def cluster: Parser[Cluster] = """@\s""".r ~> """[-\w\s]+\n""".r ~ rep(sentence) <~ "###" ~ opt(eol) ^^
+  protected def cluster: Parser[Cluster] = """@\s""".r ~> rep(word) ~ eol ~ rep(sentence) <~ "###" ~ opt(eol) ^^
     {
-      case name ~ list =>
+      case nameList ~ eol ~ list =>
         //println("Parsed cluster " + name.trim)
-        new Cluster(name.trim, list)
+        new Cluster(nameList.map(_.trim).mkString(" "), list)
     }
 
   protected def story: Parser[Story] = rep(sentence) <~ "###" ~ opt(eol) ^^

@@ -112,10 +112,13 @@ class StoryNLPParser(val storyList: List[Story], cacheFile: String, overWrite: B
 
     val text = storyList.flatMap { _.members.map { _.tokens.map(_.word).mkString(" ") } }.mkString("\n")
     val nlp = new NLPWrapper()
+    println("parsing: ************************************")
+    println(text)
+    println("parsed: ************************************")
     nlp.getParsed(text)
     val newStories = storyList map { story =>
       val newSents = story.members map { sent =>
-        println(sent.id + " " + sent.tokens.map(_.word).mkString(" "))
+        
         if (!nlp.hasNextSentence()) throw new RuntimeException("parsed sentence exhausted prematurely")
         nlp.processNextSentence();
 
@@ -134,6 +137,7 @@ class StoryNLPParser(val storyList: List[Story], cacheFile: String, overWrite: B
           val graph = nlp.getSemanticGraph()
 
           val relations = graphToRelations(graph, tokens)
+          println("parsed: " + sent.id + " " + tokens.map(x => x.word).mkString(" "))
           Sentence(sent.id, tokens, null, relations, sent.location)
         } else throw new RuntimeException("empty sentence " + sent.id)
       }

@@ -75,7 +75,7 @@ class ConfigReader(val configFile: String) {
       val clusterFile = properties.getProperty("clusterFile")
 
       //println("using story file: " + storyFile)
-      var storyList: List[Story] = GoldParser.parseStories(storyFile)
+      var storyList: List[Story] = SimpleParser.parseStories(storyFile)
       //GoldParser.parseStories(storyFile)
 
       storyList.foreach(_.addStoryLocation())
@@ -88,15 +88,16 @@ class ConfigReader(val configFile: String) {
       (storyList, clusterList)
     }
 
-  def initDataFilterUnused(): (List[Story], List[Cluster]) =
+  def initDataFiltered(): (List[Story], List[Cluster]) =
     {
       val storyFile = properties.getProperty("storyFile")
       val clusterFile = properties.getProperty("clusterFile")
 
-      //println("using story file: " + storyFile)
-      var storyList: List[Story] = SimpleParser.parseStories("./data/movie/movieSimpleStories.txt")
+      println("using story file: " + storyFile)
+      var storyList: List[Story] = SimpleParser.parseStories(storyFile)
       //GoldParser.parseStories(storyFile)
-
+      //println(storyList.map(_.members.map(_.toShortString()).mkString("\n")).mkString("\n###\n"))
+      //System.exit(1)
       storyList.foreach(_.addStoryLocation())
 
       println("using cluster file: " + clusterFile)
@@ -162,16 +163,21 @@ class ConfigReader(val configFile: String) {
               sentence =>
                 if (hashmap.contains(sentence.id)) throw new ParsingException("sentence repeated" + sentence.id)
                 hashmap += ((sentence.id, sentence))
+                //println(sentence.id)
             }
       }
 
-      GoldParser.parseClusters(clusterFile) map {
+      SimpleParser.parseClusters(clusterFile) map {
         c =>
+          //println("name = " + c.name)
           val newMembers = c.members map
             {
               sentence =>
                 // make sure we get the same sentence 
-                hashmap.get(sentence.id).get
+                val ans = hashmap.get(sentence.id)
+                if (ans.isEmpty) throw new Exception("Did not find the same sentence in the story file: " + sentence.id)
+
+                ans.get
             }
           val newC = new Cluster(c.name, newMembers)
           newC.members foreach { s =>
@@ -179,6 +185,7 @@ class ConfigReader(val configFile: String) {
           }
           newC
       }
+      
     }
 
   //  def parseSentence(storyList: List[Story]): List[Story] =
@@ -290,22 +297,22 @@ object ConfigReader {
     //    val string = scala.io.Source.fromFile("movieParsed.txt").mkString    
     //    val obj = XStream.fromXML(string).asInstanceOf[StorySet]
     //    println(obj.storyList.mkString("\n"))
-    val reader = new ConfigReader("configMvS.txt")
+    val reader = new ConfigReader("configRob.txt")
     val (stories, gold) = reader.newInitData()
-    val parser = new StoryNLPParser(stories, "movieParsed.txt", true)
+    val parser = new StoryNLPParser(stories, "robberyParsed.txt", true)
     // val zero = s.storyList(0)
     //    println(zero)
     //    println(zero.members.mkString("\n"))
 
     def sentFn: () => List[Sentence] = () => parser().storyList.flatMap(_.members)
 
-    val simi = new DSDSimilarity(sentFn, "movieSemantic.txt")
+    val simi = new DSDSimilarity(sentFn, "robberySemantic.txt")
     //var simiMatrix = simi()
     //    utils.Matrix.prettyPrint(matrix1)
     //    System.exit(0)
-    val local = new SimpleLocation(sentFn, 0.6, "movieLocations.txt")
+    val local = new SimpleLocation(sentFn, 0.6, "robberyLocations.txt")
 
-    var addition = new MatrixAddition(() => simi(), () => local(), 0.2, "movie1stSimilarity.txt")
+    var addition = new MatrixAddition(() => simi(), () => local(), 0.2, "robbery1stSimilarity.txt")
 
     //val matrix = simi()
     var matrix = addition()
@@ -314,21 +321,21 @@ object ConfigReader {
     //        println("matrix length = " + matrix.length)
 
     //no-link constraints
-//    var count = 0
-//    for (story <- stories) {
-//      val storyLen = story.members.length
-//      for (i <- 0 until storyLen; j <- i + 1 until storyLen) {
-//        matrix(i + count)(j + count) = 0
-//        matrix(j + count)(i + count) = 0
-//      }
-//      count = storyLen
-//    }
+    //    var count = 0
+    //    for (story <- stories) {
+    //      val storyLen = story.members.length
+    //      for (i <- 0 until storyLen; j <- i + 1 until storyLen) {
+    //        matrix(i + count)(j + count) = 0
+    //        matrix(j + count)(i + count) = 0
+    //      }
+    //      count = storyLen
+    //    }
 
     val (distance, max) = similarityToDistance(matrix)
 
     var clusterList = cluster.algo.OPTICS.cluster(distance, max, 4, stories.flatMap(_.members.toList))
     //iterativeRestrain(clusterList, stories, simi())
-    //evaluate(clusterList, gold)
+    evaluate(clusterList, gold)
   }
 
   def evaluate(clusters: List[Cluster], gold: List[Cluster]) {

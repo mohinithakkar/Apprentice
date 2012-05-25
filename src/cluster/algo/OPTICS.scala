@@ -93,7 +93,12 @@ object OPTICS {
         // if (core-distance(p, eps, Minpts) != UNDEFINED)
         if (p.core != UNDEFINED) {
           seeds = update(neighbors, p, seeds, epsilon, minPts, similarity)
+
           while (!seeds.isEmpty) {
+            // debug: print the seeds queue
+//            var text = seeds.map(x => x.reachability).min
+//            println("*************MIN*************" + text)
+//            println("*************head*************" + seeds.head.reachability)
             val q = seeds.dequeue()
             val qNeighbors = getNeighbors(q, epsilon, similarity, points)
             q.visited = true
@@ -112,21 +117,20 @@ object OPTICS {
       list(0).next = list(1)
       list.last.previous = list(list.length - 2)
     }
-    
+
     for (i <- 1 until list.length - 1) {
       list(i).previous = list(i - 1)
       list(i).next = list(i + 1)
     }
     //println(list.size)
-//    val min = list.map(_.reachability).min
-//    val max = list.map(_.reachability).filterNot(_ == Double.PositiveInfinity).max
-//    val cutoff = (max - min) * 0.5 + min 
-//    list = list.head :: list.tail.filter(_.reachability < cutoff)
+    //    val min = list.map(_.reachability).min
+    //    val max = list.map(_.reachability).filterNot(_ == Double.PositiveInfinity).max
+    //    val cutoff = (max - min) * 0.5 + min 
+    //    list = list.head :: list.tail.filter(_.reachability < cutoff)
     //println(list.size)
-    
 
-    for (p <- list) {      
-      println(sentences(p.id).toShortString + ": " +  p.reachability)
+    for (p <- list) {
+      println(sentences(p.id).toShortString + ": " + p.reachability)
     }
 
     val larray = list.toArray
@@ -177,7 +181,7 @@ object OPTICS {
       if (r.children == Nil) {
 
         var pts = r.rArray
-        
+
         val reach = pts.map(_.reachability)
 
         val valid =
@@ -205,7 +209,7 @@ object OPTICS {
             }
           }
           separation = (start, end) :: separation
-          
+
           // add the point before the continuous parts only if it is of similar height with the point immediately after the part
           for (s <- separation) {
             var endInd = s._2 + 1
@@ -213,25 +217,22 @@ object OPTICS {
             val startPt = goodPortion(s._1).previous
             // the is the heigh cutoff
             var height = goodPortion(s._1).reachability
-            
+
             if (endPt != null && startPt != null && startPt.reachability > goodPortion(s._1).reachability &&
               ((endPt.reachability * 1.3 > startPt.reachability &&
-              endPt.reachability * 0.7 < startPt.reachability) || startPt.reachability == UNDEFINED)) {
+                endPt.reachability * 0.7 < startPt.reachability) || startPt.reachability == UNDEFINED)) {
               //println("end = " + endPt.reachability + ", start = " + startPt.reachability + " thre = " + endPt.reachability * 1.3)
               additional = startPt :: additional
               height = startPt.reachability
             }
-            
+
             //now try to add some points after the end point
             var break = false;
-            while(endInd < pts.length && !break)
-            {
-            	if (pts(endInd).reachability <= height && pts(endInd).reachability >= pts(endInd).previous.reachability)
-            	{
-            	  additional = pts(endInd)::additional
-            	  endInd += 1;
-            	}
-            	else break = true;
+            while (endInd < pts.length && !break) {
+              if (pts(endInd).reachability <= height && pts(endInd).reachability >= pts(endInd).previous.reachability) {
+                additional = pts(endInd) :: additional
+                endInd += 1;
+              } else break = true;
             }
           }
           // add the starting points of each segment
@@ -256,8 +257,8 @@ object OPTICS {
       var members = List[Sentence]()
       println("@ a")
       for (pt <- r) {
-        val text = sentences(pt.id).toShortString().replaceAll("\\(S", "").replaceAll("\\)", "") 
-        println(text)// + " : " + sentences(pt.id).location)
+        val text = sentences(pt.id).toShortString().replaceAll("\\(S", "").replaceAll("\\)", "")
+        println(text) // + " : " + sentences(pt.id).location)
         members = sentences(pt.id) :: members
       }
       println("###")
@@ -270,7 +271,7 @@ object OPTICS {
     clusterList
   }
 
-  def markLeaves(root: Node, sentences:List[Sentence]) {
+  def markLeaves(root: Node, sentences: List[Sentence]) {
     var leaves = List[Node]()
 
     def findLeaves(r: Node) {
@@ -289,7 +290,7 @@ object OPTICS {
       val end = leaf.rArray.last.plotId
       for (p <- leaf.rArray)
         println(sentences(p.id).toShortString())
-        
+
       println("###")
       r = (start, end) :: r
     }
