@@ -1,5 +1,4 @@
-package iron
-
+package utils
 import data._
 import graph._
 import main._
@@ -9,8 +8,8 @@ import scala.collection.mutable.HashMap
 // this little program makes sure sentence id starts from zero and align the gold cluster file with it
 object IDMatcher extends App {
 
-  val reader = new ConfigReader("configRob.txt")
-  var (stories, clusters) = reader.initData()
+  val reader = new ConfigReader("configMv2.txt")
+  var (stories, clusters) = reader.initOldData()
 
   var map = new HashMap[Int, Int]()
 
@@ -26,7 +25,7 @@ object IDMatcher extends App {
       new Story(sents)
   }
 
-  val storyOut = new PrintWriter(new BufferedOutputStream(new FileOutputStream("robSimpleStory.txt")))
+  val storyOut = new PrintWriter(new BufferedOutputStream(new FileOutputStream("movieSimpleStories.txt")))
   for (s <- stories) {
     if (s.members.isEmpty) println("empty story")
     for (sent <- s.members) {
@@ -36,7 +35,7 @@ object IDMatcher extends App {
     storyOut.println("###")
   }
 
-  val clusterOut = new PrintWriter(new BufferedOutputStream(new FileOutputStream("robSemanticGold.txt")))
+  val clusterOut = new PrintWriter(new BufferedOutputStream(new FileOutputStream("movieSimpleClusters.txt")))
   for (c <- clusters) {
     clusterOut.println("@ " + c.name)
     for (sent <- c.members) {

@@ -19,7 +19,7 @@ object GoldParser extends JavaTokenParsers {
         Sentence(number.toInt, list.toArray)
     }
 
-  protected def cluster: Parser[Cluster] = """@\s""".r ~> """[-\w\s]+\n""".r ~ rep(sentence) <~ "###" ^^
+  protected def cluster: Parser[Cluster] = """@\s""".r ~> """[-\w\s\(\)]+\n""".r ~ rep(sentence) <~ "###" ^^
     {
       case name ~ list =>
         //println("Parsed cluster " + name.trim)

@@ -1,0 +1,6 @@
+storyFile = ./data/restaurant/restaurantStories.txt
+clusterFile = ./data/restaurant/restaurantGold1.txt
+parameters = probThresholds, confThresholds, s
+probThresholds = 0.6
+confThresholds = 0.4
+s = 4

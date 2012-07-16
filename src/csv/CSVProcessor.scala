@@ -5,7 +5,7 @@ import java.io._
 object CSVProcessor {
 
   def main(args: Array[String]) {
-    val text = scala.io.Source.fromFile("./movies/movie-original-data.csv").mkString
+    val text = scala.io.Source.fromFile("./data/new_movie/original_data.csv").mkString
     
     val writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream("movie-stories.txt")))
     

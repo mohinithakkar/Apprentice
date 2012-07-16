@@ -80,7 +80,7 @@ object Causality {
             if (!betterExplanations.exists(x => x.filterNot(AorBList.contains(_)) isEmpty)) // no better explanation exists
             {
               //if (c.name == "use bathroom")
-              println("possible causal: " + AorBList.map(_.name).mkString(" || ") + " ->, " + c.name + ", " + prob1 + ", " + prob2)
+              //println("possible causal: " + AorBList.map(_.name).mkString(" || ") + " ->, " + c.name + ", " + prob1 + ", " + prob2)
               result += (c -> (AorBList :: betterExplanations))
             }
             //            else {

@@ -19,3 +19,20 @@ object StoryGetter {
     }
   }
 }
+
+object GoldGetter {
+
+  def main(args: Array[String]) {
+    val clusterList: List[Cluster] = GoldParser.parseClusters("./data/movie/movieGold2.txt")
+    clusterList.foreach {
+      cluster =>
+        val stringList =
+          cluster.members.map {
+            sentence =>
+              sentence.id + " " + sentence.tokens.map { _.word }.mkString("", " ", "\n")
+          }
+        println("@ " + cluster.name)
+        println(stringList.mkString("", "", "###"))
+    }
+  }
+}

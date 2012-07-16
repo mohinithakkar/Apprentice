@@ -58,18 +58,22 @@ class SimilarityMetric {
         val tail2 = dep2.dep.lemma
 
         // this part treats John and Sally as the same person. May not apply to all situations.
-//        if (head1 == head2 && ((tail1 == "Sally" && tail2 == "John") || (tail2 == "Sally" && tail1 == "John")))
-//          return 1
-//        else if (tail1 == tail2 && ((head1 == "Sally" && head2 == "John") || (head2 == "Sally" && head1 == "John")))
-//          return 1
-//        else {
+        if (head1 == head2 && ((tail1 == "Sally" && tail2 == "John") || (tail2 == "Sally" && tail1 == "John")))
+          return 1
+        else if (tail1 == tail2 && ((head1 == "Sally" && head2 == "John") || (head2 == "Sally" && head1 == "John")))
+          return 1
+        else {
+          
+        // part ends
           val govSim = wordSimilarity(dep1.gov, dep2.gov)
           val depSim = wordSimilarity(dep1.dep, dep2.dep)
 
           var base =
-//            if (((tail1 == "Sally" && tail2 == "John") || (tail2 == "Sally" && tail1 == "John")) && govSim < 0.01) 0
-//            else if (((head1 == "Sally" && head2 == "John") || (head2 == "Sally" && head1 == "John")) && depSim < 0.01) 0
-//            else
+            // part begins
+            if (((tail1 == "Sally" && tail2 == "John") || (tail2 == "Sally" && tail1 == "John")) && govSim < 0.01) 0
+            else if (((head1 == "Sally" && head2 == "John") || (head2 == "Sally" && head1 == "John")) && depSim < 0.01) 0
+            else              
+              // part ends 
               0.5 * depSim + 0.5 * govSim
 
           //          if (head1 != head2 && tail1 == tail2) {
@@ -93,7 +97,7 @@ class SimilarityMetric {
           //          }
 
           base
-        //}
+        }
       }
     }
 

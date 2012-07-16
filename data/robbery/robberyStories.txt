@@ -141,9 +141,9 @@
 130 Sally was frightened.
 131 Sally didn't answer John.
 132 John asked for money again.
-133 Sally gave him $500.
+133 Sally gave John $500.
 134 John wanted more money.
-135 Sally gave him $500 more.
+135 Sally gave John $500 more.
 136 John took the money.
 137 John left the bank.
 138 Sally called her supervisor.
@@ -522,7 +522,7 @@
 481 John waited in line.
 482 John pulled a gun.
 483 Sally put her hands up.
-484 John demaned money.
+484 John demanded money.
 485 Sally gave John money.
 486 John ran away.
 ###

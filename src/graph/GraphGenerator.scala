@@ -2,7 +2,7 @@ package graph
 
 import scala.util.parsing.combinator._
 import scala.collection.mutable.HashMap
-import java.util.Properties
+import utils._
 import java.io._
 import graph._
 import data._
@@ -10,38 +10,24 @@ import parse._
 import data._
 import graph.metric._
 
-class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Properties) {
+class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: SingleProperty) {
 
   val DEFAULT_PROB_THRESHOLD = 0.55
-  val DEFAULT_CONF_THRESHOLD = 0.45
+  //val DEFAULT_CONF_THRESHOLD = 0.45
+  val DEFAULT_MIN_CLUSTER = 2
 
   val DEFAULT_ADDED_OBSERVATIONS = 1
 
-  def getParameter[T](property: Properties, name: String, conversionFunc: String => T): Option[T] =
-    {
-      if (property.containsKey(name)) {
-        val s = property.getProperty(name)
-        try {
-          Some(conversionFunc(s))
-        }
-        catch {
-          case e: Exception =>
-            println("illegal parameter value for " + name + " " + s)
-            e.printStackTrace()
-            None
-        }
-      }
-      else
-        None
-    }
+  
 
-  val PROBABILITY_THRESHOLD: Double = getParameter(property, "probThresholds", x => x.toDouble).getOrElse(DEFAULT_PROB_THRESHOLD)
+  val PROBABILITY_THRESHOLD: Double = property.getParameter("probThresholds", x => x.toDouble).getOrElse(DEFAULT_PROB_THRESHOLD)
 
-  val CONFIDENCE_THRESHOLD = getParameter(property, "confThresholds", x => x.toDouble).getOrElse(DEFAULT_CONF_THRESHOLD)
+  //val CONFIDENCE_THRESHOLD = getParameter(property, "confThresholds", x => x.toDouble).getOrElse(DEFAULT_CONF_THRESHOLD)
+  val CLUSTER_SIZE_THRESHOLD = property.getParameter("minClusterSize", x => x.trim.toInt).getOrElse(DEFAULT_MIN_CLUSTER)
 
-  val ADDED_OBSERVATIONS = getParameter(property, "addedObservations", x => x.toInt).getOrElse(DEFAULT_ADDED_OBSERVATIONS)
+  val ADDED_OBSERVATIONS = property.getParameter("addedObservations", x => x.toInt).getOrElse(DEFAULT_ADDED_OBSERVATIONS)
 
-  val OUTPUT_FILE = getParameter(property, "outputFile", x => x).getOrElse("output")
+  val OUTPUT_FILE = property.getParameter("outputFile", x => x).getOrElse("output")
 
   val storyList: List[Story] = stories
   val clusterList: List[Cluster] = clusters
@@ -64,22 +50,28 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
       false
     }
   
-  def thresholdFilter = (r: Relation) => (r.confidence > CONFIDENCE_THRESHOLD && r.prob > PROBABILITY_THRESHOLD)
+  //def thresholdFilter = (r: Relation) => (r.confidence > CONFIDENCE_THRESHOLD && r.prob > PROBABILITY_THRESHOLD)
+  def thresholdFilter = ((r: Relation) => (r.totalObservations > CLUSTER_SIZE_THRESHOLD) && (r.prob > PROBABILITY_THRESHOLD))
 
   /* returns the error before and after adjustment
    * 
    */
-  def generate(): (Double, Double, Double, Double) = {
+  def generate(): (Double, Graph, Double, Graph) = {
 
+//    println("generating plot graph using the following parameters: \n" +
+//      "probability threshold = " + PROBABILITY_THRESHOLD + "\n" +
+//      "confidence threshold = " + CONFIDENCE_THRESHOLD + "\n" +
+//      "added observations = " + ADDED_OBSERVATIONS + "\n")
+    
     println("generating plot graph using the following parameters: \n" +
       "probability threshold = " + PROBABILITY_THRESHOLD + "\n" +
-      "confidence threshold = " + CONFIDENCE_THRESHOLD + "\n" +
+      "minimum cluster size = " + CLUSTER_SIZE_THRESHOLD + "\n" +
       "added observations = " + ADDED_OBSERVATIONS + "\n")
 
     var errorBefore = -1.0
     var errorAfter = -1.0
-    var freedomBefore = -1.0
-    var freedomAfter = -1.0
+   // var freedomBefore = -1.0
+   // var freedomAfter = -1.0
 
     var statsList = List[(Int, Double, Double)]()
 
@@ -95,11 +87,19 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
     //println(totalGraph.links.mkString("\n"))
     val compactGraph = totalGraph.compact
     compactGraph.draw(OUTPUT_FILE + "-simplified")
+    
+    try {
+      compactGraph.makeEfficient()
+    } catch {
+      case g:GraphException => 
+        println(g.msg)
+        return (0, compactGraph, 0, null)
+    }
     //println(compactGraph.links.mkString("\n"))
     var (sum, avg) = errorChecker.checkErrors(storyList, compactGraph)
     println("before improvement, avg err = " + avg)
     errorBefore = avg
-    freedomBefore = Freedom(storyList, totalGraph)
+    //freedomBefore = Freedom(storyList, totalGraph)
     //println("GOOD PATHS: \n\n" + checker.getGoodPaths.mkString("\n"))
     //println("\n\n BAD PATHS: \n\n" + checker.getBadPaths.mkString("\n"))
     //statsList = (i, sum, avg) :: statsList
@@ -108,31 +108,39 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
     //      var relations = valid.filter { r =>
     //        reducedLinks.exists { link => link.source == r.source && link.target == r.target }
     //      }
+    // the 2 lines below for adjacent graph
+//    Thread.sleep(30000)
+//    System.exit(0)
+    
+    val adjustedRelations = updateBadPaths(errorChecker.getBadPaths, compactGraph, allRelations)
+    val adjustedLinks = filterRelations(adjustedRelations, thresholdFilter)
+    val adjustedTotalGraph = new Graph(clusterList, adjustedLinks)
+    val adjustedGraph = adjustedTotalGraph.compact
+    adjustedGraph.draw(OUTPUT_FILE + "-adjusted")
 
-    val updatedRelations = updateBadPaths(errorChecker.getBadPaths, compactGraph, allRelations)
-    val updatedLinks = filterRelations(updatedRelations, thresholdFilter)
-    val updatedTotalGraph = new Graph(clusterList, updatedLinks)
-    val updatedGraph = updatedTotalGraph.compact
-    updatedGraph.draw(OUTPUT_FILE + "-adjusted")
 
-
-    avg = errorChecker.checkErrors(storyList, updatedGraph)._2
+    avg = errorChecker.checkErrors(storyList, adjustedGraph)._2
     println("after improvement, avg err = " + avg)
     errorAfter = avg
 
-    freedomAfter = Freedom(storyList, totalGraph)
+    //freedomAfter = Freedom(storyList, totalGraph)
 
-    val causalGraph = Causality.findCausal(storyList, updatedTotalGraph).compact.singleLink
-    causalGraph.draw(OUTPUT_FILE + "-causal")
+    //val causalGraph = Causality.findCausal(storyList, adjustedTotalGraph).compact.singleLink
+    //causalGraph.draw(OUTPUT_FILE + "-causal")
+    
+    // find the branching structure of the final graph
+    //Branching.discover(adjustedGraph)
+    
+    
     //println(statsList.map(_.toString).map(x => x.substring(1, x.length - 2)).mkString("\n"))
-    (errorBefore, freedomBefore, errorAfter, freedomAfter)
+    (errorBefore, compactGraph, errorAfter, adjustedGraph)
 
   }
 
   def updateBadPaths(badPaths: List[(Link, (Double, Double))], graph: Graph,
                      allRelations: List[Relation]): List[Relation] =
     {
-    /*** SOMETHING IS WRONG WITH THIS METHOD. FIX IT ***/
+
       var newRelations = allRelations
       var oldRelations = allRelations
 
@@ -164,7 +172,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
                 val dist = newGraph.shortestDistance(target, possible)
                 dist == -1
 
-              /* This prevents cycles. If there is already a path from target to this posible source,
+              /* This prevents cycles. If there is already a path from target to this possible source,
                  * and we strength the link from this possible source to target, 
                  * we could create a cycle.
                  */
@@ -179,6 +187,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
               newRelations.find(r => r.source == possible && r.target == target) match {
                 case Some(rel: Relation) =>
                   //println ("possible source: " + possible.name)
+                  // add a number of positive relations
                   val updated = rel.addEvidence(ADDED_OBSERVATIONS, 0)
 
                   oldRelations = newRelations
@@ -217,6 +226,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
     relations.filter(filterFunc).map { r => new Link(r.source, r.target) }
   }
 
+  /*
   def drawDiagram(clusterList: List[Cluster], allRelations: List[Relation], filename: String) = {
 
     val valid = allRelations.filter {
@@ -259,7 +269,7 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
 
     reducedLinks
   }
-
+  */
  
 
   def computeRelations(storyList: List[Story], clusterList: List[Cluster]): List[Relation] =
@@ -277,10 +287,11 @@ class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: Pr
 
       storyList foreach {
         story =>
-          for (i <- 0 to story.members.length - 1) {
+          for (i <- 0 to story.members.length - 2) {
             for (j <- i + 1 to story.members.length - 1) {
               val source = story.members(i).cluster
-              val target = story.members(j).cluster
+              val target = story.members(j).cluster // this line for normal computation
+              //val target = story.members(i+1).cluster // this line for adjacent graph
               //if (source == null || target == null) println(story + ", " + i + ", " + j + " have no clusters")
               increment(source, target)
             }

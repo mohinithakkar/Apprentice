@@ -5,6 +5,7 @@ import data._
 import xml._
 import javanlp._
 import graph._
+import utils.SuperProperties
 import java.io._
 import java.util.Properties
 import scala.collection.mutable.HashMap
@@ -15,57 +16,50 @@ import edu.stanford.nlp.ling.IndexedWord;
 
 class ConfigReader(val configFile: String) {
 
-  val properties = new Properties()
+  val properties = new SuperProperties()
   val in = new FileInputStream(configFile)
   properties.load(in)
   in.close()
   println("Parameters supplied: " + properties.getProperty("parameters"))
-  val paraNames = properties.getProperty("parameters").split(",")
+  
 
-  def allParameters(): Array[Properties] =
-    {
-      var params: Array[Properties] = new Array[Properties](0)
-      for (n <- paraNames) {
-        val name = n.trim
-        // for each parameter listed, we get a list of values
-        val values = properties.getProperty(name).split(",")
-        if (params.isEmpty) {
-          params = values.map { v =>
-            val p = new Properties()
-            p.setProperty(name, v)
-            p
-          }
-        } else {
-          // for each existing Properties object, we append this parameter
-          params = params flatMap { param =>
-            values.map { v =>
-              val p = param.clone().asInstanceOf[Properties]
-              p.setProperty(name, v)
-              p
-            }
-          }
-        }
-      }
+  
 
-      params
-    }
-
-  def newInitData(): (List[Story], List[Cluster]) =
+  def initOldData(): (List[Story], List[Cluster]) =
     {
       val storyFile = properties.getProperty("storyFile")
       val clusterFile = properties.getProperty("clusterFile")
 
       //println("using story file: " + storyFile)
-      var storyList: List[Story] = SimpleParser.parseStories(storyFile)
+      var storyList: List[Story] = GoldParser.parseStories(storyFile)
       //GoldParser.parseStories(storyFile)
 
       storyList.foreach(_.addStoryLocation())
 
       //println("using cluster file: " + clusterFile)
-      val clusterList: List[Cluster] = newInitClusters(storyList, clusterFile)
+      val clusterList: List[Cluster] = initOldClusters(storyList, clusterFile)
 
       // This filters unused sentences in the stories
       //storyList = filterUnused(storyList, clusterList)
+      (storyList, clusterList)
+    }
+  
+  def initOldDataFiltered(): (List[Story], List[Cluster]) =
+    {
+      val storyFile = properties.getProperty("storyFile")
+      val clusterFile = properties.getProperty("clusterFile")
+
+      //println("using story file: " + storyFile)
+      var storyList: List[Story] = GoldParser.parseStories(storyFile)
+      //GoldParser.parseStories(storyFile)
+
+      storyList.foreach(_.addStoryLocation())
+
+      //println("using cluster file: " + clusterFile)
+      val clusterList: List[Cluster] = initOldClusters(storyList, clusterFile)
+
+      // This filters unused sentences in the stories
+      storyList = filterUnused(storyList, clusterList)
       (storyList, clusterList)
     }
 
@@ -113,13 +107,13 @@ class ConfigReader(val configFile: String) {
       val used = clusterList.flatMap { _.members }
       storyList map { story =>
         val newMembers = story.members.filter { s => used.contains(s) }
-        val str = story.members.filterNot { s => used.contains(s) }.map { _.toShortString() }.mkString("\n")
-        println(str)
+        //val str = story.members.filterNot { s => used.contains(s) }.map { _.toShortString() }.mkString("\n")
+        //println(str)
         new Story(newMembers)
       }
     }
 
-  def newInitClusters(storyList: List[Story], clusterFile: String) =
+  def initOldClusters(storyList: List[Story], clusterFile: String) =
     {
       val hashmap = new HashMap[Int, Sentence]
       storyList foreach {
@@ -132,7 +126,7 @@ class ConfigReader(val configFile: String) {
             }
       }
 
-      SimpleParser.parseClusters(clusterFile) map {
+      GoldParser.parseClusters(clusterFile) map {
         c =>
           val newMembers = c.members map
             {
@@ -277,19 +271,15 @@ class ConfigReader(val configFile: String) {
     relations.toList
   }
 
-  def printParameterNames(pw: PrintWriter) {
-    paraNames foreach { name =>
-      pw.print(name.trim + ", ")
-    }
-    pw.println()
+  /** print the sentence that does not end with a period
+   * 
+   */
+  def findIrregularSent(stories:List[Story]) {
+    val temp = stories.flatMap(_.members).filterNot(s => s.tokens.last.word.trim.endsWith(".")).mkString
+    println(temp)
+    System.exit(0)
   }
-
-  def printParameterValues(para: Properties, pw: PrintWriter) {
-    paraNames foreach { name =>
-      val value = para.getProperty(name.trim)
-      pw.print(value + ", ")
-    }
-  }
+  
 }
 
 object ConfigReader {
@@ -297,22 +287,23 @@ object ConfigReader {
     //    val string = scala.io.Source.fromFile("movieParsed.txt").mkString    
     //    val obj = XStream.fromXML(string).asInstanceOf[StorySet]
     //    println(obj.storyList.mkString("\n"))
-    val reader = new ConfigReader("configRob.txt")
-    val (stories, gold) = reader.newInitData()
-    val parser = new StoryNLPParser(stories, "robberyParsed.txt", true)
+    val reader = new ConfigReader("configRobBest.txt")
+    val (stories, gold) = reader.initData()
+
+    val parser = new StoryNLPParser(stories, "RobParsed.txt", true)
     // val zero = s.storyList(0)
     //    println(zero)
     //    println(zero.members.mkString("\n"))
 
     def sentFn: () => List[Sentence] = () => parser().storyList.flatMap(_.members)
 
-    val simi = new DSDSimilarity(sentFn, "robberySemantic.txt")
+    val simi = new DSDSimilarity(sentFn, "RobSemantic.txt")
     //var simiMatrix = simi()
     //    utils.Matrix.prettyPrint(matrix1)
     //    System.exit(0)
-    val local = new SimpleLocation(sentFn, 0.6, "robberyLocations.txt")
+    val local = new SimpleLocation(sentFn, 0.6, "RobLocations.txt")
 
-    var addition = new MatrixAddition(() => simi(), () => local(), 0.2, "robbery1stSimilarity.txt")
+    var addition = new MatrixAddition(() => simi(), () => local(), 0.2, "Rob1stSimilarity.txt")
 
     //val matrix = simi()
     var matrix = addition()
@@ -346,6 +337,7 @@ object ConfigReader {
     println("MUC: recall " + r1 + " precision " + p1 + " f1 " + 2 * p1 * r1 / (p1 + r1))
 
     println("B Cubed: recall " + r2 + " precision " + p2 + " f1 " + 2 * p2 * r2 / (p2 + r2))
+    println("purity: " + ClusterMetric.purity(gold, clusters))
   }
 
   def iterativeRestrain(cList: List[Cluster], stories: List[Story], simiMatrix: Array[Array[Double]]) {
@@ -558,40 +550,40 @@ object ConfigReader {
     Thread.sleep(2000)
   }
 
-  def tempGraph(stories: List[Story], clusters: List[Cluster]) = {
-    val reader = new ConfigReader("configMvn.txt")
-    val para = reader.allParameters()(0)
-    val outputPath = new File(reader.properties.getProperty("storyFile")).getParent()
-    para.put("outputFile", outputPath + "\\conft")
-    Relation.init(para)
-
-    val gen = new GraphGenerator(stories, clusters, para)
-    val (prevErr, prevFreedom, afterErr, afterFreedom) = gen.generate()
-  }
-
-  def generateGraphs() {
-    val reader = new ConfigReader("configMv3.txt")
-    val (stories, clusters) = reader.initData()
-    for (s <- stories) println(s)
-
-    val parameters = reader.allParameters()
-    val outputPath = new File(reader.properties.getProperty("storyFile")).getParent()
-    var i = 1;
-    val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(outputPath + "\\summary.csv")));
-
-    reader.printParameterNames(pw)
-
-    parameters foreach { para =>
-      reader.printParameterValues(para, pw)
-      para.put("outputFile", outputPath + "\\conf" + i)
-      println(outputPath + "conf" + i)
-      i += 1
-
-      Relation.init(para)
-      val gen = new GraphGenerator(stories, clusters, para)
-      val (prevErr, prevFreedom, afterErr, afterFreedom) = gen.generate()
-      pw.print(prevErr + ", " + afterErr + ", " + prevFreedom + ", " + afterFreedom + ", " + "\n")
-
-    }
-  }
+//  def tempGraph(stories: List[Story], clusters: List[Cluster]) = {
+//    val reader = new ConfigReader("configMvn.txt")
+//    val para = reader.allParameters()(0)
+//    val outputPath = new File(reader.properties.getProperty("storyFile")).getParent()
+//    para.put("outputFile", outputPath + "\\conft")
+//    //Relation.init(para)
+//
+//    val gen = new GraphGenerator(stories, clusters, para)
+//    val (prevErr, prevFreedom, afterErr, afterFreedom) = gen.generate()
+//  }
+//
+//  def generateGraphs() {
+//    val reader = new ConfigReader("configMv3.txt")
+//    val (stories, clusters) = reader.initData()
+//    for (s <- stories) println(s)
+//
+//    val parameters = reader.allParameters()
+//    val outputPath = new File(reader.properties.getProperty("storyFile")).getParent()
+//    var i = 1;
+//    val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(outputPath + "\\summary.csv")));
+//
+//    reader.printParameterNames(pw)
+//
+//    parameters foreach { para =>
+//      reader.printParameterValues(para, pw)
+//      para.put("outputFile", outputPath + "\\conf" + i)
+//      println(outputPath + "conf" + i)
+//      i += 1
+//
+//      //Relation.init(para)
+//      val gen = new GraphGenerator(stories, clusters, para)
+//      val (prevErr, prevFreedom, afterErr, afterFreedom) = gen.generate()
+//      pw.print(prevErr + ", " + afterErr + ", " + prevFreedom + ", " + afterFreedom + ", " + "\n")
+//
+//    }
+//  }
 }

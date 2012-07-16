@@ -67,7 +67,7 @@
 292 John and Sally talk about the movie afterwards .
 289 John and Sally talk before the movie begin .
 ###
-@ us toilet
+@ use toilet
 104 Sally goes to the toilet .
 140 John and Sally use the restroom .
 162 John and Sally use the restroom .
@@ -272,7 +272,7 @@
 203 Sally make sure to turn off their cell phone .
 241 John turns off his cellphone .
 ###
-@ eat nibble popcorn
+@ eat popcorn
 7 Sally eats the popcorn .
 150 John and Sally eat the popcorn .
 191 John and Sally eat popcorn .

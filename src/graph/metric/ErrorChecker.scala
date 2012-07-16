@@ -64,7 +64,7 @@ class ErrorChecker {
             for (j <- i + 1 to story.members.length - 1) {
               val source = story.members(i).cluster
               val target = story.members(j).cluster
-              if (source == null || target == null) println(story + ", " + i + ", " + j + " have no clusters")
+              //if (source == null || target == null) println(story + ", " + i + ", " + j + " have no clusters")
               if (source == target) {
                 /*
             	  println("WARNING: SOURCE = " + source + "TARGET = " + target)
@@ -82,6 +82,10 @@ class ErrorChecker {
       }
     }
 
+  /** Computes the graph error as a mean squared error
+   * Returns (sum, mean). mean is the mean squared error. sum is the total error before the final division to compute mean.
+   * 
+   */
   def compareDist(distances: HashMap[(Cluster, Cluster), Double], graph: Graph): (Double, Double) = {
     var sum: Double = 0
     var total: Int = 0
@@ -108,7 +112,6 @@ class ErrorChecker {
         val backwardDist = graph.shortestDistance(target, source)
         if (debug) println("backward dist " + backwardDist)
         if (backwardDist != -1) {
-          //println("ignoring pair: " + source.name + ", " + target.name)
           // the backward link exists. We can safely ignore this pair of nodes
         } else {
           /* neither links exists. Therefore those nodes are parallel
@@ -116,7 +119,7 @@ class ErrorChecker {
               * If not, sum up Dn from both directions and compare it with this pair's Dg, which is 0
               * Finally, add it to the checked list
               */
-          if (!checkedList.contains((source, target))) {
+          if (!checkedList.contains((target, source))) {
             val reverseDistance = distances.getOrElse((target, source), 0.0)
             //println("reverse direction distance = " + reverseDistance)
 

@@ -5,6 +5,23 @@ import parse._
 import scala.collection.mutable.HashMap
 
 object ClusterMetric {
+  
+  def purity(gold: List[Cluster], actual: List[Cluster]): Double = {
+    val count:Double = actual.flatMap(_.members).size
+    var total = 0
+    for(c <- actual)
+    {
+      var max = 0
+      for (g <- gold)
+      {
+        val matched = c.members.filter(s => g.members.contains(s)).size
+        if (matched > max) max = matched
+      }
+      total += max
+    }
+      
+    total / count
+  }
 
   def bCubed(gold: List[Cluster], actual: List[Cluster]): (Double, Double) =
     {

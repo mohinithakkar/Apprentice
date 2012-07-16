@@ -1,0 +1,5 @@
+storyFile = ./data/new_movie/movieStories.txt
+clusterFile = ./data/new_movie/movieGold.txt
+parameters = probThresholds, minClusterSize
+probThresholds = 0.56
+minClusterSize = 3

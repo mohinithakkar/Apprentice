@@ -108,6 +108,8 @@ class Story(
       s.location = location
     }
   }
+  
+  def size():Int = members.length
 }
 
 class ClusterLink(val source: Cluster, val target: Cluster, var count: Int = 0) extends Ordered[ClusterLink] with XStreamable {
