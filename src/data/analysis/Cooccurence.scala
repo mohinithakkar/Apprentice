@@ -28,11 +28,13 @@ object Cooccurence extends App {
 
       val max = math.min(c1.size, c2.size)
       val mi = mutualInfo(c1, c2, stories)
+      val pmi = ptMutualInfo(c1, c2, stories)
       val sizeEntropy = clusterSizeDifference(c1, c2, stories)
       //println(c1.name + ", " + c2.name + ", " + count + ", " + max + ", " + count.toDouble / max + ", " + (mi._1 + mi._2) + ", " + mi._1 + ", " + mi._2)
-      if ((mi._1 + mi._2) > 0.05 && mi._2 > 0)
+      //if ((mi._1 + mi._2) > 0.05 && mi._2 > 0)
+      if (c1.size >= 4 && c2.size >= 4)
     	  println(c1.name + ", " + c2.name + ", " + c1.size + ", " + c2.size + ", " + count + ", " + max + ", " + count.toDouble / max + ", " + 
-          sizeEntropy + ", " + (mi._1 + mi._2) + ", " + mi._1 + ", " + mi._2)
+          sizeEntropy + ", mi: " + (mi._1 + mi._2) + ", " + mi._1 + ", " + mi._2 + ", pmi: " + (pmi._1 + pmi._2) + ", " + pmi._1 + ", " + pmi._2)
     //}
   }
 
@@ -88,6 +90,37 @@ object Cooccurence extends App {
     
     val comp3 =  if (joint(0)(1) == 0) 0 else joint(0)(1) * math.log(joint(0)(1) / p1(0) / p2(1))
     val comp4 = if (joint(1)(0) == 0) 0 else joint(1)(0) * math.log(joint(1)(0) / p1(1) / p2(0))
+    sum2 = comp3 + comp4
+    //println("component 3:" + comp3)
+    //println("component 4:" + comp4)
+    
+    //println(joint(1)(0) * math.log(joint(1)(0) / p1(1) / p2(0)))
+    (sum1, sum2)
+  }
+  
+    /**
+   * pointwise mutual information of two clusters
+   *
+   */
+  def ptMutualInfo(c1: Cluster, c2: Cluster, stories: List[Story]): (Double, Double) = {
+    val joint = jointDist(c1, c2, stories)
+    val p1 = probDist(c1, stories)
+    val p2 = probDist(c2, stories)
+    val total = stories.size
+
+    var sum1 = 0.0
+    var sum2 = 0.0
+    
+    
+    val comp1 = math.log(joint(0)(0) / p1(0) / p2(0))
+    val comp2 = math.log(joint(1)(1) / p1(1) / p2(1))
+    sum1 = comp1 + comp2
+
+    //println("component 1:" + comp1 + " vs " + p1(0) * math.log(1/p2(0)))
+    //println("component 2:" + comp2 + " vs " + p1(1) * math.log(1/p2(1)))
+    
+    val comp3 =  math.log(joint(0)(1) / p1(0) / p2(1))
+    val comp4 = math.log(joint(1)(0) / p1(1) / p2(0))
     sum2 = comp3 + comp4
     //println("component 3:" + comp3)
     //println("component 4:" + comp4)
