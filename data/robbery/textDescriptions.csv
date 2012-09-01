@@ -1,0 +1,32 @@
+Name,Actor,OptionText,SelfExecutionText,OtherExecutionText
+John shows gun,John,Show your gun to the bank teller,You lifted your jacket to show your gun to the bank teller. She turned pale.,None
+Sally gives John money,Sally,Give the money to the robber,None,The bank teller hand over all the money she had to you.
+Sally presses alarm,Sally,Press the alarm,None,"When you looked away, the bank teller pressed the silent alarm under the table."
+John takes the bag,John,Take the bag,You quickly grabbed the bag from the bank teller. Now you are really close to being rich!,None
+John gets in car,John,Get in the car,"You opened the car door, put the money in the back seat, and got into the driver seat.",None
+John drives away,John,Drive away,"Before the police can react, you drove off the scene and vanished. Now they'll never find you!",None
+John opens bank door,John,Open the bank door,You pushed hard to open the heavy bank door.,None
+John leaves bank,John,Leave the bank,You left the bank as soon as you can.,None
+John collects money,John,Collect the money,You collected the money from the bank teller.,None
+John covers face,John,Covers your face with a mask,"Before the security camera can take a good shot at your, you put on a joker mask that covered your entire face.",None
+Sally scared,Sally,Look Scared,None,The bank teller looked very scared. She might faint any moment.
+Sally collects money,Sally,Collect the money,None,The bank teller collected money when shaking hands. 
+Sally opens cash drawer,Sally,Open the cash drawer,None,The bank teller opened the cash drawer. Your eyes catched the green color of joy.
+waits in line,John,Wait in the teller line,You waited in the line just like every other customer.,None
+Sally calls police,Sally,Call the police,None,The bank teller called the police and reported this robbery.
+police arrests John,police,Arrest John,The police surrounded you. You have no choice but accept your fate.,None
+police arrived,police,Arrive,The siren got near. The bank door opened and police swarmed into.,None
+Sally gives John Bag,Sally,Give the bag to John,None,The bank teller gave the money bag to you.
+Sally puts money in bag,Sally,Put the money in the bag,None,Sally put all the money she could find in the bag.
+John gives Sally bag,John,Give a bag to the teller,You gave the banker teller a bag for her to put money in the bag.,None
+the note demands money,the note,the note demands money,None,The note read: This is a robbery. Give me money to save your own life.
+Sally reads note,Sally,Read the note,None,Sally read the note.
+John hands Sally a note,John,Give a note to the teller,You pulled out a note and gave it to Sally.,None
+John points gun at Sally,John,Point your gun at the teller,You pointed your gun at Sally.,None
+John pulls out gun,John,Pull out your gun,You pulled out a gun from your pocket.,None
+Sally screams,Sally,Scream loudly,None,Sally screamed as loud as she could. You had no idea human could produce such noise.
+John demands money,John,Demand money,You demanded that she gave you all the money in the bank. Do it! Quickly!,None
+Sally greets John,Sally,Greet the customer,None,"When she sees you, she smiled and said:""How can I help you?"""
+John approaches Sally,John,Approach the teller,"You walked to the bank teller. Her name tag read ""Sally Smith""",None
+John sees Sally,John,Look around for a teller,You looked around and saw a bank teller.,None
+John enters bank,John,Enter the bank,"You walked into the bank, trying to look as normal as you can. Your pulse quickened and you can feel sweat in your palm.",None

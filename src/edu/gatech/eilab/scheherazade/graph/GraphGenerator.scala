@@ -79,10 +79,10 @@ package graph {
       val allLinks = filterRelations(allRelations, thresholdFilter)
       val totalGraph = new Graph(clusterList, allLinks)
       println("outputing to " + OUTPUT_FILE)
-      //totalGraph.draw(OUTPUT_FILE)
+      totalGraph.draw(OUTPUT_FILE)
       //println(totalGraph.links.mkString("\n"))
       val compactGraph = totalGraph.compact
-      //compactGraph.draw(OUTPUT_FILE + "-simplified")
+      compactGraph.draw(OUTPUT_FILE + "-simplified")
 
       try {
         compactGraph.makeEfficient()
@@ -112,7 +112,7 @@ package graph {
       val adjustedLinks = filterRelations(adjustedRelations, thresholdFilter)
       val adjustedTotalGraph = new Graph(clusterList, adjustedLinks)
       val adjustedGraph = adjustedTotalGraph.compact
-      //adjustedGraph.draw(OUTPUT_FILE + "-adjusted")
+      adjustedGraph.draw(OUTPUT_FILE + "-adjusted")
 
       avg = errorChecker.checkErrors(storyList, adjustedGraph)._2
       println("after improvement, avg err = " + avg)

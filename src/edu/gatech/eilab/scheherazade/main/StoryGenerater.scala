@@ -5,118 +5,131 @@ import analysis._
 import scala.collection.mutable.ListBuffer
 import java.io._
 package main {
-  object StoryGenerater extends App {
+  object StoryGenerater {
 
-    val MI_THRESHOLD = 0.05
+    def main(args: Array[String]) {
+      val MI_THRESHOLD = 0.05
 
-    // generate graph
-    val reader = new ConfigReader("configRobBest.txt")
-    var (stories, clusters) = reader.initDataFiltered()
+      // generate graph
+      val (stories, clusters, eGraph) = generateGraph()
+      // generate mutual exclusive links
+      val me = generateMtlExcl(stories, clusters, MI_THRESHOLD)
+      //    println("me: " + me.mkString("\n"))
 
-    val para = reader.properties.allParameters()(0)
+      // starting point:
+      var sources = eGraph.sourceNodes().map(eGraph.num2Node)
+      //println(sources.map(_.name).mkString("sources : ", "\n", ""))
+      val ends = eGraph.sinkNodes().map(eGraph.num2Node)
+      //println(ends.map(_.name).mkString("ends : ", "\n", ""))
+      //readLine()
 
-    val minimumSize = para.getParameter("minClusterSize", text => text.trim.toInt).getOrElse(0)
-    val insideClusters = clusters.filterNot(c => c.members.size < minimumSize)
-    val insideStories = reader.filterUnused(stories, insideClusters)
+      // remove from the graph nodes without predecessors that are not sources
+      var graph: Graph = eGraph.removeIrregularSourceEnds()
 
-    val gen = new GraphGenerator(insideStories, insideClusters, para)
-    var graph: Graph = gen.generate()._4
-    val eGraph = graph.makeEfficient()
+      val optionals = findOptionals(graph, me)
+      graph = graph.addSkipLinks(optionals)
+      sources = graph.nodes.filter(n => (!sources.contains(n)) &&
+        graph.links.filter(l => l.target == n).map(_.source).forall(optionals contains)) ::: sources
 
-    graph.draw("valid")
-    Thread.sleep(500)
+      println(sources.map(_.name).mkString("sources :", "\n", ""))
+      println(optionals.map(_.name).mkString("optionals :", "\n", ""))
+      graph.draw("initGraph")
 
-    // generate mutual exclusive links
-    var melinks = ListBuffer[MutualExcl]()
-    val size = clusters.size
-    for (i <- 0 until size; j <- i + 1 until size) {
-      val c1 = clusters(i)
-      val c2 = clusters(j)
-      //if (graph.nodes.contains(c1) && graph.nodes.contains(c2) && !graph.ordered(c1, c2) && 
-      //c1.name != "Sally sees a gun" && c2.name != "Sally sees a gun") {
-      //if (graph.nodes.contains(c1) && graph.nodes.contains(c2)) {
-      //only consider parallel c1 and c2
-      var count = 0
-      for (story <- stories) {
-        if (story.members.exists(sent => c1.members.contains(sent)) && story.members.exists(sent => c2.members.contains(sent)))
-          count += 1
-      }
-
-      val max = math.min(c1.size, c2.size)
-      val mi = Cooccurence.mutualInfo(c1, c2, stories)
-      if (mi._1 + mi._2 > MI_THRESHOLD && mi._2 > 0)
-        melinks += new MutualExcl(c1, c2)
+      val firstWalk = Walk.fromInits(sources, graph, me, optionals)
+      bruteSearch(firstWalk, ends, me, optionals)
     }
 
-    val me = melinks.toList
-    println("me: " + me.mkString("\n"))
-    // starting point:
-    var sources = eGraph.sourceNodes().map(eGraph.num2Node)
-    //println(sources.map(_.name).mkString("sources : ", "\n", ""))
-    val ends = eGraph.sinkNodes().map(eGraph.num2Node)
-    //println(ends.map(_.name).mkString("ends : ", "\n", ""))
-    //readLine()
+    def bruteSearch(firstWalk: Walk, ends: List[Cluster], me: List[MutualExcl], optionals: List[Cluster]) {
+      val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream("valid stories.txt")))
 
-    // remove from the graph nodes without predecessors that are not sources
-    graph = eGraph.removeIrregularSourceEnds()
+      var q = scala.collection.mutable.Queue[Walk]()
+      var good: Long = 0
+      var result = scala.collection.mutable.Set[Walk]()
+      q.enqueue(firstWalk)
 
-    val optionals = findOptionals(graph, me)
-    graph = graph.addSkipLinks(optionals)
-    sources = graph.nodes.filter(n => (!sources.contains(n)) &&
-      graph.links.filter(l => l.target == n).map(_.source).forall(optionals contains)) ::: sources
+      while (!q.isEmpty) {
+        var n = q.dequeue()
 
-    println(sources.map(_.name).mkString("sources :", "\n", ""))
-    println(optionals.map(_.name).mkString("optionals :", "\n", ""))
-    graph.draw("initGraph")
+        //println(n)
+        //    println("fringe: " + n.fringe.map(_.name).mkString("(", ", ", ")"))
+        //    println("\n\n")    
 
-    val firstWalk = Walk.fromInits(sources, graph, me, optionals)
-
-    val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream("valid stories.txt")))
-
-    var q = scala.collection.mutable.Queue[Walk]()
-    var good: Long = 0
-    var result = scala.collection.mutable.Set[Walk]()
-    q.enqueue(firstWalk)
-
-    while (!q.isEmpty) {
-      var n = q.dequeue()
-
-      //println(n)
-      //    println("fringe: " + n.fringe.map(_.name).mkString("(", ", ", ")"))
-      //    println("\n\n")    
-
-      //println("story length = " + n.history.size)
-      if (ends.exists(c => n.history.contains(c))) {
-        // we have reached the end. 
-        // end nodes are considered to be mutually exclusive.
-        // you can only reach one any time
-        //println("GOOD STORY: \n" + n)
-        //print(".")
-        //good += 1
-        //if (good % 1000 == 0) println(good)
-        //if (good % 10000 == 0) System.gc()
-        result += n
-      } else {
-        if (n.hasMoreSteps) {
+        //println("story length = " + n.history.size)
+        if (ends.exists(c => n.history.contains(c))) {
+          // we have reached the end. 
+          // end nodes are considered to be mutually exclusive.
+          // you can only reach one any time
+          //println("GOOD STORY: \n" + n)
           //print(".")
-          //readLine()
-          q ++= n.oneStep(me, optionals)
+          //good += 1
+          //if (good % 1000 == 0) println(good)
+          //if (good % 10000 == 0) System.gc()
+          result += n
         } else {
-          println("WARNING: CANNOT REACH AN ENDING. \n" + n)
-          //println("WARNING: CANNOT REACH AN ENDING. \n" + n)
+          if (n.hasMoreSteps) {
+            //print(".")
+            //readLine()
+            q ++= n.oneStep(me, optionals)
+          } else {
+            println("WARNING: CANNOT REACH AN ENDING. \n" + n)
+            //println("WARNING: CANNOT REACH AN ENDING. \n" + n)
+          }
         }
+
+        n = null
       }
 
-      n = null
+      //for (story <- result)
+      //pw.println("GOOD STORY: \n" + story)
+
+      pw.close()
+
+      println("found " + result.size + " stories.")
+      println("Considered " + Walk.id + " search nodes. ")
     }
 
-    //for (story <- result)
-    //pw.println("GOOD STORY: \n" + story)
+    def generateGraph(): (List[Story], List[Cluster], EfficientGraph) =
+      {
+        val reader = new ConfigReader("configRobBest.txt")
+        var (stories, clusters) = reader.initDataFiltered()
 
-    pw.close()
+        val para = reader.properties.allParameters()(0)
 
-    println("found " + result.size + " stories.")
-    println("Considered " + Walk.id + " search nodes. ")
+        val minimumSize = para.getParameter("minClusterSize", text => text.trim.toInt).getOrElse(0)
+        val insideClusters = clusters.filterNot(c => c.members.size < minimumSize)
+        val insideStories = reader.filterUnused(stories, insideClusters)
+
+        val gen = new GraphGenerator(insideStories, insideClusters, para)
+        var graph: Graph = gen.generate()._4
+        val eGraph = graph.makeEfficient()
+
+        (stories, clusters, eGraph)
+      }
+
+    def generateMtlExcl(stories: List[Story], clusters: List[Cluster], threshold: Double) = {
+      var melinks = ListBuffer[MutualExcl]()
+      val size = clusters.size
+      for (i <- 0 until size; j <- i + 1 until size) {
+        val c1 = clusters(i)
+        val c2 = clusters(j)
+        //if (graph.nodes.contains(c1) && graph.nodes.contains(c2) && !graph.ordered(c1, c2) && 
+        //c1.name != "Sally sees a gun" && c2.name != "Sally sees a gun") {
+        //if (graph.nodes.contains(c1) && graph.nodes.contains(c2)) {
+        //only consider parallel c1 and c2
+        var count = 0
+        for (story <- stories) {
+          if (story.members.exists(sent => c1.members.contains(sent)) && story.members.exists(sent => c2.members.contains(sent)))
+            count += 1
+        }
+
+        val max = math.min(c1.size, c2.size)
+        val mi = Cooccurence.mutualInfo(c1, c2, stories)
+        if (mi._1 + mi._2 > threshold && mi._2 > 0)
+          melinks += new MutualExcl(c1, c2)
+      }
+
+      melinks.toList
+    }
 
     /**
      * optional nodes are nodes that are ordered but mutually exclusive
@@ -142,11 +155,31 @@ package main {
 
     val debug = false
 
+    def nextFringe(step: Cluster, melinks:List[MutualExcl], optionals:List[Cluster]): Walk = {
+      if (!fringe.contains(step)) throw new RuntimeException("Illegal Step: " + step)
+
+      val newHistory = step :: history
+      var excluded = Walk.excluded(List(step), melinks).filter(selfGraph.nodes contains)
+      //println(excluded.map(_.name).mkString("directly mutex: ", ", ", ""))
+      //println(exclList.map(_.name).mkString("old mutex: ", ", ", ""))
+      var excl = excluded ::: exclList
+      excl = findTransitiveClosure(selfGraph, excl)
+      //println(excl.map(_.name).mkString("closure mutex: ", ", ", ""))
+      excluded = excl -- exclList
+      val expired = selfGraph.links.filter(l => l.target == step).map(_.source)
+      val newGraph = selfGraph.addSkipLinks(excluded).removeNodes(excluded ::: expired)
+
+      var newFringe = Walk.maxFringe(newHistory, newGraph, optionals)
+      // delete those already executed
+      newFringe = newFringe filterNot (newHistory contains)
+      
+      new Walk(id, newHistory, newFringe, excl, newGraph)	
+    }
+
     /**
      * Takes one step in the graph
      *
      */
-
     def oneStep(melinks: List[MutualExcl], optionals: List[Cluster]): List[Walk] =
       {
         fringe map { step =>

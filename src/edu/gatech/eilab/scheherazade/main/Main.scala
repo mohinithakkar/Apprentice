@@ -20,7 +20,7 @@ package main {
     }
 
     def generateGraphs() {
-      val reader = new ConfigReader("configNewMv.txt")
+      val reader = new ConfigReader("configRobBest.txt")
       val (stories, clusters) = reader.initData()
       //val (stories, clusters) = reader.initOldDataFiltered()
       //for (s <- stories) println(s)
@@ -63,6 +63,8 @@ package main {
           pw.println("loop detected")
         }
 
+        println(afterGraph.nodes.map(_.name).mkString("\n"))
+        //selectRelations(afterGraph, 40)
       }
 
       val emptyCols = parameters.head.stringPropertyNames.size()
@@ -217,5 +219,43 @@ package main {
         //seq.sum / seq.size
         numerator.toDouble / denominator
       }
+
+    private def selectRelations(graph: Graph, num: Int) {
+      val adjacent = graph.links.map(l => (l.source.name, l.target.name))
+      val parallel = {
+        for (i <- 0 until graph.nodes.size; j <- i + 1 until graph.nodes.size if !graph.ordered(graph.nodes(i), graph.nodes(j))) yield (graph.nodes(i).name, graph.nodes(j).name)
+      }.toList
+
+      //println("total adjacent: " + adjacent.size)
+      //println("total parallel: " + parallel.size)
+
+      println(adjacent.mkString("************************************Adjacent************************************\n", "\n", ""))
+      println(parallel.mkString("************************************Parallel************************************* /n", "\n", ""))
+
+      /*
+      val pool = adjacent ::: parallel
+      val size = pool.size
+      
+      val ans1 = ListBuffer[(String, String)]()
+      while (ans1.size <= math.min(num / 2, adjacent.size)) {
+        val idx = math.floor(math.random * adjacent.size).toInt
+        val p = adjacent(idx)
+        if (!(ans1 contains p)) ans1 += p
+      }
+
+      val ans2 = ListBuffer[(String, String)]()
+      
+      while (ans2.size <= math.min(num / 2, parallel.size)) {
+        val idx = math.floor(math.random * parallel.size).toInt
+        val p = parallel(idx)
+        if (!(ans2 contains p)) ans2 += p
+      }
+
+      for (pair <- (ans1 ++ ans2)) {
+        if (adjacent contains pair) println(pair.toString + " : Adjacent")
+        else println(pair.toString + " : Parallel")
+      }
+      */
+    }
   }
 }

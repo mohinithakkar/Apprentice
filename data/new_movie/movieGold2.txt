@@ -426,7 +426,6 @@
 @ watch movie
 9 Sally and John watched the movie quietly.
 30 John and Sally watched the movie.
-40 John and Sally enjoyed the movie.
 57 John and Sally watched the movie.
 67 John and Sally watched the movie.
 78 John and Sally watched the movie.
@@ -475,6 +474,7 @@
 873 John and Sally watched the movie.
 ###
 @ enjoy movie
+40 John and Sally enjoyed the movie.
 86 John and Sally enjoyed the movie.
 390 John and Sally enjoyed the movie.
 448 John and Sally enjoyed the movie.
