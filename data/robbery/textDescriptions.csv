@@ -10,12 +10,12 @@ John leaves bank,John,Leave the bank,You left the bank as soon as you can.,None
 John collects money,John,Collect the money,You collected the money from the bank teller.,None
 John covers face,John,Covers your face with a mask,"Before the security camera can take a good shot at your, you put on a joker mask that covered your entire face.",None
 Sally scared,Sally,Look Scared,None,The bank teller looked very scared. She might faint any moment.
-Sally collects money,Sally,Collect the money,None,The bank teller collected money when shaking hands. 
+Sally collects money,Sally,Collect the money,None,The bank teller collected money with shaking hands. 
 Sally opens cash drawer,Sally,Open the cash drawer,None,The bank teller opened the cash drawer. Your eyes catched the green color of joy.
 waits in line,John,Wait in the teller line,You waited in the line just like every other customer.,None
 Sally calls police,Sally,Call the police,None,The bank teller called the police and reported this robbery.
-police arrests John,police,Arrest John,The police surrounded you. You have no choice but accept your fate.,None
-police arrived,police,Arrive,The siren got near. The bank door opened and police swarmed into.,None
+police arrests John,police,Arrest John,None,The police surrounded you. You have no choice but accept your fate.
+police arrived,police,Arrive,None,The siren got near. The bank door opened and police swarmed into.
 Sally gives John Bag,Sally,Give the bag to John,None,The bank teller gave the money bag to you.
 Sally puts money in bag,Sally,Put the money in the bag,None,Sally put all the money she could find in the bag.
 John gives Sally bag,John,Give a bag to the teller,You gave the banker teller a bag for her to put money in the bag.,None

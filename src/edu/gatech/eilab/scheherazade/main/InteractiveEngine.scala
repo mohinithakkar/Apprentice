@@ -4,12 +4,13 @@ import main.StoryGenerater._
 import utils.CSVProcessor
 import data._
 import graph._
-import utils.ReadTimeOut
+
 import java.io._
 import java.nio.channels.ClosedChannelException
 
 package main {
 
+  //TODO: A thorough test to make sure there is bugs and is consistent with the graph. 
   object InteractiveEngine {
 
     def main(args: Array[String]) {
@@ -41,33 +42,47 @@ package main {
     }
 
     def execute(sources: List[Cluster], ends: List[Cluster], graph: Graph, me: List[MutualExcl], optionals: List[Cluster], desc: List[TextDescription]) {
-      var walk = Walk.fromInits(sources, graph, me, optionals)
-      var step: Cluster = null
+      var playAgain = true
+      do {
+        var walk = Walk.fromInits(sources, graph, me, optionals)
+        var step: Cluster = null
 
-      val actors = desc.map(_.actor).distinct
+        val actors = desc.map(_.actor).distinct
 
-      var actor = ""
-      while (actor == "") {
-        println("Choose an actor: ")
-        for (i <- 0 until actors.length) {
-          println((i + 1) + ". " + actors(i))
+        var actor = ""
+        while (actor == "") {
+          println("Choose an actor: ")
+          for (i <- 0 until actors.length) {
+            println((i + 1) + ". " + actors(i))
+          }
+
+          val actorNum = readLine().toInt - 1
+
+          if (actorNum < 0 || actorNum >= actors.length) println("Invalid choice")
+          else actor = actors(actorNum)
         }
 
-        val actorNum = readLine().toInt - 1
+        do {
+          var fringe = walk.fringe
+          step = makeChoice(fringe, desc, actor)
+          walk = walk.nextFringe(step, me, optionals)
+        } while (!ends.contains(step))
 
-        if (actorNum < 0 || actorNum >= actors.length) println("Invalid choice")
-        else actor = actors(actorNum)
-      }
-
-      do {
-        var fringe = walk.fringe
-        var step = makeChoice(fringe, desc, actor)
-        walk = walk.nextFringe(step, me, optionals)
-      } while (!ends.contains(step))
-
-      println("The End")
-      println("Thank you for playing the game")
-
+        println("The End.")
+        var input: Char = 0
+        while (input != 'Y' && input != 'y' && input != 'N' && input != 'n') {
+          print("Play again (Y or N)?")
+          val line = readLine().trim
+          if (line.length > 0)
+            input = line.charAt(0)
+        }
+        
+        if (input == 'Y' || input == 'y')
+          playAgain = true
+        else playAgain = false
+        
+      } while (playAgain)
+      println("Thank you for playing the game! \n Copyright 2012 Entertainment Intelligence Lab, Georgia Tech.")
     }
 
     def makeChoice(choices: List[Cluster], desc: List[TextDescription], actor: String): Cluster = {
@@ -84,69 +99,54 @@ package main {
 
       while (chosen == null) { // repeat until a choice is made
 
-        println("Now you have the following choices: ")
-        for (i <- 0 until humanChoices.length) {
-          val optionText = humanChoices(i)._2.optionText
-          println((i + 1) + ". " + optionText)
-        }
-        print("Your choice is: ")
-
         var readText = ""
-        if (npcChoices.size > 0) {
-          // can make a npc choice. apply a timeout on input
-          var sleep = 0
-          while (readText == "" && sleep < 10) 
-          {
-            if (System.in.available() > 0)
-            {
-              val char = Array.ofDim[Char](3)
-              var i = 0
-              while(System.in.available() > 0 && i < 3)
-              {
-                char(i) = System.in.read().asInstanceOf[Char]
-                i += 1
+
+        if (humanChoices.size > 0) {
+          println("Now you have the following choices: ")
+          for (i <- 0 until humanChoices.length) {
+            val optionText = humanChoices(i)._2.optionText
+            println((i + 1) + ". " + optionText)
+          }
+          print("Your choice is: ")
+
+          if (npcChoices.size > 0) {
+
+            // can make a npc choice. apply a timeout on input
+            var sleep = 0
+            while (readText == "" && sleep < 10) {
+              if (System.in.available() > 0) {
+                val char = Array.ofDim[Char](3)
+                var i = 0
+                while (System.in.available() > 0 && i < 3) {
+                  char(i) = System.in.read().asInstanceOf[Char]
+                  i += 1
+                }
+                readText = new String(char).substring(0, 1)
+              } else {
+                sleep += 1
+                Thread.sleep(500) // sleep for 0.5 sec
               }
-              readText = new String(char).substring(0, 1)              
             }
-            else
-            {
-            	sleep += 1
-            	Thread.sleep(500) // sleep for 0.5 sec
-            }
-          }
-          /*
-          val in = ReadTimeOut.extract(System.in);
-          try {
-            if (!in.isInstanceOf[FileInputStream])
-              throw new RuntimeException(
-                "Could not extract a FileInputStream from STDIN.");
 
-            val ret = ReadTimeOut.maybeAvailable(in.asInstanceOf[FileInputStream], 5000);
-            val readText = {
-              if (ret == 0) ""
-              else ReadTimeOut.buf.asCharBuffer().subSequence(0, ret).toString
-            }
-          } catch {
-            case e: Exception =>
-              readText = ""
-          } finally {
-            in.close
-          }
-          */
+            if (readText == "") println() // this line break comes after "Your choice is:"
 
-        } else {
-          readText = readLine()
+          } else {
+            readText = readLine()
+          }
         }
 
         if (readText == "") {
 
           if (npcChoices.length > 0) {
-            // select a npc choice
+            // select a npc choice            
             val idx = math.floor(math.random * npcChoices.length).toInt
             chosen = npcChoices(idx)
             madeByHuman = false
           }
         } else {
+
+          if (humanChoices.size == 0) throw new RuntimeException("No choices left. That's weird.")
+
           val idx = readText.toInt - 1
           if (idx < 0 || idx >= humanChoices.length)
             println("Invalid Choice. Choose from 1 to " + humanChoices.length)
@@ -157,6 +157,7 @@ package main {
       }
 
       val result = if (madeByHuman) chosen._2.SelfExec else chosen._2.otherExec
+      if (result == "None") println("problematic: " + chosen._2)
       println()
       println(result)
       println()
