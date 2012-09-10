@@ -20,11 +20,15 @@ package main {
     }
 
     def generateGraphs() {
-      val reader = new ConfigReader("configRobBest.txt")
+      val reader = new ConfigReader("configNewMv.txt")
       val (stories, clusters) = reader.initData()
-      //val (stories, clusters) = reader.initOldDataFiltered()
-      //for (s <- stories) println(s)
+      //val (stories, clusters) = reader.initDataFiltered()
 
+      // count average number of sentences in each story
+      //val avg = stories.map(_.members.size).sum / stories.size
+      //println("average = " + avg); 
+      println(clusters.map(c => c.name + ", " + c.size).mkString("\n"));System.exit(1)
+      
       val property = reader.properties
       val parameters = property.allParameters()
 
@@ -63,7 +67,31 @@ package main {
           pw.println("loop detected")
         }
 
-        println(afterGraph.nodes.map(_.name).mkString("\n"))
+        /*
+        val efGraph = afterGraph.makeEfficient()
+        val pairArray = utils.CSVProcessor.readCSV("used pairs.txt")
+        for (pair <- pairArray) {
+          print(pair(0) + "," + pair(1))
+          val sopt = afterGraph.nodes.find(_.name == pair(0))
+          val topt = afterGraph.nodes.find(_.name == pair(1))
+          if (sopt.isEmpty || topt.isEmpty) {
+             println(", Unknown")
+          } else {
+            val source = sopt.get
+            val target = topt.get
+            val dis1 = efGraph.shortestDistance(source, target)
+            val dis2 = efGraph.shortestDistance(target, source)
+            if (dis1 == 1) println(",A")
+            else if (dis2 == 1) println(",B")
+            else if (dis1 > 1) println(",AI")
+            else if (dis2 > 1) println(",BI")
+            else if (dis1 == -1 && dis2 == -1) println(",P")
+            else println("not supposed to happen!!!")
+          }
+
+        }*/
+
+        //println(afterGraph.nodes.map(_.name).mkString("\n"))
         //selectRelations(afterGraph, 40)
       }
 

@@ -8,7 +8,8 @@ import edu.gatech.eilab.scheherazade.cluster.algo.OPTICS.Point
 
 class ReachPlot(points: Array[Point]) {
 
-  val colors = Array(Color.BLUE, Color.CYAN, Color.RED, Color.GREEN, Color.MAGENTA, Color.ORANGE)
+  //val colors = Array(Color.BLUE, Color.CYAN, Color.RED, Color.GREEN, Color.MAGENTA, Color.ORANGE)
+  val colors = Array(new Color(0x606060), new Color(0xB0B0B0))
   val array = points.map(p => if (p.reachability == Double.PositiveInfinity) 0 else p.reachability)
   println(array.mkString(" "))
   val drawPanel = new BarChartPanel(array)
@@ -108,7 +109,7 @@ class ReachPlot(points: Array[Point]) {
 
   def disableRegions(regions: List[(Int, Int)]) {
     for (r <- regions) {
-      drawPanel.markRegion(r._1, r._2, Color.GRAY)
+      drawPanel.markRegion(r._1, r._2, Color.black)
     }
     top.repaint()
   }

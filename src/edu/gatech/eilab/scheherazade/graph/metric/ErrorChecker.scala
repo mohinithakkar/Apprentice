@@ -126,6 +126,7 @@ package graph.metric {
 
               val totalDist = distance - reverseDistance
               sum += totalDist * totalDist
+              //sum += math.abs(totalDist)
               total += 1
 
               val key = new Link(source, target)
@@ -137,6 +138,7 @@ package graph.metric {
         } else {
           // found the forward link
           sum += (forwardDist - distance) * (forwardDist - distance)
+          //sum += math.abs(forwardDist - distance)
           total += 1
           //          println(source.name + " -> " + target.name + ", expected: " + distance + " real: " + forwardDist)
           val key = new Link(source, target)
