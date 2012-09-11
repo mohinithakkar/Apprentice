@@ -11,6 +11,7 @@ import java.nio.channels.ClosedChannelException
 package main {
 
   //TODO: A thorough test to make sure there is bugs and is consistent with the graph. 
+  //TODO: Prompts for the time the engine waits for user input.
   object InteractiveEngine {
 
     def main(args: Array[String]) {

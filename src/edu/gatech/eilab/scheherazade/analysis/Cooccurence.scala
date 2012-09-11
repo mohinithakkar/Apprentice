@@ -5,9 +5,9 @@ import graph._
 
 package analysis {
   object Cooccurence extends App {
-    val reader = new ConfigReader("configRob.txt")
-    var (stories, clusters) = reader.initDataFiltered()
-    //var (stories, clusters) = reader.initOldData()
+    val reader = new ConfigReader("configRt.txt")
+    //var (stories, clusters) = reader.initDataFiltered()
+    var (stories, clusters) = reader.initData()
     //val para = reader.properties.allParameters()(0)
     //val gen = new GraphGenerator(stories, clusters, para)
     //val graph = gen.generate()._4.makeEfficient()
@@ -17,10 +17,7 @@ package analysis {
     for (i <- 0 until size; j <- i + 1 until size) {
       val c1 = clusters(i)
       val c2 = clusters(j)
-      //if (graph.nodes.contains(c1) && graph.nodes.contains(c2) && !graph.ordered(c1, c2) && 
-      //c1.name != "Sally sees a gun" && c2.name != "Sally sees a gun") {
-      //if (graph.nodes.contains(c1) && graph.nodes.contains(c2)) {
-      //only consider parallel c1 and c2
+
       var count = 0
       for (story <- stories) {
         if (story.members.exists(sent => c1.members.contains(sent)) && story.members.exists(sent => c2.members.contains(sent)))
