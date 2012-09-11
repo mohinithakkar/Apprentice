@@ -1,6 +1,5 @@
-storyFile = ./data/restaurant/restaurantStories.txt
-clusterFile = ./data/restaurant/restaurantGold1.txt
-parameters = probThresholds, confThresholds, s
-probThresholds = 0.6
-confThresholds = 0.4
-s = 4
+storyFile = ./data/restaurant/RtSimpleStories.txt
+clusterFile = ./data/restaurant/RtSimpleGold.txt
+parameters = probThresholds, minClusterSize
+probThresholds = 0.7
+minClusterSize = 2
