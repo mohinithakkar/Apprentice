@@ -241,8 +241,8 @@ package graph {
       val lastIndex = if (!filename.contains(".")) filename.length else filename.lastIndexOf(".")
       val outputName = filename.substring(0, lastIndex)
       println("outputname = " + filename + " " + outputName)
-      //Runtime.getRuntime().exec("dot -Tpng -o" + outputName + ".png " + filename)
-      //file.deleteOnExit()
+      Runtime.getRuntime().exec("dot -Tpng -o" + outputName + ".png " + filename)
+      file.deleteOnExit()
     }
 
   }

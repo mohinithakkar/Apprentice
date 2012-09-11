@@ -131,9 +131,11 @@ package edu.gatech.eilab.scheherazade {
         //    list = list.head :: list.tail.filter(_.reachability < cutoff)
         //println(list.size)
 
+        println("**************************")
         for (p <- list) {
-          println(sentences(p.id).toShortString + ": " + p.reachability)
+          println(p.reachability)
         }
+        println("**************************")
 
         val larray = list.toArray
         plot = new ReachPlot(larray)
@@ -188,13 +190,13 @@ package edu.gatech.eilab.scheherazade {
 
             val valid =
               reach.sliding(minClusterSize + 1).exists(l => l.head * 0.98 > l.tail.min) && // head is greater than min
-                reach.sliding(minClusterSize).exists(l => l.max < l.min * 1.05) // a relative flat area
+                reach.sliding(minClusterSize).exists(l => l.max < l.min * 1.6) // a relative flat area bestRobbery = 1.05, best movie = 1.4
 
             if (valid) {
               val max = reach.max
               val min = reach.min
-              val portion = if (loose) 0.35 else 0.3
-              var goodPortion = pts.filter { x => x.reachability < (min + (max - min) * 0.3) }.toList
+              //val portion = if (loose) 0.35 else 0.3
+              var goodPortion = pts.filter { x => x.reachability < (min + (max - min) * 1) }.toList // 0.55 for movie
               // divide the portions into continuous parts
               var additional = List[Point]()
               var separation = List[(Int, Int)]()
@@ -221,8 +223,8 @@ package edu.gatech.eilab.scheherazade {
                 var height = goodPortion(s._1).reachability
 
                 if (endPt != null && startPt != null && startPt.reachability > goodPortion(s._1).reachability &&
-                  ((endPt.reachability * 1.3 > startPt.reachability &&
-                    endPt.reachability * 0.7 < startPt.reachability) || startPt.reachability == UNDEFINED)) {
+                  ((endPt.reachability * 1.4 > startPt.reachability &&
+                    endPt.reachability * 0.8 < startPt.reachability) || startPt.reachability == UNDEFINED)) {
                   //println("end = " + endPt.reachability + ", start = " + startPt.reachability + " thre = " + endPt.reachability * 1.3)
                   additional = startPt :: additional
                   height = startPt.reachability

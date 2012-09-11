@@ -607,9 +607,9 @@
 557 John and Sally walked to theater 2 for their movie.
 558 John and Sally sat in the front row of the theater.
 559 Sally got up to go to the bathroom.
-560 Sally returned and sits back down from the bathroom.
+560 Sally returned and sat back down from the bathroom.
 561 John put his arm around Sally.
-562 John tryed to kiss Sally.
+562 John tried to kiss Sally.
 563 Sally rejected the kiss.
 564 Sally got up.
 565 Sally walked out of the theater.
@@ -826,7 +826,7 @@
 758 John and Sally left.
 ###
 759 John and Sally walked into the theater.
-760 John ask Sally if she wanted popcorn.
+760 John asked Sally if she wanted popcorn.
 761 Sally wanted a drink.
 762 John and Sally sat in the back.
 763 John and Sally laughed at the movie.
@@ -934,9 +934,9 @@
 857 John smiled at Sally.
 858 John and Sally shared Sally's popcorn.
 859 Sally cried at the end of the movie.
-860 John and Sally leave the theater.
-861 John holds Sally's hand.
-862 John and Sally get in in John's car.
+860 John and Sally left the theater.
+861 John held Sally's hand.
+862 John and Sally got in in John's car.
 ###
 863 John drove to Sally's house.
 864 John picked up Sally.

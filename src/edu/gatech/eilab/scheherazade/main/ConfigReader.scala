@@ -286,23 +286,39 @@ package main {
       //    val string = scala.io.Source.fromFile("movieParsed.txt").mkString    
       //    val obj = XStream.fromXML(string).asInstanceOf[StorySet]
       //    println(obj.storyList.mkString("\n"))
-      val reader = new ConfigReader("configRobBest.txt")
-      val (stories, gold) = reader.initData()
+      val reader = new ConfigReader("configRtSimple.txt")
+      var (stories, gold) = reader.initData()
+      val minCluster = reader.properties.allParameters()(0).getParameter("minClusterSize", _.toInt).get
+      gold = gold.filter(_.members.size >= minCluster)
 
-      val parser = new StoryNLPParser(stories, "RobParsed.txt", true)
+      val parser = new StoryNLPParser(stories, "RtParsed.txt", true)
       // val zero = s.storyList(0)
       //    println(zero)
       //    println(zero.members.mkString("\n"))
 
       def sentFn: () => List[Sentence] = () => parser().storyList.flatMap(_.members)
+      
+      /*// temp
+      
+      val sentences = sentFn()
+      val verbs = sentences.flatMap(_.tokens.collect{case s:Token if s.pos == "VBD" => s.word}).distinct.sortWith(_<_)
+      //println(verbs.mkString("\n")); println(verbs.size + "\n***************************")
+      val nouns = sentences.flatMap(_.tokens.collect{case s:Token if s.pos == "NN" || s.pos == "NNS" => s.word}).distinct.sortWith(_<_)
+      //println(nouns.mkString("\n") + "\n" + nouns.size); 
+      
+      val allwords = sentences.flatMap(_.tokens).map(_.word).distinct.filterNot(s => verbs.contains(s) || nouns.contains(s))
+      println(allwords.mkString("\n"))
+      
+      System.exit(0)
+      // end of temp */
 
-      val simi = new DSDSimilarity(sentFn, "RobSemantic.txt")
+      val simi = new DSDSimilarity(sentFn, "RtSemantic.txt")
       //var simiMatrix = simi()
       //    utils.Matrix.prettyPrint(matrix1)
       //    System.exit(0)
-      val local = new SimpleLocation(sentFn, 0.6, "RobLocations.txt")
+      val local = new SimpleLocation(sentFn, 0.6, "RtLocations.txt")
 
-      var addition = new MatrixAddition(() => simi(), () => local(), 0.2, "Rob1stSimilarity.txt")
+      var addition = new MatrixAddition(() => simi(), () => local(), 0.25, "Rt1stSimilarity.txt")
 
       //val matrix = simi()
       var matrix = addition()
@@ -323,7 +339,7 @@ package main {
 
       val (distance, max) = similarityToDistance(matrix)
 
-      var clusterList = cluster.algo.OPTICS.cluster(distance, max, 4, stories.flatMap(_.members.toList))
+      var clusterList = cluster.algo.OPTICS.cluster(distance, max, minCluster, stories.flatMap(_.members.toList))
       //iterativeRestrain(clusterList, stories, simi())
       evaluate(clusterList, gold)
     }

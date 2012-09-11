@@ -14,7 +14,7 @@ package graph {
 
     val DEFAULT_PROB_THRESHOLD = 0.55
     //val DEFAULT_CONF_THRESHOLD = 0.45
-    val DEFAULT_MIN_CLUSTER = 2
+    val DEFAULT_MIN_CLUSTER = 3
 
     val DEFAULT_ADDED_OBSERVATIONS = 1
 
@@ -145,16 +145,33 @@ package graph {
         var oldErr = errorChecker.checkErrors(storyList, graph)._2
         var newErr = oldErr
 
+        var accepted = 0
+        var rejected = 0
+
         badPaths.sortWith {
-          (x, y) => (x._2._1 - x._2._2) > (y._2._1 - y._2._2)
+          (x, y) => math.abs((x._2._1 - x._2._2)) > math.abs((y._2._1 - y._2._2))
         } foreach {
           path =>
             val link = path._1
-            val source = link.source
-            val expected = path._2._1
+
+            var expected = path._2._1
+            val actual = path._2._2
             val deviation = path._2._1 - path._2._2
-            val target = link.target
-            //println("processing bad link " + source.name + " " + target.name + " expected = " + expected + " " + (expected-1).toInt + " deviation =" + deviation)
+
+            var source = link.source
+            var target = link.target
+
+            /*
+            if (source.name == "drive to window" || target.name == "drive to window") {
+              println("processing bad link " + source.name + " " + target.name + " expected = " + expected + " actual = " + actual + " deviation =" + deviation)
+            }*/
+
+            if (expected < 0) {
+              source = link.target
+              target = link.source
+              expected = -1 * expected
+            }
+
             var possibleSources = newGraph.takeSteps(source, math.round(expected - 1).toInt)
 
             //var updateSuccess = false
@@ -183,23 +200,34 @@ package graph {
                     //println ("possible source: " + possible.name)
                     // add a number of positive relations
                     val updated = rel.addEvidence(ADDED_OBSERVATIONS, 0)
-
+//                    if (target.name == "drive to window") {
+//                      println("updated = " + updated)
+//                    }
                     oldRelations = newRelations
                     newRelations = updated :: (newRelations filterNot (_ == rel))
 
                     // adding the new relation to the set of links if it already surpasses the threshold
-                    newLinks = filterRelations(newRelations, thresholdFilter)
+                    //newLinks = filterRelations(newRelations, thresholdFilter)
+                    newLinks = new Link(updated.source, updated.target) :: oldGraph.links.filterNot(l => l.source == source && l.target == target)
+                    //                    if (target.name == "drive to window") {
+                    //                      println("updated = " + newLinks.filter(l => l.target.name == "drive to window" || l.source.name == "drive to window"))
+                    //                    }
                     newGraph = new Graph(graph.nodes, newLinks).compact
                     newErr = errorChecker.checkErrors(storyList, newGraph)._2
                     //newErr = sum / total
                     //println("new error = " + newErr)
+                    //if (newErr >= oldErr && oldGraph.links.exists(r => r.target == target)) {
                     if (newErr >= oldErr) {
+                      //println("rolled back")
+                      rejected += 1
                       // the total error has increased or stay constant. undo that update
                       // this is a change from previous approach which only requires the error not to increase. 
                       // This seems to curb the indeterminism
                       newRelations = oldRelations
                       newGraph = oldGraph
                     } else {
+                      //println("accepted ")
+                      accepted += 1
                       oldErr = newErr // total error decreased. update succeeded.
                       oldGraph = newGraph
                       oldRelations = newRelations
@@ -211,7 +239,7 @@ package graph {
 
           //if (!updateSuccess) return newRelations
         }
-
+        println("accepted modifications: " + accepted + " rejected modifications: " + rejected)
         newRelations
       }
 
