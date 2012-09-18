@@ -142,11 +142,11 @@ package edu.gatech.eilab.scheherazade {
         plot.show
         val root = interpret(larray)
 
-        //markLeaves(root, sentences)
+        markLeaves(root, sentences)
 
-        inferClusters(root, sentences)
+        //inferClusters(root, sentences)
 
-        //Nil
+        Nil
         //    var start = 0
         //    var end = 0
         //    var clusterList = List[Cluster]()

@@ -2,12 +2,13 @@ package edu.gatech.eilab.scheherazade
 import data._
 import main._
 import graph._
+import org.apache.commons.math3.stat.inference.ChiSquareTest
 
 package analysis {
   object Cooccurence extends App {
-    val reader = new ConfigReader("configRt.txt")
-    //var (stories, clusters) = reader.initDataFiltered()
-    var (stories, clusters) = reader.initData()
+    val reader = new ConfigReader("configNewMv.txt")
+    var (stories, clusters) = reader.initDataFiltered()
+    //var (stories, clusters) = reader.initData()
     //val para = reader.properties.allParameters()(0)
     //val gen = new GraphGenerator(stories, clusters, para)
     //val graph = gen.generate()._4.makeEfficient()
@@ -23,21 +24,47 @@ package analysis {
         if (story.members.exists(sent => c1.members.contains(sent)) && story.members.exists(sent => c2.members.contains(sent)))
           count += 1
       }
-
+      print(c1.name + ", " + c2.name)
+      
       val max = math.min(c1.size, c2.size)
       val mi = mutualInfo(c1, c2, stories)
       val pmi = ptMutualInfo(c1, c2, stories)
-      val sizeEntropy = clusterSizeDifference(c1, c2, stories)
+      //val sizeEntropy = clusterSizeDifference(c1, c2, stories)
+      val chisquare = computeChi(c1, c2, stories)
       //println(c1.name + ", " + c2.name + ", " + count + ", " + max + ", " + count.toDouble / max + ", " + (mi._1 + mi._2) + ", " + mi._1 + ", " + mi._2)
       //if ((mi._1 + mi._2) > 0.05 && mi._2 > 0)
-      if (c1.size >= 4 && c2.size >= 4)
-        println(c1.name + ", " + c2.name + ", " + c1.size + ", " + c2.size + ", " + count + ", " + max + ", " + count.toDouble / max + ", " +
-          sizeEntropy + ", mi: " + (mi._1 + mi._2) + ", " + mi._1 + ", " + mi._2 + ", pmi: " + (pmi._1 + pmi._2) + ", " + pmi._1 + ", " + pmi._2)
+      if (c1.size >= 0 && c2.size >= 0)
+        
+        println(", mi: " + (mi._1 + mi._2) + ", " + mi._1 + ", " + mi._2 + ", p-value: " + chisquare._1 + ", " + chisquare._2 ) 
+          //+ ", pmi: " + (pmi._1 + pmi._2) + ", " + pmi._1 + ", " + pmi._2)
       //}
     }
 
     Thread.sleep(3000)
 
+    
+    def computeChi(c1: Cluster, c2: Cluster, stories: List[Story]): (Double, Int) = {
+      val counts = Array.ofDim[Long](2, 2)
+      
+      counts(0)(0) = stories.filter(story => ! (story.members.exists(c1.members.contains) || story.members.exists(c2.members.contains))).size
+      counts(0)(1) = stories.filter(story => (!story.members.exists(c1.members.contains)) && story.members.exists(c2.members.contains)).size
+      counts(1)(0) = stories.filter(story => (!story.members.exists(c2.members.contains)) && story.members.exists(c1.members.contains)).size
+      counts(1)(1) = stories.filter(story => story.members.exists(c1.members.contains) && story.members.exists(c2.members.contains)).size
+      
+      var coOccur = if (counts(1)(1)+counts(0)(0) > counts(0)(1)+counts(1)(0)) 1 else 0
+      var low = 0
+      for(i <- 0 to 1; j <- 0 to 1)
+      {
+        print("," + counts(i)(j))
+        if (counts(i)(j) < 5) low += 1
+      }
+        
+      if (low > 1) coOccur = -1
+      
+      val pValue = new ChiSquareTest().chiSquareTest(counts)
+      (pValue, coOccur)
+    }
+    
     def clusterSizeDifference(c1: Cluster, c2: Cluster, stories: List[Story]): Double = {
       val joint = jointSize(c1, c2, stories)
       val p1 = probDist(c1, stories)

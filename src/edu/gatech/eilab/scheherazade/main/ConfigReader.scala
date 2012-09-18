@@ -286,12 +286,12 @@ package main {
       //    val string = scala.io.Source.fromFile("movieParsed.txt").mkString    
       //    val obj = XStream.fromXML(string).asInstanceOf[StorySet]
       //    println(obj.storyList.mkString("\n"))
-      val reader = new ConfigReader("configRtSimple.txt")
+      val reader = new ConfigReader("configNewMv.txt")
       var (stories, gold) = reader.initData()
       val minCluster = reader.properties.allParameters()(0).getParameter("minClusterSize", _.toInt).get
       gold = gold.filter(_.members.size >= minCluster)
 
-      val parser = new StoryNLPParser(stories, "RtParsed.txt", true)
+      val parser = new StoryNLPParser(stories, "NewMvParsed.txt", true)
       // val zero = s.storyList(0)
       //    println(zero)
       //    println(zero.members.mkString("\n"))
@@ -312,13 +312,13 @@ package main {
       System.exit(0)
       // end of temp */
 
-      val simi = new DSDSimilarity(sentFn, "RtSemantic.txt")
+      val simi = new DSDSimilarity(sentFn, "NewMvSemantic.txt")
       //var simiMatrix = simi()
       //    utils.Matrix.prettyPrint(matrix1)
       //    System.exit(0)
-      val local = new SimpleLocation(sentFn, 0.6, "RtLocations.txt")
+      val local = new SimpleLocation(sentFn, 0.6, "NewMvLocations.txt")
 
-      var addition = new MatrixAddition(() => simi(), () => local(), 0.25, "Rt1stSimilarity.txt")
+      var addition = new MatrixAddition(() => simi(), () => local(), 0.25, "NewMv1stSimilarity.txt")
 
       //val matrix = simi()
       var matrix = addition()

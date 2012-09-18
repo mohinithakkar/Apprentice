@@ -49,7 +49,8 @@ package graph {
       }
 
     //def thresholdFilter = (r: Relation) => (r.confidence > CONFIDENCE_THRESHOLD && r.prob > PROBABILITY_THRESHOLD)
-    def thresholdFilter = ((r: Relation) => (r.totalObservations > CLUSTER_SIZE_THRESHOLD) && (r.prob > PROBABILITY_THRESHOLD))
+    //def thresholdFilter = ((r: Relation) => (r.totalObservations > CLUSTER_SIZE_THRESHOLD) && (r.prob > PROBABILITY_THRESHOLD))
+    def thresholdFilter = ((r: Relation) => (r.confidence > PROBABILITY_THRESHOLD))
 
     /* returns the error before and after adjustment
    * 
@@ -108,10 +109,8 @@ package graph {
       //    Thread.sleep(30000)
       //    System.exit(0)
 
-      val adjustedRelations = updateBadPaths(errorChecker.getBadPaths, compactGraph, allRelations)
-      val adjustedLinks = filterRelations(adjustedRelations, thresholdFilter)
-      val adjustedTotalGraph = new Graph(clusterList, adjustedLinks)
-      val adjustedGraph = adjustedTotalGraph.compact
+      val adjustedGraph = updateBadPaths2(errorChecker.getBadPaths, compactGraph, allRelations)
+
       adjustedGraph.draw(OUTPUT_FILE + "-adjusted")
 
       avg = errorChecker.checkErrors(storyList, adjustedGraph)._2
@@ -131,8 +130,113 @@ package graph {
 
     }
 
+    def updateBadPaths2(badPaths: List[(Link, (Double, Double))], graph: Graph,
+      allRelations: List[Relation]): Graph =
+      {
+        var relationsBelow = allRelations filter { rel =>
+          !graph.ordered(rel.source, rel.target)
+        } sortWith (_.confidence > _.confidence)
+
+        var newLinks = graph.links
+        var newGraph = graph
+        var oldGraph = graph
+
+        var oldErr = errorChecker.checkErrors(storyList, graph)._2
+        var newErr = oldErr
+
+        var accepted = 0
+        var rejected = 0
+
+        var success = true
+        while (success) {
+          val candidate = relationsBelow.head
+          relationsBelow = relationsBelow.tail
+          //if (newRelations.find(r => r.source == possible && r.target == target).isDefined) {
+
+          println("Evaluating: " + candidate.source.name + " -> " + candidate.target.name)
+
+          newLinks = new Link(candidate.source, candidate.target) :: oldGraph.links
+          newGraph = new Graph(graph.nodes, newLinks).compact
+          newErr = errorChecker.checkErrors(storyList, newGraph)._2
+
+          if (newErr >= oldErr) {
+            success = false
+            // the total error has increased or stay constant. undo that update
+            // this is a change from previous approach which only requires the error not to increase. 
+            // This seems to curb the indeterminism
+            //newRelations = oldRelations
+            //newGraph = oldGraph
+          } else {
+            println("accepted " + candidate.source.name + " -> " + candidate.target.name)
+            accepted += 1
+            oldErr = newErr // total error decreased. update succeeded.
+            oldGraph = newGraph
+          }
+        }
+        // case None =>
+        //}
+        //else println("rejected for non existence in original links")
+
+        //if (!updateSuccess) return newRelations
+        println("accepted modifications: " + accepted + " rejected modifications: " + rejected)
+        oldGraph
+      }
+
+    def updateBadPaths3(badPaths: List[(Link, (Double, Double))], graph: Graph,
+      allRelations: List[Relation]): Graph =
+      {
+        var relationsBelow = allRelations filter { rel =>
+          !graph.ordered(rel.source, rel.target)
+        } sortWith (_.confidence > _.confidence)
+
+        var newLinks = graph.links
+        var newGraph = graph
+        var oldGraph = graph
+
+        var oldErr = errorChecker.checkErrors(storyList, graph)._2
+        var newErr = oldErr
+
+        var accepted = 0
+        var rejected = 0
+
+        var success = true
+        while (relationsBelow != Nil) {
+          val candidate = relationsBelow.head
+          relationsBelow = relationsBelow.tail
+          //if (newRelations.find(r => r.source == possible && r.target == target).isDefined) {
+
+          println("Evaluating: " + candidate.source.name + " -> " + candidate.target.name)
+
+          newLinks = new Link(candidate.source, candidate.target) :: oldGraph.links
+          newGraph = new Graph(graph.nodes, newLinks).compact
+          newErr = errorChecker.checkErrors(storyList, newGraph)._2
+
+          if (newErr >= oldErr) {
+            success = false
+            // the total error has increased or stay constant. undo that update
+            // this is a change from previous approach which only requires the error not to increase. 
+            // This seems to curb the indeterminism
+            //newRelations = oldRelations
+            //newGraph = oldGraph
+            rejected += 1
+          } else {
+            println("accepted " + candidate.source.name + " -> " + candidate.target.name)
+            accepted += 1
+            oldErr = newErr // total error decreased. update succeeded.
+            oldGraph = newGraph
+          }
+        }
+        // case None =>
+        //}
+        //else println("rejected for non existence in original links")
+
+        //if (!updateSuccess) return newRelations
+        println("accepted modifications: " + accepted + " rejected modifications: " + rejected)
+        oldGraph
+      }
+
     def updateBadPaths(badPaths: List[(Link, (Double, Double))], graph: Graph,
-      allRelations: List[Relation]): List[Relation] =
+      allRelations: List[Relation]): Graph =
       {
 
         var newRelations = allRelations
@@ -148,29 +252,27 @@ package graph {
         var accepted = 0
         var rejected = 0
 
-        badPaths.sortWith {
-          (x, y) => math.abs((x._2._1 - x._2._2)) > math.abs((y._2._1 - y._2._2))
-        } foreach {
+        val sorted = badPaths.sortWith {
+          (x, y) => math.abs(x._2._1) - x._2._2 > math.abs(y._2._1) - y._2._2
+        }
+
+        sorted foreach {
           path =>
             val link = path._1
 
-            var expected = path._2._1
+            var expected = math.abs(path._2._1)
             val actual = path._2._2
-            val deviation = path._2._1 - path._2._2
+            val deviation = expected - actual
 
             var source = link.source
             var target = link.target
 
-            /*
-            if (source.name == "drive to window" || target.name == "drive to window") {
-              println("processing bad link " + source.name + " " + target.name + " expected = " + expected + " actual = " + actual + " deviation =" + deviation)
-            }*/
-
-            if (expected < 0) {
+            if (path._2._1 < 0) {
               source = link.target
               target = link.source
-              expected = -1 * expected
             }
+
+            println("processing bad link: " + source.name + " -> " + target.name + " expected = " + expected + " actual = " + actual + " deviation =" + deviation)
 
             var possibleSources = newGraph.takeSteps(source, math.round(expected - 1).toInt)
 
@@ -179,68 +281,68 @@ package graph {
             possibleSources = possibleSources filter
               {
                 possible =>
-
-                  val dist = newGraph.shortestDistance(target, possible)
-                  dist == -1
-
-                /* This prevents cycles. If there is already a path from target to this possible source,
-                 * and we strength the link from this possible source to target, 
-                 * we could create a cycle.
+                  !oldGraph.ordered(target, possible)
+                /* This prevents cycles. 
+                 * If there is already a path from target to this possible source,
+                 * we will create a cycle. 
+                 * If there is already a path from this possible source to target, this will not help
                  */
-
               }
 
-            var updateSuccess = (possibleSources.length == 0)
-            // if there are no possible sources, we would not give up on the next
+            var possible = for (posSource <- possibleSources) yield {
+              val forward = oldRelations.find(r => r.source == posSource && r.target == target)
+              val backward = oldRelations.find(r => r.target == posSource && r.source == target)
+              if (forward.isDefined) (posSource, forward.get.confidence)
+              else if (backward.isDefined) (posSource, 1 - backward.get.confidence)
+              else (posSource, 0.5)
+            }
 
-            possibleSources foreach {
-              possible =>
-                newRelations.find(r => r.source == possible && r.target == target) match {
-                  case Some(rel: Relation) =>
-                    //println ("possible source: " + possible.name)
-                    // add a number of positive relations
-                    val updated = rel.addEvidence(ADDED_OBSERVATIONS, 0)
-//                    if (target.name == "drive to window") {
-//                      println("updated = " + updated)
-//                    }
+            possible = possible.sortWith((x, y) => x._2 > y._2)
+
+            possible foreach {
+              case (posSource, conf) =>
+                if (conf > 0.3) {
+                  //if (newRelations.find(r => r.source == possible && r.target == target).isDefined) {
+
+                  println("Evaluating: " + posSource.name + " -> " + target.name)
+                  // add a number of positive relations                     
+                  val updated = new Relation(posSource, target, 1, 1)
+                  oldRelations = newRelations
+
+                  //                  newRelations.find(r => r.source == possible && r.target == target) match {
+                  //                    case None => newRelations = updated :: newRelations 
+                  //                    case _ => 
+                  //                  }
+
+                  newLinks = new Link(posSource, target) :: oldGraph.links.filterNot(l => l.source == source && l.target == target)
+                  newGraph = new Graph(graph.nodes, newLinks).compact
+                  newErr = errorChecker.checkErrors(storyList, newGraph)._2
+
+                  if (newErr >= oldErr) {
+                    println("rolled back")
+                    rejected += 1
+                    // the total error has increased or stay constant. undo that update
+                    // this is a change from previous approach which only requires the error not to increase. 
+                    // This seems to curb the indeterminism
+                    newRelations = oldRelations
+                    newGraph = oldGraph
+                  } else {
+                    println("accepted " + posSource.name + " -> " + target.name)
+                    accepted += 1
+                    oldErr = newErr // total error decreased. update succeeded.
+                    oldGraph = newGraph
                     oldRelations = newRelations
-                    newRelations = updated :: (newRelations filterNot (_ == rel))
-
-                    // adding the new relation to the set of links if it already surpasses the threshold
-                    //newLinks = filterRelations(newRelations, thresholdFilter)
-                    newLinks = new Link(updated.source, updated.target) :: oldGraph.links.filterNot(l => l.source == source && l.target == target)
-                    //                    if (target.name == "drive to window") {
-                    //                      println("updated = " + newLinks.filter(l => l.target.name == "drive to window" || l.source.name == "drive to window"))
-                    //                    }
-                    newGraph = new Graph(graph.nodes, newLinks).compact
-                    newErr = errorChecker.checkErrors(storyList, newGraph)._2
-                    //newErr = sum / total
-                    //println("new error = " + newErr)
-                    //if (newErr >= oldErr && oldGraph.links.exists(r => r.target == target)) {
-                    if (newErr >= oldErr) {
-                      //println("rolled back")
-                      rejected += 1
-                      // the total error has increased or stay constant. undo that update
-                      // this is a change from previous approach which only requires the error not to increase. 
-                      // This seems to curb the indeterminism
-                      newRelations = oldRelations
-                      newGraph = oldGraph
-                    } else {
-                      //println("accepted ")
-                      accepted += 1
-                      oldErr = newErr // total error decreased. update succeeded.
-                      oldGraph = newGraph
-                      oldRelations = newRelations
-                      updateSuccess = true
-                    }
-                  case None =>
+                  }
                 }
+              // case None =>
+              //}
+              //else println("rejected for non existence in original links")
             }
 
           //if (!updateSuccess) return newRelations
         }
         println("accepted modifications: " + accepted + " rejected modifications: " + rejected)
-        newRelations
+        oldGraph
       }
 
     def filterRelations(relations: List[Relation], filterFunc: Relation => Boolean): List[Link] = {
