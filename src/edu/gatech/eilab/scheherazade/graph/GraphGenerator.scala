@@ -10,22 +10,10 @@ import parse._
 import data._
 import graph.metric._
 package graph {
-  class GraphGenerator(stories: List[Story], clusters: List[Cluster], property: SingleProperty) {
+  class GraphGenerator(stories: List[Story], clusters: List[Cluster]) {
 
-    val DEFAULT_PROB_THRESHOLD = 0.55
-    //val DEFAULT_CONF_THRESHOLD = 0.45
-    val DEFAULT_MIN_CLUSTER = 3
-
-    val DEFAULT_ADDED_OBSERVATIONS = 1
-
-    val PROBABILITY_THRESHOLD: Double = property.getParameter("probThresholds", x => x.toDouble).getOrElse(DEFAULT_PROB_THRESHOLD)
-
-    //val CONFIDENCE_THRESHOLD = getParameter(property, "confThresholds", x => x.toDouble).getOrElse(DEFAULT_CONF_THRESHOLD)
-    val CLUSTER_SIZE_THRESHOLD = property.getParameter("minClusterSize", x => x.trim.toInt).getOrElse(DEFAULT_MIN_CLUSTER)
-
-    val ADDED_OBSERVATIONS = property.getParameter("addedObservations", x => x.toInt).getOrElse(DEFAULT_ADDED_OBSERVATIONS)
-
-    val OUTPUT_FILE = property.getParameter("outputFile", x => x).getOrElse("output")
+    var PROBABILITY_THRESHOLD: Double = 0
+    var OUTPUT_FILE = ""
 
     val storyList: List[Story] = stories
     val clusterList: List[Cluster] = clusters
@@ -55,35 +43,34 @@ package graph {
     /* returns the error before and after adjustment
    * 
    */
-    def generate(): (Double, Graph, Double, Graph) = {
+    def generate(property: SingleProperty): (Double, Graph, Double, Graph) = {
 
-      //    println("generating plot graph using the following parameters: \n" +
-      //      "probability threshold = " + PROBABILITY_THRESHOLD + "\n" +
-      //      "confidence threshold = " + CONFIDENCE_THRESHOLD + "\n" +
-      //      "added observations = " + ADDED_OBSERVATIONS + "\n")
+      PROBABILITY_THRESHOLD = property.doubleParam("probThresholds")
+      OUTPUT_FILE = property.paramOrFail("outputFile", x => x)
 
       println("generating plot graph using the following parameters: \n" +
-        "probability threshold = " + PROBABILITY_THRESHOLD + "\n" +
-        "minimum cluster size = " + CLUSTER_SIZE_THRESHOLD + "\n" +
-        "added observations = " + ADDED_OBSERVATIONS + "\n")
+        "probability threshold = " + PROBABILITY_THRESHOLD)
 
       var errorBefore = -1.0
       var errorAfter = -1.0
       // var freedomBefore = -1.0
       // var freedomAfter = -1.0
 
-      var statsList = List[(Int, Double, Double)]()
+      //var statsList = List[(Int, Double, Double)]()
 
       val allRelations: List[Relation] = computeRelations(storyList, clusterList).filter(_.totalObservations > 0)
 
       // create the graph that contains every link
       val allLinks = filterRelations(allRelations, thresholdFilter)
       val totalGraph = new Graph(clusterList, allLinks)
-      println("outputing to " + OUTPUT_FILE)
-      totalGraph.draw(OUTPUT_FILE)
-      //println(totalGraph.links.mkString("\n"))
+
       val compactGraph = totalGraph.compact
-      compactGraph.draw(OUTPUT_FILE + "-simplified")
+
+      if (OUTPUT_FILE != "") {
+        println("outputing to " + OUTPUT_FILE)
+        totalGraph.draw(OUTPUT_FILE)
+        compactGraph.draw(OUTPUT_FILE + "-simplified")
+      }
 
       try {
         compactGraph.makeEfficient()
@@ -111,7 +98,9 @@ package graph {
 
       val adjustedGraph = updateBadPaths2(errorChecker.getBadPaths, compactGraph, allRelations)
 
-      adjustedGraph.draw(OUTPUT_FILE + "-adjusted")
+      if (OUTPUT_FILE != "") {
+        adjustedGraph.draw(OUTPUT_FILE + "-adjusted")
+      }
 
       avg = errorChecker.checkErrors(storyList, adjustedGraph)._2
       println("after improvement, avg err = " + avg)
@@ -119,13 +108,6 @@ package graph {
 
       //freedomAfter = Freedom(storyList, totalGraph)
 
-      //val causalGraph = Causality.findCausal(storyList, adjustedTotalGraph).compact.singleLink
-      //causalGraph.draw(OUTPUT_FILE + "-causal")
-
-      // find the branching structure of the final graph
-      //Branching.discover(adjustedGraph)
-
-      //println(statsList.map(_.toString).map(x => x.substring(1, x.length - 2)).mkString("\n"))
       (errorBefore, compactGraph, errorAfter, adjustedGraph)
 
     }

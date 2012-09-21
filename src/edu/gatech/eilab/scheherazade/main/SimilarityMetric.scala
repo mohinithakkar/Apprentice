@@ -11,6 +11,9 @@ package main {
 
     var simHash = HashMap.empty[(String, String), Double]
 
+    System.setProperty("wordnet.database.dir", "../../WordNet/dict/")
+    var wordnet = edu.smu.tspell.wordnet.WordNetDatabase.getFileInstance();
+
     def normalize() {
       var min = Double.PositiveInfinity
       var max = 0.0
@@ -166,19 +169,41 @@ package main {
     def preprocess(deps: List[Dependency]): List[Dependency] =
       {
         var result = deps
+
+        // Preprocessing1: if there is a relation involving John, remove the same relation involving Sally 
         val suspect = deps.filter { d =>
           d.dep.word == "John"
         }.filter { dep1 => deps.exists { dep2 => dep2.gov == dep1.gov && dep2.dep.word == "Sally" && dep2.relation == dep1.relation } }
 
         if (suspect != Nil) {
-          //println(deps.mkString("\n") + "\n\n")
           // remove sally's dependencies
           suspect.foreach { d =>
             result = result.filterNot(dr => dr.gov == d.gov && dr.dep.word == "Sally")
           }
-          // remove anything between john and sally
+          // Preprocessing 2: When John and Sally are parallel, remove anything between john and sally (usually the AND conjunctive)
           result = result.filterNot(dr => (dr.gov.word == "John" && dr.dep.word == "Sally") || (dr.gov.word == "Sally" && dr.dep.word == "John"))
-          //println("removed things from " + deps + ". Now = " + result)
+        }
+
+        // Preprocessing2: find nouns with two words.
+        val nnRelations = result.filter { _.relation == "nn" }
+        for (rel <- nnRelations) {
+          val word = rel.dep.word + " " + rel.gov.word
+          val lemma = rel.dep.lemma + " " + rel.gov.lemma
+          //println("nn word: " + word)
+          if (wordnet.getSynsets(word).length > 0) {
+            // this is a word
+            println("we found a word: " + word)
+            result = result filterNot (_ == rel) map { r =>
+              if (r.dep.word == rel.gov) {
+                val newDep = Token(r.gov.id, word, r.dep.pos, lemma, "")
+                Dependency(r.gov, newDep, r.relation, r.specific, r.depth)
+              } else if (r.gov.word == rel.gov) {
+                val newGov = Token(r.gov.id, word, r.gov.pos, lemma, "")
+                Dependency(newGov, r.dep, r.relation, r.specific, r.depth)
+              } else r
+            }
+          }
+          else println("word does not exist: " + word)
         }
 
         result

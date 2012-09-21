@@ -8,7 +8,7 @@ John drives away,John,Drive away,"Before the police can react, you drove off the
 John opens bank door,John,Open the bank door,You pushed hard to open the heavy bank door.,None
 John leaves bank,John,Leave the bank,You left the bank as soon as you can.,None
 John collects money,John,Collect the money,You collected the money from the bank teller.,None
-John covers face,John,Covers your face with a mask,"Before the security camera can take a good shot at your, you put on a joker mask that covered your entire face.",None
+John covers face,John,Cover your face with a mask,"Before the security camera can take a good shot at your, you put on a joker mask that covered your entire face.",None
 Sally scared,Sally,Look Scared,None,The bank teller looked very scared. She might faint any moment.
 Sally collects money,Sally,Collect the money,None,The bank teller collected money with shaking hands. 
 Sally opens cash drawer,Sally,Open the cash drawer,None,The bank teller opened the cash drawer. Your eyes catched the green color of joy.
@@ -26,7 +26,7 @@ John points gun at Sally,John,Point your gun at the teller,You pointed your gun 
 John pulls out gun,John,Pull out your gun,You pulled out a gun from your pocket.,None
 Sally screams,Sally,Scream loudly,None,Sally screamed as loud as she could. You had no idea human could produce such noise.
 John demands money,John,Demand money,You demanded that she gave you all the money in the bank. Do it! Quickly!,None
-Sally greets John,Sally,Greet the customer,None,"When she sees you, she smiled and said:""How can I help you?"""
+Sally greets John,Sally,Greet the customer,None,"When she saw you, she smiled and said:""How can I help you?"""
 John approaches Sally,John,Approach the teller,"You walked to the bank teller. Her name tag read ""Sally Smith""",None
 John sees Sally,John,Look around for a teller,You looked around and saw a bank teller.,None
 John enters bank,John,Enter the bank,"You walked into the bank, trying to look as normal as you can. Your pulse quickened and you can feel sweat in your palm.",None

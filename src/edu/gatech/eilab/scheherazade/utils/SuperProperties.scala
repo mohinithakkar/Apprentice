@@ -19,7 +19,16 @@ class SingleProperty extends Properties {
     }
   }
 
-  def getParameter[T](name: String, conversionFunc: String => T): Option[T] =
+  def doubleParam(name: String) = paramOrFail(name, x => x.toDouble)
+  def intParam(name: String) = paramOrFail(name, x => x.toInt)
+  def param(name: String): String = {
+    if (containsKey(name)) {
+      val s = getProperty(name)
+      s
+    } else throw new RuntimeException("FATAL: cannot retrieve parameter " + name)
+  }
+
+  def param[T](name: String, conversionFunc: String => T): Option[T] =
     {
       if (containsKey(name)) {
         val s = getProperty(name)
@@ -33,6 +42,15 @@ class SingleProperty extends Properties {
         }
       } else
         None
+    }
+
+  def paramOrFail[T](name: String, conversionFunc: String => T): T =
+    {
+      val option = param(name, conversionFunc)
+      option match {
+        case Some(t) => t
+        case None => throw new RuntimeException("FATAL: cannot retrieve parameter " + name)
+      }
     }
 }
 

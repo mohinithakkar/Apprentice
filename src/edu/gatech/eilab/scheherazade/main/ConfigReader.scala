@@ -7,6 +7,8 @@ import javanlp._
 import graph._
 import utils.SuperProperties
 import java.io._
+import edu.gatech.eilab.scheherazade.cluster.algo.OPTICS
+import edu.gatech.eilab.scheherazade.cluster.metric.ClusterMetric
 import java.util.Properties
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
@@ -23,43 +25,43 @@ package main {
     in.close()
     println("Parameters supplied: " + properties.getProperty("parameters"))
 
-    def initOldData(): (List[Story], List[Cluster]) =
-      {
-        val storyFile = properties.getProperty("storyFile")
-        val clusterFile = properties.getProperty("clusterFile")
+//    def initOldData(): (List[Story], List[Cluster]) =
+//      {
+//        val storyFile = properties.getProperty("storyFile")
+//        val clusterFile = properties.getProperty("clusterFile")
+//
+//        //println("using story file: " + storyFile)
+//        var storyList: List[Story] = GoldParser.parseStories(storyFile)
+//        //GoldParser.parseStories(storyFile)
+//
+//        storyList.foreach(_.addStoryLocation())
+//
+//        //println("using cluster file: " + clusterFile)
+//        val clusterList: List[Cluster] = initOldClusters(storyList, clusterFile)
+//
+//        // This filters unused sentences in the stories
+//        //storyList = filterUnused(storyList, clusterList)
+//        (storyList, clusterList)
+//      }
 
-        //println("using story file: " + storyFile)
-        var storyList: List[Story] = GoldParser.parseStories(storyFile)
-        //GoldParser.parseStories(storyFile)
-
-        storyList.foreach(_.addStoryLocation())
-
-        //println("using cluster file: " + clusterFile)
-        val clusterList: List[Cluster] = initOldClusters(storyList, clusterFile)
-
-        // This filters unused sentences in the stories
-        //storyList = filterUnused(storyList, clusterList)
-        (storyList, clusterList)
-      }
-
-    def initOldDataFiltered(): (List[Story], List[Cluster]) =
-      {
-        val storyFile = properties.getProperty("storyFile")
-        val clusterFile = properties.getProperty("clusterFile")
-
-        //println("using story file: " + storyFile)
-        var storyList: List[Story] = GoldParser.parseStories(storyFile)
-        //GoldParser.parseStories(storyFile)
-
-        storyList.foreach(_.addStoryLocation())
-
-        //println("using cluster file: " + clusterFile)
-        val clusterList: List[Cluster] = initOldClusters(storyList, clusterFile)
-
-        // This filters unused sentences in the stories
-        storyList = filterUnused(storyList, clusterList)
-        (storyList, clusterList)
-      }
+//    def initOldDataFiltered(): (List[Story], List[Cluster]) =
+//      {
+//        val storyFile = properties.getProperty("storyFile")
+//        val clusterFile = properties.getProperty("clusterFile")
+//
+//        //println("using story file: " + storyFile)
+//        var storyList: List[Story] = GoldParser.parseStories(storyFile)
+//        //GoldParser.parseStories(storyFile)
+//
+//        storyList.foreach(_.addStoryLocation())
+//
+//        //println("using cluster file: " + clusterFile)
+//        val clusterList: List[Cluster] = initOldClusters(storyList, clusterFile)
+//
+//        // This filters unused sentences in the stories
+//        storyList = filterUnused(storyList, clusterList)
+//        (storyList, clusterList)
+//      }
 
     def initData(): (List[Story], List[Cluster]) =
       {
@@ -100,7 +102,7 @@ package main {
         (storyList, clusterList)
       }
 
-    def filterUnused(storyList: List[Story], clusterList: List[Cluster]): List[Story] =
+    protected def filterUnused(storyList: List[Story], clusterList: List[Cluster]): List[Story] =
       {
         val used = clusterList.flatMap { _.members }
         storyList map { story =>
@@ -111,34 +113,34 @@ package main {
         }
       }
 
-    def initOldClusters(storyList: List[Story], clusterFile: String) =
-      {
-        val hashmap = new HashMap[Int, Sentence]
-        storyList foreach {
-          story =>
-            story.members foreach
-              {
-                sentence =>
-                  if (hashmap.contains(sentence.id)) throw new ParsingException("sentence repeated" + sentence.id)
-                  hashmap += ((sentence.id, sentence))
-              }
-        }
-
-        GoldParser.parseClusters(clusterFile) map {
-          c =>
-            val newMembers = c.members map
-              {
-                sentence =>
-                  // make sure we get the same sentence 
-                  hashmap.get(sentence.id).get
-              }
-            val newC = new Cluster(c.name, newMembers)
-            newC.members foreach { s =>
-              s.cluster = newC
-            }
-            newC
-        }
-      }
+//    def initOldClusters(storyList: List[Story], clusterFile: String) =
+//      {
+//        val hashmap = new HashMap[Int, Sentence]
+//        storyList foreach {
+//          story =>
+//            story.members foreach
+//              {
+//                sentence =>
+//                  if (hashmap.contains(sentence.id)) throw new ParsingException("sentence repeated" + sentence.id)
+//                  hashmap += ((sentence.id, sentence))
+//              }
+//        }
+//
+//        GoldParser.parseClusters(clusterFile) map {
+//          c =>
+//            val newMembers = c.members map
+//              {
+//                sentence =>
+//                  // make sure we get the same sentence 
+//                  hashmap.get(sentence.id).get
+//              }
+//            val newC = new Cluster(c.name, newMembers)
+//            newC.members foreach { s =>
+//              s.cluster = newC
+//            }
+//            newC
+//        }
+//      }
 
     /**
      * initializing the clusters. assigning the sentences to the right story and cluster, so we
@@ -180,94 +182,40 @@ package main {
 
       }
 
-    //  def parseSentence(storyList: List[Story]): List[Story] =
-    //    {
-    //      //    val sentences
-    //      val text = storyList.map {
-    //        story =>
-    //          story.members.map {
-    //            sentence: Sentence => sentence.tokens.map(_.word).mkString(" ")
-    //          }.mkString("\n")
-    //      }.mkString("\n")
-    //      //println("text = " + text)
-    //      NLPWrapper.init()
-    //      NLPWrapper.getParsed(text)
-    //
-    //      var allSents = storyList flatMap { _.members } toArray
-    //      var sentBuffer = new ListBuffer[Sentence]()
-    //      var i = 0
-    //
-    //      while (NLPWrapper.hasNextSentence) {
-    //        NLPWrapper.processNextSentence()
-    //        var tokensArray = NLPWrapper.getTokens()
-    //        if (tokensArray.length > 1 || tokensArray(0)(0) != ".") { // filters out empty sentences with a single period
-    //
-    //          var tokenBuffer = new ListBuffer[Token]()
-    //          for (i <- 0 to tokensArray.length - 1) {
-    //            val t = tokensArray(i)
-    //            tokenBuffer += new Token(i, t(0), t(1), t(2), { if (t(3) == "O") "" else t(3) })
-    //          }
-    //
-    //          val tokens = tokenBuffer.toArray
-    //          println(i + ": " + tokens.mkString(" "))
-    //          val tree = NLPWrapper.getParseTree()
-    //          val graph = NLPWrapper.getSemanticGraph()
-    //
-    //          val relations = graphToRelations(graph, tokens)
-    //          sentBuffer += Sentence(allSents(i).id, tokens, tree, relations)
-    //          //        println("old sentence " + i + " " + allSents(i).tokens.map(_.word).mkString(" "))
-    //          println(tokens.mkString(" "))
-    //          println(relations.mkString("\n"))
-    //          i += 1 // going through two lists simultaneously
-    //        }
-    //      }
-    //
-    //      var allNewSents = sentBuffer.toList
-    //      var storyBuffer = new ListBuffer[Story]()
-    //
-    //      storyList.foreach { story =>
-    //        val length = story.members.length
-    //        storyBuffer += new Story(allNewSents.take(length).toArray)
-    //        allNewSents = allNewSents.drop(length)
-    //      }
-    //
-    //      storyBuffer.toList
-    //    }
-
-    def graphToRelations(graph: SemanticGraph, tokens: Array[Token]): List[Dependency] = {
-      var relations = new ListBuffer[Dependency]()
-      var queue = new Queue[(IndexedWord, Int)]()
-      var used = List[IndexedWord]()
-      val root = graph.getFirstRoot()
-
-      queue += ((root, 0))
-
-      while (!queue.isEmpty) {
-        val (item, depth) = queue.dequeue()
-        val it = graph.outgoingEdgeIterable(item).iterator
-
-        while (it.hasNext) {
-          val edge = it.next()
-          val gov = edge.getGovernor()
-          val dep = edge.getDependent()
-          var relation = edge.getRelation()
-
-          // makes sure each word is added to the queue only once
-          if (!used.contains(dep)) {
-            queue += ((dep, depth + 1))
-            used = dep :: used
-          }
-
-          var specifics = relation.getSpecific()
-          if (specifics == null) specifics = ""
-          relations += new Dependency(tokens(gov.index() - 1), tokens(dep.index() - 1),
-            relation.getShortName(), specifics, depth)
-
-        }
-      }
-
-      relations.toList
-    }
+//    def graphToRelations(graph: SemanticGraph, tokens: Array[Token]): List[Dependency] = {
+//      var relations = new ListBuffer[Dependency]()
+//      var queue = new Queue[(IndexedWord, Int)]()
+//      var used = List[IndexedWord]()
+//      val root = graph.getFirstRoot()
+//
+//      queue += ((root, 0))
+//
+//      while (!queue.isEmpty) {
+//        val (item, depth) = queue.dequeue()
+//        val it = graph.outgoingEdgeIterable(item).iterator
+//
+//        while (it.hasNext) {
+//          val edge = it.next()
+//          val gov = edge.getGovernor()
+//          val dep = edge.getDependent()
+//          var relation = edge.getRelation()
+//
+//          // makes sure each word is added to the queue only once
+//          if (!used.contains(dep)) {
+//            queue += ((dep, depth + 1))
+//            used = dep :: used
+//          }
+//
+//          var specifics = relation.getSpecific()
+//          if (specifics == null) specifics = ""
+//          relations += new Dependency(tokens(gov.index() - 1), tokens(dep.index() - 1),
+//            relation.getShortName(), specifics, depth)
+//
+//        }
+//      }
+//
+//      relations.toList
+//    }
 
     /**
      * print the sentence that does not end with a period
@@ -283,21 +231,132 @@ package main {
 
   object ConfigReader {
     def main(args: Array[String]) {
+      cluster()
+    }
+
+    def clusterAll() {
       //    val string = scala.io.Source.fromFile("movieParsed.txt").mkString    
       //    val obj = XStream.fromXML(string).asInstanceOf[StorySet]
       //    println(obj.storyList.mkString("\n"))
       val reader = new ConfigReader("configNewMv.txt")
+      var (mvStories, mvGold) = reader.initData()
+      val minCluster = 5
+
+      var (robStories, robGold) = new ConfigReader("configRobP.txt").initData()
+      var (rtStories, rtGold) = new ConfigReader("configRtP.txt").initData()
+
+      val mvSize = mvStories.map(_.members.size).sum
+      val robSize = robStories.map(_.members.size).sum
+
+      robStories = robStories.map { story =>
+        val sents = story.members.map { s =>
+          Sentence(s.id + mvSize, s.tokens)
+        }
+        new Story(sents)
+      }
+
+      robGold = robGold.map { gold =>
+        val sents = gold.members.map { s =>
+          Sentence(s.id + mvSize, s.tokens)
+        }
+        new Cluster("a", sents)
+      }
+
+      rtStories = rtStories.map { story =>
+        val sents = story.members.map { s =>
+          Sentence(s.id + mvSize + robSize, s.tokens)
+        }
+        new Story(sents)
+      }
+
+      rtGold = rtGold.map { gold =>
+        val sents = gold.members.map { s =>
+          Sentence(s.id + mvSize + robSize, s.tokens)
+        }
+        new Cluster("a", sents)
+      }
+
+      val stories = mvStories ::: robStories ::: rtStories
+      val parser = new StoryNLPParser(stories, "AllParsed.txt", true)
+
+      def sentFn: () => List[Sentence] = () => parser().storyList.flatMap(_.members)
+
+      val simi = new DSDSimilarity(sentFn, "AllSemantic.txt")
+
+      var matrix = simi()
+
+      val (distance, max) = similarityToDistance(matrix)
+
+      var clusterList = OPTICS.cluster(distance, max, minCluster, stories.flatMap(_.members.toList))
+
+      val mvClusters = clusterList.map { c =>
+        val realMembers = c.members.filter(s => mvStories.exists(_.members.contains(s)))
+        new Cluster("a", realMembers)
+      }.filter(_.members.size > 0)
+
+      println("mv results: ")
+      println(mvClusters.map(_.members.map(_.toShortString()).mkString("\n")).mkString("\n###\n"))
+      evaluate(mvClusters, mvGold)
+
+      val robClusters = clusterList.map { c =>
+        val realMembers = c.members.filter(s => robStories.exists(_.members.contains(s)))
+        new Cluster("a", realMembers)
+      }.filter(_.members.size > 0)
+
+      println("rob results: ")
+      evaluate(robClusters, robGold)
+
+      val rtClusters = clusterList.map { c =>
+        val realMembers = c.members.filter(s => rtStories.exists(_.members.contains(s)))
+        new Cluster("a", realMembers)
+      }.filter(_.members.size > 0)
+
+      println("rt results: ")
+      evaluate(rtClusters, rtGold)
+
+    }
+
+    def cluster() {
+
+      val dataSet = "Movie"
+      var configFile = ""
+      var parseFile = ""
+      var semanticFile = ""
+      var locationFile = ""
+      var allFile = ""
+
+      if (dataSet == "Robbery") {
+        configFile = "configRobP.txt"
+        parseFile = "RobParse.txt"
+        semanticFile = "RobSemantic.txt"
+        locationFile = "RobLocation.txt"
+        allFile = "RobSimilarity.txt"
+      } else if (dataSet == "Movie") {
+        configFile = "configNewMvP.txt"
+        parseFile = "MvParse.txt"
+        semanticFile = "MvSemantic.txt"
+        locationFile = "MvLocation.txt"
+        allFile = "MvSimilarity.txt"
+      } else if (dataSet == "Restaurant") {
+        configFile = "configRtP.txt"
+        parseFile = "RtParse.txt"
+        semanticFile = "RtSemantic.txt"
+        locationFile = "RtLocation.txt"
+        allFile = "RtSimilarity.txt"
+      }
+
+      val reader = new ConfigReader(configFile)
       var (stories, gold) = reader.initData()
-      val minCluster = reader.properties.allParameters()(0).getParameter("minClusterSize", _.toInt).get
+      val minCluster = 4
       gold = gold.filter(_.members.size >= minCluster)
 
-      val parser = new StoryNLPParser(stories, "NewMvParsed.txt", true)
+      val parser = new StoryNLPParser(stories, parseFile, true)
       // val zero = s.storyList(0)
       //    println(zero)
       //    println(zero.members.mkString("\n"))
 
       def sentFn: () => List[Sentence] = () => parser().storyList.flatMap(_.members)
-      
+
       /*// temp
       
       val sentences = sentFn()
@@ -312,13 +371,13 @@ package main {
       System.exit(0)
       // end of temp */
 
-      val simi = new DSDSimilarity(sentFn, "NewMvSemantic.txt")
+      val simi = new DSDSimilarity(sentFn, semanticFile)
       //var simiMatrix = simi()
       //    utils.Matrix.prettyPrint(matrix1)
       //    System.exit(0)
-      val local = new SimpleLocation(sentFn, 0.6, "NewMvLocations.txt")
+      val local = new SimpleLocation(sentFn, 0.6, locationFile)
 
-      var addition = new MatrixAddition(() => simi(), () => local(), 0.25, "NewMv1stSimilarity.txt")
+      var addition = new MatrixAddition(() => simi(), () => local(), 0.25, allFile)
 
       //val matrix = simi()
       var matrix = addition()
@@ -339,13 +398,12 @@ package main {
 
       val (distance, max) = similarityToDistance(matrix)
 
-      var clusterList = cluster.algo.OPTICS.cluster(distance, max, minCluster, stories.flatMap(_.members.toList))
+      var clusterList = OPTICS.cluster(distance, max, minCluster, stories.flatMap(_.members.toList))
       //iterativeRestrain(clusterList, stories, simi())
       evaluate(clusterList, gold)
     }
 
     def evaluate(clusters: List[Cluster], gold: List[Cluster]) {
-      import cluster.metric.ClusterMetric
 
       val (r1, p1) = ClusterMetric.muc(gold, clusters)
       val (r2, p2) = ClusterMetric.bCubed(gold, clusters)
@@ -456,7 +514,7 @@ package main {
         val (distance, max) = similarityToDistance(matrix)
 
         //cluster.algo.OPTICS.loose = true
-        clusterList = cluster.algo.OPTICS.cluster(distance, max, 4, stories.flatMap(_.members.toList))
+        clusterList = OPTICS.cluster(distance, max, 4, stories.flatMap(_.members.toList))
         writeClusters(iteration, clusterList)
       }
     }

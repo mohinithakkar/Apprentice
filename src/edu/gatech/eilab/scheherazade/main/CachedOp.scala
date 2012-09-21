@@ -113,9 +113,9 @@ package main {
 
       val text = storyList.flatMap { _.members.map { _.tokens.map(_.word).mkString(" ") } }.mkString("\n")
       val nlp = new NLPWrapper()
-      println("parsing: ************************************")
-      println(text)
-      println("parsed: ************************************")
+      //println("parsing: ************************************")
+      //println(text)
+      //println("parsed: ************************************")
       nlp.getParsed(text)
       val newStories = storyList map { story =>
         val newSents = story.members map { sent =>

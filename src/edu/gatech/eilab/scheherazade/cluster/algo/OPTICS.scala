@@ -4,8 +4,9 @@ package edu.gatech.eilab.scheherazade {
   import scala.collection.mutable.PriorityQueue
   import scala.math.Ordered
   import cluster.gui.ReachPlot
+  import java.io._
   package cluster.algo {
-    
+
     object OPTICS {
 
       var loose = false
@@ -25,7 +26,7 @@ package edu.gatech.eilab.scheherazade {
         var next: Point = null
 
         override def compare(that: Point): Int = {
-          if (this.reachability == UNDEFINED && that.reachability != UNDEFINED) -1 // UNDEFINED is greater than everthing
+          if (this.reachability == UNDEFINED && that.reachability != UNDEFINED) -1 // UNDEFINED is greater than everything
           else if (this.reachability != UNDEFINED && that.reachability == UNDEFINED) 1
           else if (this.reachability < that.reachability) 1
           else if (this.reachability == that.reachability) 0
@@ -54,6 +55,99 @@ package edu.gatech.eilab.scheherazade {
         //println(text)
       }
 
+      def cluster2(similarity: Array[Array[Double]], epsilon: Double, minPts: Int, sentences: List[Sentence]): List[Cluster] = {
+        val INFINITY = 10000
+        val n = similarity.length
+        var coreDist = Array.fill[Double](n)(0)
+        var reachDist = Array.fill[Double](n)(INFINITY)
+
+        // find core distances
+        for (i <- 0 until n) {
+          val sorted = similarity(i).sortWith(_ < _)
+          coreDist(i) = sorted(minPts)
+        }
+
+        //for(i <- 0 until n)
+        //	println((i + 1) + " " + coreDist(i))
+
+        var order = List[Int]()
+        var seeds = (0 until n).toList
+
+        var index = 0
+        while (seeds != Nil) {
+          var ob = index
+          seeds = seeds filter (_ != index)
+          order = ob :: order
+
+          val mm = seeds.map(similarity(ob)(_)).map(v => math.max(v, coreDist(ob)))
+
+          //val ii = seeds.map(reachDist(_)).zip(mm).map { case (x, y) => x > y }
+
+          //          for (i <- 0 until mm.length)
+          //            println((i + 1) + " " + ii(i))
+          //          System.exit(1)
+          //println("mm dimension = " + mm.size + " ii dimension =" + ii.size)
+
+          for (i <- 0 until seeds.length) {
+            val s = seeds(i)
+            if (reachDist(s) > mm(i)) reachDist(s) = mm(i)
+          }
+
+          if (seeds != Nil) {
+            val min = seeds.map(i => reachDist(i)).min
+            index = seeds.filter(s => reachDist(s) == min).head
+            //println("next index = " + index)
+          }
+        }
+
+        reachDist(0) = 1.02 * reachDist.tail.max
+        order = order.reverse
+        /****************** END OF OPTICS CODE **********************/
+        val sorted = order.map(i => sentences(i))
+
+        val points = for (i <- order) yield {
+          val p = new Point(i)
+          p.core = coreDist(i)
+          p.reachability = reachDist(i)
+          p
+        }
+
+        if (points.length > 1) {
+          points(0).next = points(1)
+          points.last.previous = points(points.length - 2)
+        }
+
+        for (i <- 1 until points.length - 1) {
+          points(i).previous = points(i - 1)
+          points(i).next = points(i + 1)
+        }
+        
+        val larray = points.toArray
+        plot = new ReachPlot(larray)
+        plot.show
+        val root = interpret(larray, minPts)
+
+        //markLeaves(root, sentences)
+        //println("required: (555, 613) = " + similarity(555)(613) + " (485, 613) = " + similarity(485)(613) )
+
+        inferClusters(root, sentences)
+        /*
+        println(sorted.map(_.toShortString()).mkString("\n"))
+        
+        val no = sorted.map(_.id)
+
+        val correct = scala.io.Source.fromFile("sentences.txt").getLines().map {
+          line =>
+            val cut = line.indexOf(" ")
+            line.substring(0, cut).toInt
+        }.toArray
+
+        //val good = (0 until no.length).forall(i => no(i) == correct(i))
+        //(0 until no.length).foreach(i => if (no(i) != correct(i)) println( no(i) + " <> " + correct(i)))
+        print("GOOD = " + good)
+        */
+      }
+
       def cluster(similarity: Array[Array[Double]], epsilon: Double, minPts: Int, sentences: List[Sentence]): List[Cluster] = {
 
         val length = similarity.length
@@ -65,13 +159,13 @@ package edu.gatech.eilab.scheherazade {
         var ordered = List[Point]()
 
         // for each unprocessed point p of DB
-        for (i <- 0 until length)
+        for (i <- 0 until length) {
           if (!points(i).visited) {
             val p = points(i)
-            //println("processing " + p.id)
+
             // N = getNeighbors(p, eps)
             val neighbors = getNeighbors(p, epsilon, similarity, points)
-            //println("neighbors are: " + neighbors)
+
             // mark p as processed
             p.visited = true
 
@@ -110,6 +204,7 @@ package edu.gatech.eilab.scheherazade {
               }
             }
           }
+        }
 
         var list = ordered.reverse // this is the reachability plot
 
@@ -131,22 +226,40 @@ package edu.gatech.eilab.scheherazade {
         //    list = list.head :: list.tail.filter(_.reachability < cutoff)
         //println(list.size)
 
+        /*
         println("**************************")
         for (p <- list) {
           println(p.reachability)
         }
         println("**************************")
-
+         */
         val larray = list.toArray
         plot = new ReachPlot(larray)
         plot.show
-        val root = interpret(larray)
+        val root = interpret(larray, minPts)
 
-        markLeaves(root, sentences)
+        //markLeaves(root, sentences)
+        //println("required: (555, 613) = " + similarity(555)(613) + " (485, 613) = " + similarity(485)(613) )
 
-        //inferClusters(root, sentences)
+        val pw1 = new PrintWriter(new FileOutputStream("simMatrix.txt"))
+        val pw2 = new PrintWriter(new FileOutputStream("sentences.txt"))
 
-        Nil
+        for (i <- 0 until similarity.length) {
+          for (j <- 0 until similarity(0).length) {
+            pw1.print(similarity(i)(j).toString.substring(0, 5) + ", ")
+          }
+          pw1.println()
+        }
+
+        for (i <- 0 until sentences.length) {
+          val str = sentences(i).toShortString().replaceAll("\\)", " ").replaceAll("\\(S", "")
+          pw2.println(str)
+        }
+        pw1.close()
+        pw2.close()
+        inferClusters(root, sentences)
+
+        //Nil
         //    var start = 0
         //    var end = 0
         //    var clusterList = List[Cluster]()
@@ -189,14 +302,14 @@ package edu.gatech.eilab.scheherazade {
             val reach = pts.map(_.reachability)
 
             val valid =
-              reach.sliding(minClusterSize + 1).exists(l => l.head * 0.98 > l.tail.min) && // head is greater than min
-                reach.sliding(minClusterSize).exists(l => l.max < l.min * 1.6) // a relative flat area bestRobbery = 1.05, best movie = 1.4
+              reach.sliding(minClusterSize + 1).exists(l => l.head * 0.98 > l.tail.min) && // head is greater than min movie = 0.98
+                reach.sliding(minClusterSize).exists(l => l.max < l.min * 1.4) // a relative flat area bestRobbery = 1.05, best movie = 1.4
 
             if (valid) {
               val max = reach.max
               val min = reach.min
               //val portion = if (loose) 0.35 else 0.3
-              var goodPortion = pts.filter { x => x.reachability < (min + (max - min) * 1) }.toList // 0.55 for movie
+              var goodPortion = pts.filter { x => x.reachability < (min + (max - min) * 0.5) }.toList // 0.5(in acs paper)-0.6 for movie 0.4 for robbery
               // divide the portions into continuous parts
               var additional = List[Point]()
               var separation = List[(Int, Int)]()
@@ -331,7 +444,8 @@ package edu.gatech.eilab.scheherazade {
             } else if (newReachDist < o.reachability) {
               o.reachability = newReachDist
               //println(o.id + " new reachabitlity = " + newReachDist)
-              nQueue = (nQueue filterNot { _ == o }) += o
+              nQueue = (nQueue filterNot { _.id == o.id })
+              nQueue += o
             }
           }
         nQueue
@@ -372,7 +486,7 @@ package edu.gatech.eilab.scheherazade {
         var splitPt: Point = null
       }
 
-      def interpret(rArray: Array[Point]): Node =
+      def interpret(rArray: Array[Point], minPts: Int): Node =
         {
           import scala.collection.mutable.ListBuffer
 
@@ -381,8 +495,8 @@ package edu.gatech.eilab.scheherazade {
 
           var localMaxima = new ListBuffer[(Int, Point)]()
 
-          minClusterSize = scala.math.ceil(0.005 * rArray.length).toInt
-          //println("minimum size = " + minClusterSize)
+          minClusterSize = minPts + 1
+
           // first, find all local maximum
           for (idx <- 0 until rArray.length) {
             val point = rArray(idx)
@@ -401,12 +515,9 @@ package edu.gatech.eilab.scheherazade {
             }
 
             val maxima = (rightDefined || leftDefined) &&
-              (nbLeft ++ nbRight).foldLeft(true) { (b: Boolean, p: Point) =>
-                b &&
-                  {
-                    if (rArray(idx).reachability == UNDEFINED) true // undefined points are always local maxima
-                    else p.reachability != UNDEFINED && p.reachability <= rArray(idx).reachability
-                  }
+              (nbLeft ++ nbRight).forall { p =>
+                if (rArray(idx).reachability == UNDEFINED) true // undefined points are always local maxima
+                else p.reachability != UNDEFINED && p.reachability <= rArray(idx).reachability
               }
 
             if (maxima) {
@@ -420,8 +531,8 @@ package edu.gatech.eilab.scheherazade {
           val lm = localMaxima.sortBy(_._2).toList
 
           //println(lm.map(p => p._2.plotId + " " + p._2.reachability).mkString("\n"))
-          val real = lm.map(_._2)
-          val root = new Node(real, rArray, null)
+          val sortedMaxima = lm.map(_._2)
+          val root = new Node(sortedMaxima, rArray, null)
           clusterTree(root, null)
           //System.exit(-1)
 
