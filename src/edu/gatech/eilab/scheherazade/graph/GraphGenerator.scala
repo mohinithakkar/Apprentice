@@ -36,14 +36,14 @@ package graph {
         false
       }
 
-    //def thresholdFilter = (r: Relation) => (r.confidence > CONFIDENCE_THRESHOLD && r.prob > PROBABILITY_THRESHOLD)
-    //def thresholdFilter = ((r: Relation) => (r.totalObservations > CLUSTER_SIZE_THRESHOLD) && (r.prob > PROBABILITY_THRESHOLD))
     def thresholdFilter = ((r: Relation) => (r.confidence > PROBABILITY_THRESHOLD))
 
-    /* returns the error before and after adjustment
-   * 
-   */
-    def generate(property: SingleProperty): (Double, Graph, Double, Graph) = {
+    /**
+     * Generates the graph according to the property
+     * returns everything in a hashmap: 
+     * GraphName:String -> (graph:Graph, graphError:Double) 
+     */
+    def generate(property: SingleProperty): HashMap[String, (Graph, Double)] = {
 
       PROBABILITY_THRESHOLD = property.doubleParam("probThresholds")
       OUTPUT_FILE = property.paramOrFail("outputFile", x => x)
@@ -51,12 +51,9 @@ package graph {
       println("generating plot graph using the following parameters: \n" +
         "probability threshold = " + PROBABILITY_THRESHOLD)
 
+      val hashmap = new HashMap[String, (Graph, Double)]()
       var errorBefore = -1.0
       var errorAfter = -1.0
-      // var freedomBefore = -1.0
-      // var freedomAfter = -1.0
-
-      //var statsList = List[(Int, Double, Double)]()
 
       val allRelations: List[Relation] = computeRelations(storyList, clusterList).filter(_.totalObservations > 0)
 
@@ -66,49 +63,38 @@ package graph {
 
       val compactGraph = totalGraph.compact
 
+      /*
       if (OUTPUT_FILE != "") {
         println("outputing to " + OUTPUT_FILE)
         totalGraph.draw(OUTPUT_FILE)
         compactGraph.draw(OUTPUT_FILE + "-simplified")
-      }
+      }*/
 
       try {
         compactGraph.makeEfficient()
       } catch {
         case g: GraphException =>
           println(g.msg)
-          return (0, compactGraph, 0, null)
+          hashmap += (("original", (compactGraph, 0)))
+          println("loop detected")
+          return hashmap
       }
+
       //println(compactGraph.links.mkString("\n"))
       var (sum, avg) = errorChecker.checkErrors(storyList, compactGraph)
       println("before improvement, avg err = " + avg)
-      errorBefore = avg
-      //freedomBefore = Freedom(storyList, totalGraph)
-      //println("GOOD PATHS: \n\n" + checker.getGoodPaths.mkString("\n"))
-      //println("\n\n BAD PATHS: \n\n" + checker.getBadPaths.mkString("\n"))
-      //statsList = (i, sum, avg) :: statsList
 
-      //println("threshold = " + i + ", sum = " + sum + ", avg = " + avg)
-      //      var relations = valid.filter { r =>
-      //        reducedLinks.exists { link => link.source == r.source && link.target == r.target }
-      //      }
-      // the 2 lines below for adjacent graph
-      //    Thread.sleep(30000)
-      //    System.exit(0)
+      hashmap += (("original", (compactGraph, avg)))
+      
+      // improve the graph
+      val improvedGraph = updateBadPaths2(errorChecker.getBadPaths, compactGraph, allRelations)
+      avg = errorChecker.checkErrors(storyList, improvedGraph)._2      
+      errorAfter = avg      
+      hashmap += (("improved", (improvedGraph, avg)))
 
-      val adjustedGraph = updateBadPaths2(errorChecker.getBadPaths, compactGraph, allRelations)
-
-      if (OUTPUT_FILE != "") {
-        adjustedGraph.draw(OUTPUT_FILE + "-adjusted")
-      }
-
-      avg = errorChecker.checkErrors(storyList, adjustedGraph)._2
-      println("after improvement, avg err = " + avg)
-      errorAfter = avg
-
-      //freedomAfter = Freedom(storyList, totalGraph)
-
-      (errorBefore, compactGraph, errorAfter, adjustedGraph)
+      // compute mutual exclusions below
+      
+      hashmap
 
     }
 

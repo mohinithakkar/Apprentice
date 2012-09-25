@@ -21,14 +21,14 @@ package main {
 
     def generateGraphs() {
       val reader = new ConfigReader("configNewMvP.txt")
-     // val (stories, clusters) = reader.initData()
+      // val (stories, clusters) = reader.initData()
       val (stories, clusters) = reader.initDataFiltered()
 
       // count average number of sentences in each story
       //val avg = stories.map(_.members.size).sum / stories.size
       //println("average = " + avg); 
       //println(clusters.map(c => c.name + ", " + c.size).mkString("\n"));System.exit(1)
-      
+
       val property = reader.properties
       val parameters = property.allParameters()
 
@@ -36,70 +36,92 @@ package main {
       var i = 1;
       val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(outputPath + "\\summary.csv")));
 
-      property.printParameterNames(pw)
-
-      var prevErrList = ListBuffer[Double]()
+      property.allParamNames().foreach(n => print(n + ", "))
+      pw.println("Error Before Improvement, Error After Improvement, % Decrease")
+      var beforeErrList = ListBuffer[Double]()
       var afterErrList = ListBuffer[Double]()
 
       parameters foreach { para =>
 
         // filter out clusters smaller than the minimum cluster size
-        val minimumSize = para.getParameter("minClusterSize", text => text.trim.toInt).getOrElse(0)
+        val minimumSize = para.intParam("minClusterSize")
         val insideClusters = clusters.filterNot(c => c.members.size < minimumSize)
         val insideStories = reader.filterUnused(stories, insideClusters)
 
         para.printParameterValues(pw)
-        para.put("outputFile", outputPath + "\\conf" + i)
+        val outputPrefix = outputPath + "\\conf" + i
+        para.put("outputFile", outputPrefix)
         println(outputPath + "conf" + i)
         i += 1
 
-        val gen = new GraphGenerator(insideStories, insideClusters, para)
-        val (beforeErr, beforeGraph, afterErr, afterGraph) = gen.generate()
-        if (afterGraph != null) {
+        val gen = new GraphGenerator(insideStories, insideClusters)
+        val hashmap = gen.generate(para)
 
-          val beforeCoverage = rateEntireCoverage3(stories, beforeGraph)
-          val afterCoverage = rateEntireCoverage3(stories, afterGraph)
-          pw.print(beforeErr + ", " + afterErr + "," + ((1 - (afterErr / beforeErr)) * 100) + "," + beforeCoverage + "," + afterCoverage + "\n")
-          prevErrList += beforeErr
-          afterErrList += afterErr
-        } else {
-          // the graph contains loops
-          pw.println("loop detected")
+        var beforeErr = 0.0
+        var afterErr = 0.0
+        for (entry <- hashmap) {
+          val name = entry._1
+          val (graph, error) = entry._2
+          graph.draw(outputPrefix + name)
+
+          if (name == "original") beforeErr = error
+          else if (name == "adjusted") afterErr = error
         }
 
-        /*
-        val efGraph = afterGraph.makeEfficient()
-        val pairArray = utils.CSVProcessor.readCSV("used pairs.txt")
-        for (pair <- pairArray) {
-          print(pair(0) + "," + pair(1))
-          val sopt = afterGraph.nodes.find(_.name == pair(0))
-          val topt = afterGraph.nodes.find(_.name == pair(1))
-          if (sopt.isEmpty || topt.isEmpty) {
-             println(", Unknown")
-          } else {
-            val source = sopt.get
-            val target = topt.get
-            val dis1 = efGraph.shortestDistance(source, target)
-            val dis2 = efGraph.shortestDistance(target, source)
-            if (dis1 == 1) println(",A")
-            else if (dis2 == 1) println(",B")
-            else if (dis1 > 1) println(",AI")
-            else if (dis2 > 1) println(",BI")
-            else if (dis1 == -1 && dis2 == -1) println(",P")
-            else println("not supposed to happen!!!")
-          }
-
-        }*/
-
-        //println(afterGraph.nodes.map(_.name).mkString("\n"))
-        //selectRelations(afterGraph, 40)
+        pw.print(beforeErr + ", ")
+        if (afterErr != 0.0)
+        {
+          beforeErrList += beforeErr
+          afterErrList += afterErr
+          pw.println(afterErr + "," + ((1 - (afterErr / beforeErr)) * 100))
+        }
+        else
+          pw.println("loop detected")        
+        
       }
 
-      val emptyCols = parameters.head.stringPropertyNames.size()
-      pw.println(" ," * emptyCols + (prevErrList.sum / prevErrList.size) + ", " + (afterErrList.sum / afterErrList.size))
+      val emptyCols = property.allParamNames().length
+      val avgBefore = (beforeErrList.sum / beforeErrList.size)
+      val avgAfter = (afterErrList.sum / afterErrList.size)
+      pw.println(" ," * emptyCols + avgBefore + ", " + avgAfter + ", " + ((1 - (avgAfter / avgBefore)) * 100))
       pw.close()
     }
 
+    /**
+     * This fuction finds ordering between pairs given in a file.
+     * It is used when we validate the graph against the crowd.
+     *
+     */
+    private def findOrderingForPairs(afterGraph: Graph) {
+
+      val efGraph = afterGraph.makeEfficient()
+      val pairArray = utils.CSVProcessor.readCSV("used pairs.txt")
+      for (pair <- pairArray) {
+        print(pair(0) + "," + pair(1))
+        val sopt = afterGraph.nodes.find(_.name == pair(0))
+        val topt = afterGraph.nodes.find(_.name == pair(1))
+        if (sopt.isEmpty || topt.isEmpty) {
+          println(", Unknown")
+        } else {
+          val source = sopt.get
+          val target = topt.get
+          val dis1 = efGraph.shortestDistance(source, target)
+          val dis2 = efGraph.shortestDistance(target, source)
+          if (dis1 == 1) println(",A")
+          else if (dis2 == 1) println(",B")
+          else if (dis1 > 1) println(",AI")
+          else if (dis2 > 1) println(",BI")
+          else if (dis1 == -1 && dis2 == -1) println(",P")
+          else println("not supposed to happen!!!")
+        }
+
+      }
+    }
+
+    /**
+     * coverage of graphs. version 3
+     *
+     */
     private def rateEntireCoverage3(stories: List[Story], graph: Graph): Double =
       {
         val egraph: EfficientGraph = if (!graph.isInstanceOf[EfficientGraph]) graph.makeEfficient() else graph.asInstanceOf[EfficientGraph]
@@ -140,6 +162,10 @@ package main {
         topScore.toDouble / stories.size
       }
 
+    /**
+     * coverage version 2
+     *
+     */
     private def rateEntireCoverage2(stories: List[Story], graph: Graph): Double =
       {
         val egraph: EfficientGraph = if (!graph.isInstanceOf[EfficientGraph]) graph.makeEfficient() else graph.asInstanceOf[EfficientGraph]
@@ -178,6 +204,10 @@ package main {
         seq.sum / seq.size
       }
 
+    /**
+     * coverage version 1
+     *
+     */
     private def rateEntireCoverage(stories: List[Story], graph: Graph): Double =
       {
         val egraph: EfficientGraph = if (!graph.isInstanceOf[EfficientGraph]) graph.makeEfficient() else graph.asInstanceOf[EfficientGraph]

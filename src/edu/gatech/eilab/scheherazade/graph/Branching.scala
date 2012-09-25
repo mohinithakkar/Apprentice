@@ -143,9 +143,8 @@ package graph {
         //var (stories, clusters) = reader.initOldDataFiltered()
         var (stories, clusters) = reader.initDataFiltered()
         val para = reader.properties.allParameters()(0)
-        //Relation.init(para)
-        val gen = new GraphGenerator(stories, clusters, para)
-        val g = gen.generate()._4
+        val gen = new GraphGenerator(stories, clusters)
+        val g = gen.generate(para)("improved")._1
         val str = XStream.toXML(g)
         val pl = new PrintWriter(new BufferedOutputStream(new FileOutputStream(storage)))
         pl.println(str)

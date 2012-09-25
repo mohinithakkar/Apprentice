@@ -102,7 +102,7 @@ package main {
         (storyList, clusterList)
       }
 
-    protected def filterUnused(storyList: List[Story], clusterList: List[Cluster]): List[Story] =
+    def filterUnused(storyList: List[Story], clusterList: List[Cluster]): List[Story] =
       {
         val used = clusterList.flatMap { _.members }
         storyList map { story =>

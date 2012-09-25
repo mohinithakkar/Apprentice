@@ -4,6 +4,8 @@ import graph._
 import main._
 import java.io._
 import scala.collection.mutable.HashMap
+
+/*
 package utils {
   // this little program makes sure sentence id starts from zero and align the gold cluster file with it
   object IDMatcher extends App {
@@ -49,3 +51,4 @@ package utils {
     clusterOut.close()
   }
 }
+*/

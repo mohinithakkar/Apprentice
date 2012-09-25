@@ -14,14 +14,13 @@ package main {
       val (stories, clusters, eGraph) = generateGraph()
       // generate mutual exclusive links
       val me = generateMtlExcl(stories, clusters, MI_THRESHOLD)
-      //    println("me: " + me.mkString("\n"))
+      // println("me: " + me.mkString("\n"))
 
       // starting point:
       var sources = eGraph.sourceNodes().map(eGraph.num2Node)
       //println(sources.map(_.name).mkString("sources : ", "\n", ""))
       val ends = eGraph.sinkNodes().map(eGraph.num2Node)
       //println(ends.map(_.name).mkString("ends : ", "\n", ""))
-      //readLine()
 
       // remove from the graph nodes without predecessors that are not sources
       var graph: Graph = eGraph.removeIrregularSourceEnds()
@@ -29,7 +28,7 @@ package main {
       val optionals = findOptionals(graph, me)
       graph = graph.addSkipLinks(optionals)
       sources = graph.nodes.filter(n => (!sources.contains(n)) &&
-        graph.links.filter(l => l.target == n).map(_.source).forall(optionals contains)) ::: sources
+      graph.links.filter(l => l.target == n).map(_.source).forall(optionals contains)) ::: sources
 
       println(sources.map(_.name).mkString("sources :", "\n", ""))
       println(optionals.map(_.name).mkString("optionals :", "\n", ""))
@@ -51,8 +50,8 @@ package main {
         var n = q.dequeue()
 
         //println(n)
-        //    println("fringe: " + n.fringe.map(_.name).mkString("(", ", ", ")"))
-        //    println("\n\n")    
+        //println("fringe: " + n.fringe.map(_.name).mkString("(", ", ", ")"))
+        //println("\n\n")    
 
         //println("story length = " + n.history.size)
         if (ends.exists(c => n.history.contains(c))) {
@@ -95,12 +94,12 @@ package main {
 
         val para = reader.properties.allParameters()(0)
 
-        val minimumSize = para.getParameter("minClusterSize", text => text.trim.toInt).getOrElse(0)
+        val minimumSize = para.intParam("minClusterSize")
         val insideClusters = clusters.filterNot(c => c.members.size < minimumSize)
         val insideStories = reader.filterUnused(stories, insideClusters)
 
-        val gen = new GraphGenerator(insideStories, insideClusters, para)
-        var graph: Graph = gen.generate()._4
+        val gen = new GraphGenerator(insideStories, insideClusters)
+        var graph: Graph = gen.generate(para)("improved")._1
         val eGraph = graph.makeEfficient()
 
         (stories, clusters, eGraph)

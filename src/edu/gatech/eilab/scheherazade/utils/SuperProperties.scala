@@ -19,8 +19,8 @@ class SingleProperty extends Properties {
     }
   }
 
-  def doubleParam(name: String) = paramOrFail(name, x => x.toDouble)
-  def intParam(name: String) = paramOrFail(name, x => x.toInt)
+  def doubleParam(name: String) = paramOrFail(name, x => x.trim.toDouble)
+  def intParam(name: String) = paramOrFail(name, x => x.trim.toInt)
   def param(name: String): String = {
     if (containsKey(name)) {
       val s = getProperty(name)
@@ -88,6 +88,8 @@ class SuperProperties extends Properties {
 
       params
     }
+  
+  def allParamNames():Array[String] = getProperty("parameters").split(",")
 
   def printParameterNames(pw: PrintWriter) {
     val paraNames = getProperty("parameters").split(",")

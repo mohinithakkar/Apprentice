@@ -19,12 +19,12 @@ package main {
 
       val para = reader.properties.allParameters()(0)
 
-      val minimumSize = para.getParameter("minClusterSize", text => text.trim.toInt).getOrElse(0)
+      val minimumSize = para.intParam("minClusterSize")
       val insideClusters = clusters.filterNot(c => c.members.size < minimumSize)
       val insideStories = reader.filterUnused(stories, insideClusters)
 
-      val gen = new GraphGenerator(insideStories, insideClusters, para)
-      var graph: Graph = gen.generate()._4
+      val gen = new GraphGenerator(insideStories, insideClusters)
+      var graph: Graph = gen.generate(para)("improved")._1
       val eGraph = graph.makeEfficient()
 
       //    graph.draw("valid")
