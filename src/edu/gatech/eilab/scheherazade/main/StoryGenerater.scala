@@ -124,8 +124,10 @@ package main {
 
         val max = math.min(c1.size, c2.size)
         val mi = Cooccurence.mutualInfo(c1, c2, stories)
-        if (mi._1 + mi._2 > threshold && mi._2 > 0)
+        if (mi._1 + mi._2 > threshold && mi._2 > 0) {
+          println(c1.name + "-/-" + c2.name + ": " + (mi._1 + mi._2))
           melinks += new MutualExcl(c1, c2)
+        }
       }
 
       melinks.toList
@@ -155,25 +157,27 @@ package main {
 
     val debug = false
 
-    def nextFringe(step: Cluster, melinks:List[MutualExcl], optionals:List[Cluster]): Walk = {
+    def nextFringe(step: Cluster, melinks: List[MutualExcl], optionals: List[Cluster]): Walk = {
       if (!fringe.contains(step)) throw new RuntimeException("Illegal Step: " + step)
 
       val newHistory = step :: history
+      println("history: " + newHistory.map(_.name).mkString(", "))
       var excluded = Walk.excluded(List(step), melinks).filter(selfGraph.nodes contains)
       //println(excluded.map(_.name).mkString("directly mutex: ", ", ", ""))
       //println(exclList.map(_.name).mkString("old mutex: ", ", ", ""))
       var excl = excluded ::: exclList
       excl = findTransitiveClosure(selfGraph, excl)
-      //println(excl.map(_.name).mkString("closure mutex: ", ", ", ""))
+      println(excl.map(_.name).mkString("closure mutex: ", ", ", ""))
       excluded = excl -- exclList
       val expired = selfGraph.links.filter(l => l.target == step).map(_.source)
+      println(expired.map(_.name).mkString("expired: ", ", ", ""))
       val newGraph = selfGraph.addSkipLinks(excluded).removeNodes(excluded ::: expired)
 
       var newFringe = Walk.maxFringe(newHistory, newGraph, optionals)
       // delete those already executed
       newFringe = newFringe filterNot (newHistory contains)
-      
-      new Walk(id, newHistory, newFringe, excl, newGraph)	
+
+      new Walk(id, newHistory, newFringe, excl, newGraph)
     }
 
     /**

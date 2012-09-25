@@ -14,6 +14,10 @@ package graph {
     def causalLinks() = links.filter(_.isCausal)
     def temporalLinks() = links.filter(_.isTemporal)
     def usedClusters() = links.flatMap { link => List(link.source, link.target) }.distinct
+    
+    override def clone():Graph = {
+      new Graph(nodes, links);
+    }
 
     def makeEfficient(): EfficientGraph =
       {

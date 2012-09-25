@@ -21,7 +21,7 @@ package main {
       val (stories, clusters, eGraph) = generateGraph()
       // generate mutual exclusive links
       val me = generateMtlExcl(stories, clusters, MI_THRESHOLD)
-      //    println("me: " + me.mkString("\n"))
+      println("me: " + me.mkString("\n"))
 
       // starting point:
       var sources = eGraph.sourceNodes().map(eGraph.num2Node)
@@ -37,14 +37,18 @@ package main {
       graph = graph.addSkipLinks(optionals)
       sources = graph.nodes.filter(n => (!sources.contains(n)) &&
         graph.links.filter(l => l.target == n).map(_.source).forall(optionals contains)) ::: sources
-
+      
+      graph.draw("iegraph")
+      
       execute(sources, ends, graph, me, optionals, desc)
     }
 
     def execute(sources: List[Cluster], ends: List[Cluster], graph: Graph, me: List[MutualExcl], optionals: List[Cluster], desc: List[TextDescription]) {
       var playAgain = true
+      
       do {
-        var walk = Walk.fromInits(sources, graph, me, optionals)
+        val graphCopy = graph.clone()
+        var walk = Walk.fromInits(sources, graphCopy, me, optionals)
         var step: Cluster = null
 
         val actors = desc.map(_.actor).distinct
@@ -64,8 +68,10 @@ package main {
 
         do {
           var fringe = walk.fringe
+          println("fringe = " + fringe.map(_.name).mkString(", "))
           step = makeChoice(fringe, desc, actor)
           walk = walk.nextFringe(step, me, optionals)
+          
         } while (!ends.contains(step))
 
         println("The End.")
@@ -76,13 +82,13 @@ package main {
           if (line.length > 0)
             input = line.charAt(0)
         }
-        
+
         if (input == 'Y' || input == 'y')
           playAgain = true
         else playAgain = false
-        
+
       } while (playAgain)
-      println("Thank you for playing the game! \n Copyright 2012 Entertainment Intelligence Lab, Georgia Tech.")
+      println("Thank you for playing the game! \nCopyright @ 2012 Entertainment Intelligence Lab, Georgia Tech.")
     }
 
     def makeChoice(choices: List[Cluster], desc: List[TextDescription], actor: String): Cluster = {
