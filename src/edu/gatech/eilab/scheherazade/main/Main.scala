@@ -20,7 +20,7 @@ package main {
     }
 
     def generateGraphs() {
-      val reader = new ConfigReader("configNewMvP.txt")
+      val reader = new ConfigReader("configRobBest.txt")
       // val (stories, clusters) = reader.initData()
       val (stories, clusters) = reader.initDataFiltered()
 
@@ -36,7 +36,7 @@ package main {
       var i = 1;
       val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(outputPath + "\\summary.csv")));
 
-      property.allParamNames().foreach(n => print(n + ", "))
+      property.allParamNames().foreach(n => pw.print(n + ", "))
       pw.println("Error Before Improvement, Error After Improvement, % Decrease")
       var beforeErrList = ListBuffer[Double]()
       var afterErrList = ListBuffer[Double]()
@@ -50,7 +50,6 @@ package main {
 
         para.printParameterValues(pw)
         val outputPrefix = outputPath + "\\conf" + i
-        para.put("outputFile", outputPrefix)
         println(outputPath + "conf" + i)
         i += 1
 
@@ -65,7 +64,7 @@ package main {
           graph.draw(outputPrefix + name)
 
           if (name == "original") beforeErr = error
-          else if (name == "adjusted") afterErr = error
+          else if (name == "improved") afterErr = error
         }
 
         pw.print(beforeErr + ", ")
@@ -77,9 +76,9 @@ package main {
         }
         else
           pw.println("loop detected")        
-        
+//        
       }
-
+//
       val emptyCols = property.allParamNames().length
       val avgBefore = (beforeErrList.sum / beforeErrList.size)
       val avgAfter = (afterErrList.sum / afterErrList.size)

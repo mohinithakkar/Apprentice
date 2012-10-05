@@ -30,3 +30,6 @@ Sally greets John,Sally,Greet the customer,None,"When she saw you, she smiled an
 John approaches Sally,John,Approach the teller,"You walked to the bank teller. Her name tag read ""Sally Smith""",None
 John sees Sally,John,Look around for a teller,You looked around and saw a bank teller.,None
 John enters bank,John,Enter the bank,"You walked into the bank, trying to look as normal as you can. Your pulse quickened and you can feel sweat in your palm.",None
+John drives to bank,John,Drive to the bank,You drive to the bank in the off-peak hour.,None
+John scans the bank,John,Scan the bank,You look around the bank for any security cameras and security people.,None
+Sally cries,Sally,Cry,None,Tears drop from Sally's face onto the table. 

@@ -6,7 +6,6 @@ import data._
 import graph._
 
 import java.io._
-import java.nio.channels.ClosedChannelException
 
 package main {
 
@@ -14,33 +13,98 @@ package main {
   //TODO: Prompts for the time the engine waits for user input.
   object InteractiveEngine {
 
+    var node2Num: Map[Cluster, Int] = null
+    var num2Node: Map[Int, Cluster] = null
+
     def main(args: Array[String]) {
       val desc = readDescriptions("./data/robbery/textDescriptions.csv")
 
-      val MI_THRESHOLD = 0.05
-      // generate graph
-      val (stories, clusters, eGraph) = generateGraph()
-      // generate mutual exclusive links
-      val me = generateMtlExcl(stories, clusters, MI_THRESHOLD)
-      //    println("me: " + me.mkString("\n"))
+      val reader = new ConfigReader("configRobBest.txt")
+      var (stories, clusters) = reader.initDataFiltered()
 
+      val para = reader.properties.allParameters()(0)
+
+      val minimumSize = para.intParam("minClusterSize")
+      val insideClusters = clusters.filterNot(c => c.members.size < minimumSize)
+      val insideStories = reader.filterUnused(stories, insideClusters)
+
+      val gen = new GraphGenerator(insideStories, insideClusters)
+      var graph: Graph = gen.generate(para)("mutualExcl")._1
+
+      val me = graph.mutualExcls
+      
       // starting point:
-      var sources = eGraph.sourceNodes().map(eGraph.num2Node)
+      var sources = graph.nodes.filterNot(n => graph.links.exists(l => l.target == n))
       //println(sources.map(_.name).mkString("sources : ", "\n", ""))
-      val ends = eGraph.sinkNodes().map(eGraph.num2Node)
+      val ends = graph.nodes.filterNot(n => graph.links.exists(l => l.source == n))
       //println(ends.map(_.name).mkString("ends : ", "\n", ""))
       //readLine()
 
-      // remove from the graph nodes without predecessors that are not sources
-      var graph: Graph = eGraph.removeIrregularSourceEnds()
+      node2Num = {
+        val sorted = graph.nodes.sortWith((x, y) => x.name > y.name) // introduce an arbitrary ordering between the clusters
+        val num = 0 until graph.nodes.length
+        (sorted zip num).toMap
+      }
 
-      val optionals = findOptionals(graph, me)
+      num2Node = {
+        node2Num.map { case (x, y) => (y, x) }
+      }
+
+      // remove from the graph nodes without predecessors that are not sources
+      //graph = eGraph.removeIrregularSourceEnds()
+
+      val optionals = findOptionals(graph)
       graph = graph.addSkipLinks(optionals)
       sources = graph.nodes.filter(n => (!sources.contains(n)) &&
         graph.links.filter(l => l.target == n).map(_.source).forall(optionals contains)) ::: sources
 
       execute(sources, ends, graph, me, optionals, desc)
     }
+
+    def findOptionals(graph: Graph): List[Cluster] =
+      {
+        // condition 1: c1 and c2 share a mutual exclusion but there is also a path from c1 to c2 on the graph
+        val candidates = graph.mutualExcls.filter(m => graph.ordered(m.c1, m.c2)).map(m => (m.c1, m.c2))
+        println("candidates:\n" + candidates.mkString("\n"))
+        // condition 2: c1 is not mutually exclusive to another (direct or indirect) predecessor of c2
+        val real = candidates.filterNot {
+          case (c1, c2) =>
+            var early: Cluster = null
+            var late: Cluster = null
+            if (graph.shortestDistance(c1, c2) != -1) {
+              early = c1
+              late = c2
+            } else {
+              early = c2
+              late = c1
+            }
+
+            val bool = graph.mutualExcls.exists(m =>
+              (m.c1 == early && m.c2 != late && graph.shortestDistance(m.c2, late) != -1) ||
+                (m.c2 == early && m.c1 != late && graph.shortestDistance(m.c1, late) != -1))
+
+            if (bool) {
+              val prevent = graph.mutualExcls.filter(m =>
+                (m.c1 == early && graph.shortestDistance(m.c2, late) != -1) ||
+                  (m.c2 == early && graph.shortestDistance(m.c1, late) != -1))
+
+              println(prevent.mkString(" ") + " prevents " + early.name + " " + late.name);
+            }
+            bool
+        }
+
+        /*
+        candidates foreach {
+          case (early, late) => 
+            graph.mutualExcls.foreach(m =>
+              if ((m.c1 == early && graph.shortestDistance(m.c2, late) != -1) ||
+              (m.c2 == early && graph.shortestDistance(m.c1, late) != -1))
+              
+            println(m + " prevents " + early.name + " " + late.name);
+        }*/
+
+        real.flatMap(x => List(x._1, x._2))
+      }
 
     def execute(sources: List[Cluster], ends: List[Cluster], graph: Graph, me: List[MutualExcl], optionals: List[Cluster], desc: List[TextDescription]) {
       var playAgain = true
@@ -77,11 +141,11 @@ package main {
           if (line.length > 0)
             input = line.charAt(0)
         }
-        
+
         if (input == 'Y' || input == 'y')
           playAgain = true
         else playAgain = false
-        
+
       } while (playAgain)
       println("Thank you for playing the game! \n Copyright 2012 Entertainment Intelligence Lab, Georgia Tech.")
     }
@@ -89,7 +153,9 @@ package main {
     def makeChoice(choices: List[Cluster], desc: List[TextDescription], actor: String): Cluster = {
 
       val descripts = choices.map { c =>
-        val d = desc.find(_.name == c.name).get
+        val o = desc.find(_.name == c.name)
+        if (o.isEmpty) throw new RuntimeException(c.name + " is missing from the descriptions")
+        val d = o.get
         (c, d)
       }
 

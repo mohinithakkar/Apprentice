@@ -6,8 +6,9 @@ import scala.collection.immutable.HashMap
 import scala.collection.mutable.ListBuffer
 
 package graph {
-  class Graph(val nodes: List[Cluster], val links: List[Link]) extends XStreamable {
+  class Graph(val nodes: List[Cluster], val links: List[Link], val mutualExcls:List[MutualExcl]) extends XStreamable {
 
+    def this(nodes: List[Cluster], links: List[Link]) = this(nodes, links, List[MutualExcl]())
     // this is used in XStreamable
     override def alias() = "plot-graph"
 
@@ -126,7 +127,7 @@ package graph {
     def reduce(): Graph =
       {
         val newNodes = usedClusters
-        new Graph(newNodes, links)
+        new Graph(newNodes, links, mutualExcls)
       }
 
     /**
@@ -169,7 +170,7 @@ package graph {
         reduceLinks(temporals).map { l => new Link(num2cluster(l._1), num2cluster(l._2), "T") }.toList ++
           reduceLinks(causals).map { l => new Link(num2cluster(l._1), num2cluster(l._2), "C") }
 
-      new Graph(nodes, newLinks)
+      new Graph(nodes, newLinks, mutualExcls)
     }
 
     // reduce + simplify
@@ -182,7 +183,7 @@ package graph {
 
       temporal = temporal.filterNot { tl => causal.exists { c => c.target == tl.target && c.source == tl.source } }
 
-      new Graph(nodes, temporal ::: causal)
+      new Graph(nodes, temporal ::: causal, mutualExcls)
     }
 
     /**
@@ -204,7 +205,8 @@ package graph {
     def removeNodes(excluded: List[Cluster]): Graph =
       {
         val newLinks = links.filterNot(l => excluded.contains(l.source) || excluded.contains(l.target))
-        new Graph(nodes filterNot (excluded contains), newLinks)
+        val newExcls = mutualExcls.filterNot(m => m.c1 == excluded || m.c2 == excluded)
+        new Graph(nodes filterNot (excluded contains), newLinks, newExcls)
       }
 
     /**
@@ -220,7 +222,8 @@ package graph {
           for (p <- predecessorsOf(e); s <- successors)
             newLinks += new Link(p, s)
         }
-        new Graph(nodes, newLinks.toList)
+        
+        new Graph(nodes, newLinks.toList, this.mutualExcls)
       }
 
     /**
@@ -233,14 +236,16 @@ package graph {
       val file = new File(filename)
       val writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)))
       writer.println("digraph G {")
-      writer.println(causalLinks.map { l => "\"" + l.source.name + "\" -> \"" + l.target.name + "\" [style = \"dashed\"]" }.mkString("\n"))
+      //writer.println(causalLinks.map { l => "\"" + l.source.name + "\" -- \"" + l.target.name + "\" [style = \"dashed\"]" }.mkString("\n"))
+      writer.println(mutualExcls.map {m => "\"" + m.c1.name + "\" -> \"" + m.c2.name + "\" [style=dashed, dir=none]" }.mkString(";\n"))
       writer.println(temporalLinks.map { l => "\"" + l.source.name + "\" -> \"" + l.target.name + "\"" }.mkString("\n"))
+      //writer.println(mutualExcls.map { m => "\"" + m.c1.name + """" -- [style = "dashed"]" """ + m.c2.name + "\""}.mkString(";\n"))      
       writer.println("}")
       writer.close()
 
       println("writing graph to " + fn + ".png")
       Runtime.getRuntime().exec("dot -Tpng -o" + fn + ".png " + filename)
-      file.deleteOnExit()
+      //file.deleteOnExit()
     }
 
   }

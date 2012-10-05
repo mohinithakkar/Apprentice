@@ -316,7 +316,5 @@ package main {
     }
   }
 
-  class MutualExcl(val c1: Cluster, val c2: Cluster) {
-    override def toString() = "ME: " + c1.name + " -/- " + c2.name
-  }
+
 }

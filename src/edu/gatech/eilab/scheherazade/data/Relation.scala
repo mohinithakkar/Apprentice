@@ -3,14 +3,14 @@ import java.util.Properties
 
 class Relation(val source: Cluster, val target: Cluster, val trueInstance: Int, val totalObservations: Int) //extends Ordered[Relation] 
 {
-  
-  override def equals(o:Any) = o match {
-    case that:Relation => this.source == that.source && this.target == that.target
+
+  override def equals(o: Any) = o match {
+    case that: Relation => this.source == that.source && this.target == that.target
     case _ => false
   }
-  
-  override def hashCode():Int = (source.hashCode * 17 + target.hashCode * 23) / 41
-  
+
+  override def hashCode(): Int = (source.hashCode * 17 + target.hashCode * 23) / 41
+
   val prob: Double = {
     if (totalObservations == 0)
       0
@@ -65,4 +65,8 @@ class Link(val source: Cluster, val target: Cluster, val kind: String = "T") {
   override def hashCode(): Int = (source.hashCode() + target.hashCode() + kind.hashCode()) * 19 / 97
   def isTemporal = (kind == "T")
   def isCausal = (kind == "C")
+}
+
+class MutualExcl(val c1: Cluster, val c2: Cluster) {
+  override def toString() = "ME: " + c1.name + " -/- " + c2.name
 }

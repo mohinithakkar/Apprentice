@@ -60,7 +60,6 @@
 2 John watched Sally.
 241 John recognized Sally.
 305 John saw Sally standing behind the counter.
-141 John saw Sally behind the second teller window with a customer.
 ###
 @ John scans the bank
 17 John looked around the bank.

@@ -19,6 +19,20 @@ class SingleProperty extends Properties {
     }
   }
 
+  override def toString() = {
+    val builder = new StringBuilder
+    val it = this.keySet().iterator()
+    while (it.hasNext) {
+      val key = it.next()
+      val value = this.getProperty(key.asInstanceOf[String])
+      builder.append(key)
+      builder.append(" = ")
+      builder.append(value)
+      builder.append("\n")
+    }
+    builder.toString()
+  }
+
   def doubleParam(name: String) = paramOrFail(name, x => x.trim.toDouble)
   def intParam(name: String) = paramOrFail(name, x => x.trim.toInt)
   def param(name: String): String = {
@@ -88,8 +102,8 @@ class SuperProperties extends Properties {
 
       params
     }
-  
-  def allParamNames():Array[String] = getProperty("parameters").split(",")
+
+  def allParamNames(): Array[String] = getProperty("parameters").split(",")
 
   def printParameterNames(pw: PrintWriter) {
     val paraNames = getProperty("parameters").split(",")

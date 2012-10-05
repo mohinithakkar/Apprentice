@@ -9,6 +9,9 @@ import java.io._
 package main {
   object StoryGenOnDisk {
 
+    var node2Num: Map[Cluster, Int] = null
+    var num2Node: Map[Int, Cluster] = null
+
     def main(args: Array[String]) {
 
       val MI_THRESHOLD = 0.05
@@ -24,50 +27,42 @@ package main {
       val insideStories = reader.filterUnused(stories, insideClusters)
 
       val gen = new GraphGenerator(insideStories, insideClusters)
-      var graph: Graph = gen.generate(para)("improved")._1
-      val eGraph = graph.makeEfficient()
+      var graph: Graph = gen.generate(para)("mutualExcl")._1
+      graph.draw("ondisk")
+      Thread.sleep(1000)
 
-      //    graph.draw("valid")
-      //    Thread.sleep(500)
-
-      // generate mutual exclusive links
-      var melinks = ListBuffer[MutualExcl]()
-      val size = clusters.size
-      for (i <- 0 until size; j <- i + 1 until size) {
-        val c1 = clusters(i)
-        val c2 = clusters(j)
-
-        var count = 0
-        for (story <- stories) {
-          if (story.members.exists(sent => c1.members.contains(sent)) && story.members.exists(sent => c2.members.contains(sent)))
-            count += 1
-        }
-
-        val max = math.min(c1.size, c2.size)
-        val mi = Cooccurence.mutualInfo(c1, c2, stories)
-        if (mi._1 + mi._2 > MI_THRESHOLD && mi._2 > 0)
-          melinks += new MutualExcl(c1, c2)
-      }
-
-      val me = melinks.toList
+      val me = graph.mutualExcls
       println("me: " + me.mkString("\n"))
       // starting point:
-      var sources = eGraph.sourceNodes().map(eGraph.num2Node)
+      var sources = graph.nodes.filterNot(n => graph.links.exists(l => l.target == n))
       //println(sources.map(_.name).mkString("sources : ", "\n", ""))
-      val ends = eGraph.sinkNodes().map(eGraph.num2Node)
+      val ends = graph.nodes.filterNot(n => graph.links.exists(l => l.source == n))
       //println(ends.map(_.name).mkString("ends : ", "\n", ""))
       //readLine()
 
-      // remove from the graph nodes without predecessors that are not sources
-      graph = eGraph.removeIrregularSourceEnds()
+      node2Num = {
+        val sorted = graph.nodes.sortWith((x, y) => x.name > y.name) // introduce an arbitrary ordering between the clusters
+        val num = 0 until graph.nodes.length
+        (sorted zip num).toMap
+      }
 
-      val optionals = findOptionals(graph, me)
+      num2Node = {
+        node2Num.map { case (x, y) => (y, x) }
+      }
+
+      // remove from the graph nodes without predecessors that are not sources
+      //graph = eGraph.removeIrregularSourceEnds()
+
+      val optionals = findOptionals(graph)
       graph = graph.addSkipLinks(optionals)
       sources = graph.nodes.filter(n => (!sources.contains(n)) &&
         graph.links.filter(l => l.target == n).map(_.source).forall(optionals contains)) ::: sources
 
       println(sources.map(_.name).mkString("sources :", "\n", ""))
       println(optionals.map(_.name).mkString("optionals :", "\n", ""))
+      println("******************************************")
+      randomSelectStories()
+      System.exit(1)
 
       val firstWalk = WalkOnDisk.fromInits(sources, graph, me, optionals)
 
@@ -94,7 +89,7 @@ package main {
           // we have reached the end. 
           // end nodes are considered to be mutually exclusive.
           // you can only reach one any time
-          val string = compactString(n, eGraph)
+          val string = compactString(n)
           //println("produced story " + string)
           val check = known.check(string)
           if (check) {
@@ -102,8 +97,8 @@ package main {
             good += 1
           }
 
-          val story = decode(string, eGraph)
-          println("found **\n" + story)
+          //          val story = decode(string)
+          //          println("found **\n" + story)
         } else {
           if (n.hasMoreSteps) {
             //print(".")
@@ -127,23 +122,75 @@ package main {
       println("Considered " + WalkOnDisk.id + " search nodes. ")
     }
 
-    def decode(code: String, egraph: EfficientGraph): String =
+    def decode(code: String): String =
       {
-        code map { char:Char =>
+        code map { char: Char =>
           var num = char.toInt
           if (num >= 97) num = num - 97 + 25
           else num -= 65
-          
-          val node = egraph.num2Node(num)
+
+          val node = num2Node(num)
           node.name
-        } mkString("", "\n", "************\n")
-        
+        } mkString ("", "\n", "************\n")
+
       }
 
-    def compactString(w: WalkOnDisk, egraph: EfficientGraph): String = {
+    def randomSelectStories() {
+      //val hexText = scala.io.Source.fromFile("./stats/valid stories.txt")
+      //val list = hexText.mkString.split("\n")
+      val length = 14000000
+      println("length = " + length)
+      val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream("random_stories.txt")))
+      
+      for (i <- 1 to 400) {
+        println(i)
+        val idx = math.rint(math.random * length).toInt
+        val hex = readLineFromLargeFile("./stats/valid stories.txt", idx);
+        for (j <- 0 until hex.length) {
+          val char = hex.charAt(j)
+          var num = char.toInt
+          if (num >= 97) num = num - 97 + 25
+          else num -= 65
+
+          val node = num2Node(num)
+          pw.print("CS" + i + "\t@ " + node.name)
+          if (j == 0) pw.println("\t\t" + hex)
+          else pw.println
+        }
+      }
+      
+      pw.close()
+    }
+    
+    
+    
+    def readLineFromLargeFile(filename:String, lineNo:Int):String = 
+    {
+      val reader = new BufferedReader(new FileReader(filename))
+      for (i <- 0 until lineNo)
+      {
+        reader.readLine()
+      }
+      reader.readLine()
+    }
+    
+
+    def printMappings() {
+      for (pairs <- node2Num) {
+        val node = pairs._1
+        val num = pairs._2
+        print(node.name + ", ")
+        var char = ' '
+        if (num <= 25) char = (num + 65).toChar
+        else char = (num - 25 + 97).toChar
+        println(char)
+      }
+    }
+
+    def compactString(w: WalkOnDisk): String = {
       w.history.reverse.map { c =>
         var char = ' '
-        val num = egraph.node2Num(c)
+        val num = node2Num(c)
         if (num <= 25) char = (num + 65).toChar
         else char = (num - 25 + 97).toChar
         char
@@ -154,16 +201,47 @@ package main {
      * optional nodes are nodes that are ordered but mutually exclusive
      *
      */
-    def findOptionals(graph: Graph, me: List[MutualExcl]): List[Cluster] =
+    def findOptionals(graph: Graph): List[Cluster] =
       {
         // condition 1: c1 and c2 share a mutual exclusion but there is also a path from c1 to c2 on the graph
-        val candidates = me.filter(m => graph.ordered(m.c1, m.c2)).map(m => (m.c1, m.c2))
+        val candidates = graph.mutualExcls.filter(m => graph.ordered(m.c1, m.c2)).map(m => (m.c1, m.c2))
+        println("candidates:\n" + candidates.mkString("\n"))
         // condition 2: c1 is not mutually exclusive to another (direct or indirect) predecessor of c2
         val real = candidates.filterNot {
-          case (early, late) => me.exists(m =>
-            (m.c1 == early && graph.shortestDistance(m.c2, late) != -1) ||
-              (m.c2 == early && graph.shortestDistance(m.c1, late) != -1))
+          case (c1, c2) =>
+            var early: Cluster = null
+            var late: Cluster = null
+            if (graph.shortestDistance(c1, c2) != -1) {
+              early = c1
+              late = c2
+            } else {
+              early = c2
+              late = c1
+            }
+
+            val bool = graph.mutualExcls.exists(m =>
+              (m.c1 == early && m.c2 != late && graph.shortestDistance(m.c2, late) != -1) ||
+                (m.c2 == early && m.c1 != late && graph.shortestDistance(m.c1, late) != -1))
+
+            if (bool) {
+              val prevent = graph.mutualExcls.filter(m =>
+                (m.c1 == early && graph.shortestDistance(m.c2, late) != -1) ||
+                  (m.c2 == early && graph.shortestDistance(m.c1, late) != -1))
+
+              println(prevent.mkString(" ") + " prevents " + early.name + " " + late.name);
+            }
+            bool
         }
+
+        /*
+        candidates foreach {
+          case (early, late) => 
+            graph.mutualExcls.foreach(m =>
+              if ((m.c1 == early && graph.shortestDistance(m.c2, late) != -1) ||
+              (m.c2 == early && graph.shortestDistance(m.c1, late) != -1))
+              
+            println(m + " prevents " + early.name + " " + late.name);
+        }*/
 
         real.flatMap(x => List(x._1, x._2))
       }
@@ -362,21 +440,6 @@ package main {
       }
       true
     }
-  }
-
-  object KnownElements {
-    /*
-  def main(args: Array[String]) {
-    val kn = new KnownElements(3)
-    println(kn.check("a"))
-    println(kn.check("b"))
-    println(kn.check("c"))
-    println(kn.check("a"))
-    println(kn.check("c"))
-    //println(kn.check("e"))
-    //println(kn.check("f"))
-    println(kn.known.mkString)
-  } */
   }
 
 }

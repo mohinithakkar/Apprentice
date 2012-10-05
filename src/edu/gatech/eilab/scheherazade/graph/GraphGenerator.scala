@@ -2,6 +2,8 @@ package edu.gatech.eilab.scheherazade
 
 import scala.util.parsing.combinator._
 import scala.collection.mutable.HashMap
+import scala.collection.mutable.ListBuffer;
+import analysis.Cooccurence;
 import utils._
 import java.io._
 import graph._
@@ -9,11 +11,12 @@ import data._
 import parse._
 import data._
 import graph.metric._
+
 package graph {
   class GraphGenerator(stories: List[Story], clusters: List[Cluster]) {
 
     var PROBABILITY_THRESHOLD: Double = 0
-    var OUTPUT_FILE = ""
+    var MUTUAL_INFO_THRESHOLD: Double = 0
 
     val storyList: List[Story] = stories
     val clusterList: List[Cluster] = clusters
@@ -40,16 +43,16 @@ package graph {
 
     /**
      * Generates the graph according to the property
-     * returns everything in a hashmap: 
-     * GraphName:String -> (graph:Graph, graphError:Double) 
+     * returns everything in a hashmap:
+     * GraphName:String -> (graph:Graph, graphError:Double)
      */
     def generate(property: SingleProperty): HashMap[String, (Graph, Double)] = {
 
       PROBABILITY_THRESHOLD = property.doubleParam("probThresholds")
-      OUTPUT_FILE = property.paramOrFail("outputFile", x => x)
+      MUTUAL_INFO_THRESHOLD = property.doubleParam("miThresholds")
 
       println("generating plot graph using the following parameters: \n" +
-        "probability threshold = " + PROBABILITY_THRESHOLD)
+        property.toString)
 
       val hashmap = new HashMap[String, (Graph, Double)]()
       var errorBefore = -1.0
@@ -62,13 +65,6 @@ package graph {
       val totalGraph = new Graph(clusterList, allLinks)
 
       val compactGraph = totalGraph.compact
-
-      /*
-      if (OUTPUT_FILE != "") {
-        println("outputing to " + OUTPUT_FILE)
-        totalGraph.draw(OUTPUT_FILE)
-        compactGraph.draw(OUTPUT_FILE + "-simplified")
-      }*/
 
       try {
         compactGraph.makeEfficient()
@@ -85,17 +81,36 @@ package graph {
       println("before improvement, avg err = " + avg)
 
       hashmap += (("original", (compactGraph, avg)))
-      
+
       // improve the graph
       val improvedGraph = updateBadPaths2(errorChecker.getBadPaths, compactGraph, allRelations)
-      avg = errorChecker.checkErrors(storyList, improvedGraph)._2      
-      errorAfter = avg      
+      avg = errorChecker.checkErrors(storyList, improvedGraph)._2
+      errorAfter = avg
       hashmap += (("improved", (improvedGraph, avg)))
 
-      // compute mutual exclusions below
+      // TODO compute mutual exclusions below
+      val mes = findMtlExcl(storyList, clusterList, MUTUAL_INFO_THRESHOLD)
+      val meGraph = new Graph(improvedGraph.nodes, improvedGraph.links, mes);
+      
+      hashmap += (("mutualExcl", (meGraph, avg)))
       
       hashmap
 
+    }
+
+    def findMtlExcl(stories: List[Story], clusters: List[Cluster], threshold: Double) = {
+
+      var melinks = ListBuffer[MutualExcl]()
+      val size = clusters.size
+      for (i <- 0 until size; j <- i + 1 until size) {
+        val c1 = clusters(i)
+        val c2 = clusters(j)
+
+        val mi = Cooccurence.mutualInfo(c1, c2, stories)
+        if (mi._1 + mi._2 > threshold && mi._2 > 0)
+          melinks += new MutualExcl(c1, c2)
+      }
+      melinks.toList
     }
 
     def updateBadPaths2(badPaths: List[(Link, (Double, Double))], graph: Graph,
