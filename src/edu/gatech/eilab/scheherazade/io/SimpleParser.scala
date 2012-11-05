@@ -5,7 +5,8 @@ import scala.collection.mutable.HashMap
 import java.io._
 import data._
 import graph._
-package parse {
+
+package io {
   object SimpleParser extends JavaTokenParsers {
 
     override val whiteSpace = """[ \t]+""".r

@@ -3,7 +3,15 @@ package edu.gatech.eilab.scheherazade
 import data._
 import parse._
 import data._
+import io._
+
+
 package wrapper {
+  
+  /** Converting the old data (which are compatible with GoldParser) to the new format, which is 
+   * compatible with SimpleParser.
+   * 
+   */
   object StoryGetter {
 
     def main(args: Array[String]) {

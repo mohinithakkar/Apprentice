@@ -12,6 +12,33 @@ object Matrix {
     }
   }
   
+  /** print the matrix up to a given number of decimals for each number
+   * 
+   */
+  def prettyPrint(matrix: Array[Array[Double]], decimals:Int) {
+    
+    val fstr = "%." + decimals + "f"
+    for (i <- 0 to matrix.length - 1) {
+
+      for (j <- 0 to matrix(0).length - 1) {
+        print((fstr format matrix(i)(j)) + ", ")
+      }
+      println()
+    }
+  }
+  
+  def prettyPrintTo(pw:java.io.PrintWriter, matrix: Array[Array[Double]], decimals:Int) {
+    
+    val fstr = "%." + decimals + "f"
+    for (i <- 0 to matrix.length - 1) {
+
+      for (j <- 0 to matrix(0).length - 1) {
+        pw.print((fstr format matrix(i)(j)) + ", ")
+      }
+      pw.println()
+    }
+  }
+  
   def prettyPrint(matrix: Array[Array[Int]])
   {
     val str = matrix.map(_.mkString(", ")).mkString("\n")

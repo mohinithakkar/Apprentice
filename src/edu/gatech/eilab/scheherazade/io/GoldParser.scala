@@ -5,7 +5,7 @@ import scala.collection.mutable.HashMap
 import java.io._
 import data._
 
-package parse {
+package io {
   object GoldParser extends JavaTokenParsers {
     protected def word: Parser[String] = """[-’\w\.,'’]+""".r
     protected def pos: Parser[String] = """[A-Z\$\.,]+""".r

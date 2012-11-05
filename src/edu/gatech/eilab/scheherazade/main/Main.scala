@@ -20,7 +20,7 @@ package main {
     }
 
     def generateGraphs() {
-      val reader = new ConfigReader("configRobBest.txt")
+      val reader = new ConfigReader("configNewMv.txt")
       // val (stories, clusters) = reader.initData()
       val (stories, clusters) = reader.initDataFiltered()
 
@@ -32,7 +32,9 @@ package main {
       val property = reader.properties
       val parameters = property.allParameters()
 
-      val outputPath = new File(reader.properties.getProperty("storyFile")).getParent()
+      val parent = new File(reader.properties.getProperty("storyFile")).getParent()
+      val pathFile = new File(parent + "\\graph").mkdir()
+      val outputPath = parent + "\\graph"
       var i = 1;
       val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(outputPath + "\\summary.csv")));
 

@@ -1,8 +1,10 @@
 package edu.gatech.eilab.scheherazade
 
+import io._
 import data._
 import parse._
 import scala.collection.mutable.HashMap
+
 package pipeline {
   class StoryParserPline extends Pipeline[String, List[Story]] {
 

@@ -2,6 +2,7 @@ package edu.gatech.eilab.scheherazade.cluster.algo
 
 import edu.gatech.eilab.scheherazade.parse._
 import edu.gatech.eilab.scheherazade.data._
+import edu.gatech.eilab.scheherazade.io._
 
 /**
  * The hierarhical clustering algorithm
