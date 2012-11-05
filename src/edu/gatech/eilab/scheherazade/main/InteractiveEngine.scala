@@ -65,7 +65,7 @@ package main {
       {
         // condition 1: c1 and c2 share a mutual exclusion but there is also a path from c1 to c2 on the graph
         val candidates = graph.mutualExcls.filter(m => graph.ordered(m.c1, m.c2)).map(m => (m.c1, m.c2))
-        println("candidates:\n" + candidates.mkString("\n"))
+        //println("candidates:\n" + candidates.mkString("\n"))
         // condition 2: c1 is not mutually exclusive to another (direct or indirect) predecessor of c2
         val real = candidates.filterNot {
           case (c1, c2) =>
@@ -88,7 +88,7 @@ package main {
                 (m.c1 == early && graph.shortestDistance(m.c2, late) != -1) ||
                   (m.c2 == early && graph.shortestDistance(m.c1, late) != -1))
 
-              println(prevent.mkString(" ") + " prevents " + early.name + " " + late.name);
+              //println(prevent.mkString(" ") + " prevents " + early.name + " " + late.name);
             }
             bool
         }
@@ -114,18 +114,18 @@ package main {
 
         val actors = desc.map(_.actor).distinct
 
-        var actor = ""
-        while (actor == "") {
-          println("Choose an actor: ")
-          for (i <- 0 until actors.length) {
-            println((i + 1) + ". " + actors(i))
-          }
-
-          val actorNum = readLine().toInt - 1
-
-          if (actorNum < 0 || actorNum >= actors.length) println("Invalid choice")
-          else actor = actors(actorNum)
-        }
+        var actor = "John"
+//        while (actor == "") {
+//          println("Choose an actor: ")
+//          for (i <- 0 until actors.length) {
+//            println((i + 1) + ". " + actors(i))
+//          }
+//
+//          val actorNum = readLine().toInt - 1
+//
+//          if (actorNum < 0 || actorNum >= actors.length) println("Invalid choice")
+//          else actor = actors(actorNum)
+//        }
 
         do {
           var fringe = walk.fringe
@@ -133,18 +133,18 @@ package main {
           walk = walk.nextFringe(step, me, optionals)
         } while (!ends.contains(step))
 
-        println("The End.")
+        println("The End.\n\n\nLet's play again!\n\n")
         var input: Char = 0
-        while (input != 'Y' && input != 'y' && input != 'N' && input != 'n') {
-          print("Play again (Y or N)?")
-          val line = readLine().trim
-          if (line.length > 0)
-            input = line.charAt(0)
-        }
+//        while (input != 'Y' && input != 'y' && input != 'N' && input != 'n') {
+//          print("Play again (Y or N)?")
+//          val line = readLine().trim
+//          if (line.length > 0)
+//            input = line.charAt(0)
+//        }
 
-        if (input == 'Y' || input == 'y')
-          playAgain = true
-        else playAgain = false
+//        if (input == 'Y' || input == 'y')
+//          playAgain = true
+//        else playAgain = false
 
       } while (playAgain)
       println("Thank you for playing the game! \n Copyright 2012 Entertainment Intelligence Lab, Georgia Tech.")
