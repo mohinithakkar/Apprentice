@@ -1,7 +1,7 @@
 package edu.gatech.eilab.scheherazade
 
 import main._
-import parse._
+import io._
 import data._
 import xml._
 import javanlp._
@@ -173,8 +173,9 @@ package nlp {
       var simiMatrix = simi()
       val pw = new java.io.PrintWriter(new FileOutputStream(new File("simMatrix.txt")))
           utils.Matrix.prettyPrintTo(pw,simiMatrix, 6)
+          pw.close();
           System.exit(0)
-          */
+        */  
       val local = new SimpleLocation(sentFn, 0.6, locationFile)
 
       var addition = new MatrixAddition(() => simi(), () => local(), 0.25, allFile)
@@ -196,12 +197,33 @@ package nlp {
       //      count = storyLen
       //    }
 
+      matrix = mutualKNN(matrix, 7);
       val (distance, max) = similarityToDistance(matrix)
 
       var clusterList = OPTICS.cluster(distance, max, minCluster, stories.flatMap(_.members.toList))
       //iterativeRestrain(clusterList, stories, simi())
       evaluate(clusterList, gold)
     }
+    
+    def mutualKNN(matrix:Array[Array[Double]], k:Int):Array[Array[Double]] =
+      {
+    		val n = matrix.size
+    		val answer = matrix.clone()
+    		for(i <- 0 until n)
+    		{
+    		  val sorted = answer(i).sortWith(_ > _);
+    		  val cutoff = sorted(k);
+    		  for(j <- 0 until n)
+    		  {
+    		    if (answer(i)(j) < cutoff) answer(i)(j) = 0
+    		  }
+    		}
+    		
+    		for(i <- 0 until n; j <- 0 until n)
+    		  answer(i)(j) = math.min(answer(i)(j), answer(j)(i));
+    		
+    		answer
+      }
 
     def evaluate(clusters: List[Cluster], gold: List[Cluster]) {
 

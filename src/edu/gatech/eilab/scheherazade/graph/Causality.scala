@@ -1,6 +1,5 @@
 package edu.gatech.eilab.scheherazade
 import data._
-import parse._
 import utils._
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer

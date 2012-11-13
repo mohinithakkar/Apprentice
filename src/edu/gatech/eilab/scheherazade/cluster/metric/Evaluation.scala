@@ -2,7 +2,6 @@ package edu.gatech.eilab.scheherazade
 
 import io._
 import data._
-import parse._
 import scala.collection.mutable.HashMap
 package cluster.metric {
 
@@ -93,23 +92,28 @@ package cluster.metric {
     def main(args: Array[String]) {
       //val storyFile = "movieHierarchical.txt"
 
-      for (i <- 1 to 3) {
+      for (i <- 1 to 1) {
         //val tested = "robberyTotalManualClusters.txt"
         //val tested = "mv-cl-"+i+".txt" // cluster to be tested
-        val tested = "robberyManualClusters" + i + ".txt"
-        val clusterFile = "./data/robbery/robberyGold.txt"
+        val tested = "movieSpectral2.txt"
+          
+        val clusterFile = "./data/new_movie/movieGold2.txt"
+        //val clusterFile = "./data/robbery/robberyGold.txt"
 
         var results: List[Cluster] = SimpleParser.parseClusters(tested)
+        results = results.filter(c => c.members.size >= 4);
 
         println("using cluster file: " + clusterFile)
-        val clusterList: List[Cluster] = SimpleParser.parseClusters(clusterFile)
+        val clusterList: List[Cluster] = SimpleParser.parseClusters(clusterFile).filter(c => c.members.size >= 4)
 
         //val results = storyList.map(s => new Cluster("a", s.members.toList))
         val (r1, p1) = muc(clusterList, results)
         val (r2, p2) = bCubed(clusterList, results)
+        val pr = purity(clusterList, results)
         println("MUC: precision " + p1 + " recall " + r1 + " f1 " + 2 * p1 * r1 / (p1 + r1))
 
         println("B Cubed: precision " + p2 + " recall " + r2 + " f1 " + 2 * p2 * r2 / (p2 + r2))
+        println("purity: " + pr);
       }
 
     }

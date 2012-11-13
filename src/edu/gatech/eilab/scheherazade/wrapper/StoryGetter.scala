@@ -1,7 +1,6 @@
 package edu.gatech.eilab.scheherazade
 
 import data._
-import parse._
 import data._
 import io._
 

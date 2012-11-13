@@ -2,7 +2,6 @@ package edu.gatech.eilab.scheherazade {
   
   import io._
   import data._
-  import parse._
   import scala.collection.mutable.PriorityQueue
   import scala.math.Ordered
   import cluster.gui.ReachPlot

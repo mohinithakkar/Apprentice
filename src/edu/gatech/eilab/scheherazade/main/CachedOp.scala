@@ -47,6 +47,13 @@ package main {
 
     def compute(): T
 
+    /** Converting the data to a string format, which can be then stored
+     * The default is converting to XML using XStream.
+     * Override this method if a different mechanism is desired.
+     */
+    def convertToString(data:T):String = XStream.toXML(data)
+    
+    
     def apply(): T = {
 
       if (cached) {
@@ -63,7 +70,7 @@ package main {
 
         val save = new File(saveFile)
         if (updated && (overWrite || (!save.exists))) {
-          val str = XStream.toXML(result)
+          val str = convertToString(result)
 
           if (compression == PLAIN_TEXT || compression == BOTH) {
             val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream(save)))
