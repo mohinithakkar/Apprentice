@@ -32,7 +32,7 @@ package main {
       var graph: Graph = gen.generate(para)("mutualExcl")._1
 
       val me = graph.mutualExcls
-      
+
       // starting point:
       var sources = graph.nodes.filterNot(n => graph.links.exists(l => l.target == n))
       //println(sources.map(_.name).mkString("sources : ", "\n", ""))
@@ -115,18 +115,20 @@ package main {
         val actors = desc.map(_.actor).distinct
 
         var actor = "John"
-//        while (actor == "") {
-//          println("Choose an actor: ")
-//          for (i <- 0 until actors.length) {
-//            println((i + 1) + ". " + actors(i))
-//          }
-//
-//          val actorNum = readLine().toInt - 1
-//
-//          if (actorNum < 0 || actorNum >= actors.length) println("Invalid choice")
-//          else actor = actors(actorNum)
-//        }
-
+        /* the following allows you to select an actor other than John. Now only John is allowed
+           * 
+            while (actor == "") {
+              println("Choose an actor: ")
+              for (i <- 0 until actors.length) {
+                println((i + 1) + ". " + actors(i))
+              }
+    
+              val actorNum = readLine().toInt - 1
+    
+              if (actorNum < 0 || actorNum >= actors.length) println("Invalid choice")
+              else actor = actors(actorNum)
+            }
+           */
         do {
           var fringe = walk.fringe
           step = makeChoice(fringe, desc, actor)
@@ -135,16 +137,20 @@ package main {
 
         println("The End.\n\n\nLet's play again!\n\n")
         var input: Char = 0
-//        while (input != 'Y' && input != 'y' && input != 'N' && input != 'n') {
-//          print("Play again (Y or N)?")
-//          val line = readLine().trim
-//          if (line.length > 0)
-//            input = line.charAt(0)
-//        }
 
-//        if (input == 'Y' || input == 'y')
-//          playAgain = true
-//        else playAgain = false
+        /* this code is prompt for if you want to play again. Disabled for now
+         * 
+        while (input != 'Y' && input != 'y' && input != 'N' && input != 'n') {
+          print("Play again (Y or N)?")
+          val line = readLine().trim
+          if (line.length > 0)
+            input = line.charAt(0)
+        }
+
+        if (input == 'Y' || input == 'y')
+          playAgain = true
+        else playAgain = false
+         */
 
       } while (playAgain)
       println("Thank you for playing the game! \n Copyright 2012 Entertainment Intelligence Lab, Georgia Tech.")
@@ -188,7 +194,11 @@ package main {
                   char(i) = System.in.read().asInstanceOf[Char]
                   i += 1
                 }
-                readText = new String(char).substring(0, 1)
+                readText = new String(char).trim
+                // guarding against empty input
+                if (readText.length > 0)
+                  readText = readText.substring(0, 1)
+
               } else {
                 sleep += 1
                 Thread.sleep(500) // sleep for 0.5 sec
@@ -202,24 +212,30 @@ package main {
           }
         }
 
-        if (readText == "") {
+        try {
+          if (readText == "") {
 
-          if (npcChoices.length > 0) {
-            // select a npc choice            
-            val idx = math.floor(math.random * npcChoices.length).toInt
-            chosen = npcChoices(idx)
-            madeByHuman = false
+            if (npcChoices.length > 0) {
+              // select a npc choice            
+              val idx = math.floor(math.random * npcChoices.length).toInt
+              chosen = npcChoices(idx)
+              madeByHuman = false
+            }
+          } else {
+
+            if (humanChoices.size == 0) throw new RuntimeException("No choices left. That's weird.")
+
+            val idx = readText.toInt - 1
+            if (idx < 0 || idx >= humanChoices.length)
+              println("Invalid Choice. Choose from 1 to " + humanChoices.length)
+            else {
+              chosen = humanChoices(idx)
+            }
           }
-        } else {
-
-          if (humanChoices.size == 0) throw new RuntimeException("No choices left. That's weird.")
-
-          val idx = readText.toInt - 1
-          if (idx < 0 || idx >= humanChoices.length)
-            println("Invalid Choice. Choose from 1 to " + humanChoices.length)
-          else {
-            chosen = humanChoices(idx)
-          }
+        } catch {
+          // catch the number format exception that may happen when converting a string to a number
+          // we do not need to do anything there because the choice is just empty if there is an exception
+          case numEx: NumberFormatException =>
         }
       }
 
