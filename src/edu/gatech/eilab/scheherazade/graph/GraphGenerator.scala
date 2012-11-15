@@ -8,7 +8,6 @@ import utils._
 import java.io._
 import graph._
 import data._
-import data._
 import graph.metric._
 
 package graph {
@@ -38,7 +37,7 @@ package graph {
         false
       }
 
-    def thresholdFilter = ((r: Relation) => (r.confidence > PROBABILITY_THRESHOLD))
+    def thresholdFilter = ((r: ObservedLink) => (r.confidence > PROBABILITY_THRESHOLD))
 
     /**
      * Generates the graph according to the property
@@ -57,22 +56,25 @@ package graph {
       var errorBefore = -1.0
       var errorAfter = -1.0
 
-      val allRelations: List[Relation] = computeRelations(storyList, clusterList).filter(_.totalObservations > 0)
+      val allRelations: List[ObservedLink] = computeRelations(storyList, clusterList).filter(_.totalObservations > 0)
 
       // create the graph that contains every link
-      val allLinks = filterRelations(allRelations, thresholdFilter)
-      val totalGraph = new Graph(clusterList, allLinks)
+      val links = allRelations filter thresholdFilter
+      val totalGraph = new Graph(clusterList, links)
 
-      val compactGraph = totalGraph.compact
+      var compactGraph = totalGraph.compact
 
-      try {
-        compactGraph.makeEfficient()
-      } catch {
-        case g: GraphException =>
-          println(g.msg)
-          hashmap += (("original", (compactGraph, 0)))
-          println("loop detected")
-          return hashmap
+      if (compactGraph.containsLoop()) {
+        hashmap += ("withLoops" -> (compactGraph, 0))
+        // find the loops and break them
+        try {
+          compactGraph = breakLoops(compactGraph, links)
+        } catch {
+          case ge: GraphException =>
+            println(ge.msg)
+            hashmap += ("original" -> (compactGraph, 0))
+            return hashmap
+        }
       }
 
       //println(compactGraph.links.mkString("\n"))
@@ -90,12 +92,48 @@ package graph {
       // TODO compute mutual exclusions below
       val mes = findMtlExcl(storyList, clusterList, MUTUAL_INFO_THRESHOLD)
       val meGraph = new Graph(improvedGraph.nodes, improvedGraph.links, mes);
-      
+
       hashmap += (("mutualExcl", (meGraph, avg)))
-      
+
       hashmap
 
     }
+
+    def breakLoops(graph: Graph, links:List[ObservedLink]): Graph =
+      {
+        val loops = graph.simpleLoops
+        var allLinks = links
+        for (loop <- loops) {
+
+          // find all relations in the loop
+          val slidingWindows = List(loop.last, loop.head) :: loop.sliding(2).toList
+          
+          var loopLinks = slidingWindows.map {
+            pair =>
+              val s = pair.head
+              val t = pair.last
+              allLinks.find(l => l.source == s && l.target == t).get.asInstanceOf[ObservedLink]
+          }
+
+          // find the link with the minimum confidence
+          var minLink: ObservedLink = null
+          var min = 1.0
+          for (link <- loopLinks) {
+            if (link.confidence < min) {
+              min = link.confidence
+              minLink = link
+            }
+          }
+
+          // remove that link
+          allLinks = allLinks filterNot (_ == minLink)
+        }
+
+        val answer = new Graph(graph.nodes, allLinks).compact()
+        if (answer.containsLoop)
+          throw new GraphException("Encountered complex loop structure that cannot be removed by this simple procedure")
+        else return answer
+      }
 
     def findMtlExcl(stories: List[Story], clusters: List[Cluster], threshold: Double) = {
 
@@ -113,7 +151,7 @@ package graph {
     }
 
     def updateBadPaths2(badPaths: List[(Link, (Double, Double))], graph: Graph,
-      allRelations: List[Relation]): Graph =
+      allRelations: List[ObservedLink]): Graph =
       {
         var relationsBelow = allRelations filter { rel =>
           !graph.ordered(rel.source, rel.target)
@@ -165,7 +203,7 @@ package graph {
       }
 
     def updateBadPaths3(badPaths: List[(Link, (Double, Double))], graph: Graph,
-      allRelations: List[Relation]): Graph =
+      allRelations: List[ObservedLink]): Graph =
       {
         var relationsBelow = allRelations filter { rel =>
           !graph.ordered(rel.source, rel.target)
@@ -218,7 +256,7 @@ package graph {
       }
 
     def updateBadPaths(badPaths: List[(Link, (Double, Double))], graph: Graph,
-      allRelations: List[Relation]): Graph =
+      allRelations: List[ObservedLink]): Graph =
       {
 
         var newRelations = allRelations
@@ -234,6 +272,7 @@ package graph {
         var accepted = 0
         var rejected = 0
 
+        // sort the pairs of events in decreasing order of graph error
         val sorted = badPaths.sortWith {
           (x, y) => math.abs(x._2._1) - x._2._2 > math.abs(y._2._1) - y._2._2
         }
@@ -258,8 +297,6 @@ package graph {
 
             var possibleSources = newGraph.takeSteps(source, math.round(expected - 1).toInt)
 
-            //var updateSuccess = false
-
             possibleSources = possibleSources filter
               {
                 possible =>
@@ -271,6 +308,8 @@ package graph {
                  */
               }
 
+            // find possible new sources for our target event
+            // That is, what new sources would create the desired separation?
             var possible = for (posSource <- possibleSources) yield {
               val forward = oldRelations.find(r => r.source == posSource && r.target == target)
               val backward = oldRelations.find(r => r.target == posSource && r.source == target)
@@ -279,6 +318,7 @@ package graph {
               else (posSource, 0.5)
             }
 
+            // sorts the possible new sources by the confidence of the link (new_possible_source, target)
             possible = possible.sortWith((x, y) => x._2 > y._2)
 
             possible foreach {
@@ -288,7 +328,7 @@ package graph {
 
                   println("Evaluating: " + posSource.name + " -> " + target.name)
                   // add a number of positive relations                     
-                  val updated = new Relation(posSource, target, 1, 1)
+                  val updated = new ObservedLink(posSource, target, 1, 1)
                   oldRelations = newRelations
 
                   //                  newRelations.find(r => r.source == possible && r.target == target) match {
@@ -316,9 +356,6 @@ package graph {
                     oldRelations = newRelations
                   }
                 }
-              // case None =>
-              //}
-              //else println("rejected for non existence in original links")
             }
 
           //if (!updateSuccess) return newRelations
@@ -327,65 +364,19 @@ package graph {
         oldGraph
       }
 
-    def filterRelations(relations: List[Relation], filterFunc: Relation => Boolean): List[Link] = {
-      relations.filter(filterFunc).map { r => new Link(r.source, r.target) }
-    }
-
-    /*
-  def drawDiagram(clusterList: List[Cluster], allRelations: List[Relation], filename: String) = {
-
-    val valid = allRelations.filter {
-      relation => (relation.confidence > CONFIDENCE_THRESHOLD && relation.prob > PROBABILITY_THRESHOLD) // ||  (relation.confidence > 0.3 && relation.prob > 0.9)
-    }
-
-    val invalid = allRelations.filter {
-      relation => relation.confidence <= 0.4 && relation.confidence > 0.3 && relation.prob > 0.4
-    }
-
-    val probWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream("probablities.txt")))
-    valid.foreach { r =>
-      probWriter.println(r.source.name + " -> " + r.target.name + ", " + r.prob + ", " + r.confidence)
-    }
-
-    probWriter.close()
-
-    //println(invalid.sorted.mkString("\n"))
-
-    val reducedLinks = simplifyGraph(clusterList, valid)
-    //
-    //    val fullWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream(filename + ".txt")))
-    //    println("writing to file: " + filename + ".png")
-    //    fullWriter.println("digraph G {")
-    //    fullWriter.println(getRelationsText(valid))
-    //    fullWriter.println("}")
-    //    fullWriter.close()
-    //
-    //    Runtime.getRuntime().exec("dot -Tpng -o" + filename + ".png " + filename + ".txt")
-    //    new File(filename + ".txt").deleteOnExit()
-
-    val reducedWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream(filename + "-reduced.txt")))
-    reducedWriter.println("digraph G {")
-    reducedWriter.println(reducedLinks.mkString("\n"))
-    reducedWriter.println("}")
-    reducedWriter.close()
-
-    Runtime.getRuntime().exec("dot -Tpng -o" + filename + "-reduced.png " + filename + "-reduced.txt")
-    new File(filename + "-reduced.txt").deleteOnExit()
-
-    reducedLinks
-  }
-  */
-
-    def computeRelations(storyList: List[Story], clusterList: List[Cluster]): List[Relation] =
+    def computeRelations(storyList: List[Story], clusterList: List[Cluster]): List[ObservedLink] =
       {
-        var relations = List[Relation]()
-        val linkTable = new HashMap[(Cluster, Cluster), ClusterLink]
+        var relations = List[ObservedLink]()
+        val linkTable = new HashMap[(Cluster, Cluster), Int]
 
         def increment(source: Cluster, target: Cluster) {
           if (linkTable.contains((source, target))) {
-            linkTable.get((source, target)).get.increment()
+            // increment the count
+            var count = linkTable((source, target))
+            count += 1
+            linkTable((source, target)) = count
           } else
-            linkTable += { (source, target) -> new ClusterLink(source, target, 1) }
+            linkTable += { (source, target) -> 1 }
         }
 
         storyList foreach {
@@ -395,28 +386,35 @@ package graph {
                 val source = story.members(i).cluster
                 val target = story.members(j).cluster // this line for normal computation
                 //val target = story.members(i+1).cluster // this line for adjacent graph
+
                 //if (source == null || target == null) println(story + ", " + i + ", " + j + " have no clusters")
+                // $source and $target can be null. in which case they will be ignored in counting later 
                 increment(source, target)
               }
             }
         }
 
-        var linkList = List[ClusterLink]()
-        val clusterArray = clusterList.toArray
+        var linkList = List[(Cluster, Cluster, Int)]()
+        //val clusterArray = clusterList.toArray // efficiency increase? should refactor to use lists
 
-        //val differenceThreshold = 4
+        var sourceList = clusterList
+        var source: Cluster = null
+        var target: Cluster = null
 
-        for (i <- 0 to clusterArray.length - 1) {
-          for (j <- i + 1 to clusterArray.length - 1) {
-            val source = clusterArray(i)
-            val target = clusterArray(j)
-            val forwardLink = linkTable.get((source, target))
-            val forward = forwardLink.map { _.count }.getOrElse(0)
-            val backwardLink = linkTable.get((target, source))
-            val backward = backwardLink.map { _.count }.getOrElse(0)
+        // non-repeated counting
+        while (sourceList != Nil) {
+          source = sourceList.head
+          sourceList = sourceList.tail
+          var targetList = sourceList
+          while (targetList != Nil) {
+            target = targetList.head
+            targetList = targetList.tail
+
+            val forward = linkTable.getOrElse((source, target), 0)
+            val backward = linkTable.getOrElse((target, source), 0)
             //println("forward: " + forward + " backward: " + backward)
-            val forwardRelation = Relation(source, target, forward, forward + backward)
-            val backwardRelation = Relation(target, source, backward, forward + backward)
+            val forwardRelation = ObservedLink(source, target, forward, forward + backward)
+            val backwardRelation = ObservedLink(target, source, backward, forward + backward)
             relations = forwardRelation :: backwardRelation :: relations
           }
         }
@@ -431,69 +429,69 @@ package graph {
       }.mkString("/n"))
     }
 
-    def countLinks(storyList: List[Story], clusterList: List[Cluster], threshold: Int): List[ClusterLink] = {
-      // now count links
-      val linkTable = new HashMap[(Cluster, Cluster), ClusterLink]
+    //    def countLinks(storyList: List[Story], clusterList: List[Cluster], threshold: Int): List[ClusterLink] = {
+    //      // now count links
+    //      val linkTable = new HashMap[(Cluster, Cluster), ClusterLink]
+    //
+    //      def increment(source: Cluster, target: Cluster) {
+    //        if (linkTable.contains((source, target))) {
+    //          linkTable.get((source, target)).get.increment()
+    //        } else
+    //          linkTable += { (source, target) -> new ClusterLink(source, target, 1) }
+    //      }
+    //
+    //      storyList foreach {
+    //        story =>
+    //          for (i <- 0 to story.members.length - 1) {
+    //            for (j <- i + 1 to story.members.length - 1) {
+    //              val source = story.members(i).cluster
+    //              val target = story.members(j).cluster
+    //              //if (source == null || target == null) println(story + ", " + i + ", " + j + " have no clusters")
+    //              increment(source, target)
+    //            }
+    //          }
+    //      }
+    //
+    //      var linkList = List[ClusterLink]()
+    //      val clusterArray = clusterList.toArray
+    //
+    //      //val differenceThreshold = 4
+    //
+    //      for (i <- 0 to clusterArray.length - 1) {
+    //        for (j <- i + 1 to clusterArray.length - 1) {
+    //          val source = clusterArray(i)
+    //          val target = clusterArray(j)
+    //          val forwardLink = linkTable.get((source, target))
+    //          val forward = forwardLink.map { _.count }.getOrElse(0)
+    //          val backwardLink = linkTable.get((target, source))
+    //          val backward = backwardLink.map { _.count }.getOrElse(0)
+    //          //println("forward: " + forward + " backward: " + backward)
+    //          if (forward - backward >= threshold && forward > 0)
+    //            linkList = forwardLink.get :: linkList
+    //          else if (backward - forward >= threshold && backward > 0)
+    //            linkList = backwardLink.get :: linkList
+    //        }
+    //      }
+    //
+    //      linkList.sorted
+    //    }
+    //
+    //    def printLinks(linkList: List[ClusterLink]) {
+    //      // this is where the full graph is output
+    //      println(getLinksText(linkList))
+    //    }
+    //
+    //    def getLinksText(linkList: List[ClusterLink]) = {
+    //      // this is where the full graph is output
+    //      linkList map { x => x.source.name.replace(" ", "_") + " -> " + x.target.name.replace(" ", "_") } mkString ("\r\n")
+    //    }
 
-      def increment(source: Cluster, target: Cluster) {
-        if (linkTable.contains((source, target))) {
-          linkTable.get((source, target)).get.increment()
-        } else
-          linkTable += { (source, target) -> new ClusterLink(source, target, 1) }
-      }
-
-      storyList foreach {
-        story =>
-          for (i <- 0 to story.members.length - 1) {
-            for (j <- i + 1 to story.members.length - 1) {
-              val source = story.members(i).cluster
-              val target = story.members(j).cluster
-              //if (source == null || target == null) println(story + ", " + i + ", " + j + " have no clusters")
-              increment(source, target)
-            }
-          }
-      }
-
-      var linkList = List[ClusterLink]()
-      val clusterArray = clusterList.toArray
-
-      //val differenceThreshold = 4
-
-      for (i <- 0 to clusterArray.length - 1) {
-        for (j <- i + 1 to clusterArray.length - 1) {
-          val source = clusterArray(i)
-          val target = clusterArray(j)
-          val forwardLink = linkTable.get((source, target))
-          val forward = forwardLink.map { _.count }.getOrElse(0)
-          val backwardLink = linkTable.get((target, source))
-          val backward = backwardLink.map { _.count }.getOrElse(0)
-          //println("forward: " + forward + " backward: " + backward)
-          if (forward - backward >= threshold && forward > 0)
-            linkList = forwardLink.get :: linkList
-          else if (backward - forward >= threshold && backward > 0)
-            linkList = backwardLink.get :: linkList
-        }
-      }
-
-      linkList.sorted
-    }
-
-    def printLinks(linkList: List[ClusterLink]) {
-      // this is where the full graph is output
-      println(getLinksText(linkList))
-    }
-
-    def getLinksText(linkList: List[ClusterLink]) = {
-      // this is where the full graph is output
-      linkList map { x => x.source.name.replace(" ", "_") + " -> " + x.target.name.replace(" ", "_") } mkString ("\r\n")
-    }
-
-    def getRelationsText(relationList: List[Relation]) = {
+    def getRelationsText(relationList: List[ObservedLink]) = {
       // this is where the full graph is output
       relationList map { x => x.source.name.replace(" ", "_") + " -> " + x.target.name.replace(" ", "_") } mkString ("\r\n")
     }
 
-    def simplifyGraph(clusterList: List[Cluster], relationList: List[Relation]): List[Link] = {
+    def simplifyGraph(clusterList: List[Cluster], relationList: List[ObservedLink]): List[Link] = {
       // simplifying the graph
       val clusterNumber = clusterList zip (0 to clusterList.length - 1)
 

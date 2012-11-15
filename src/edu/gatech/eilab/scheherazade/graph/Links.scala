@@ -1,11 +1,12 @@
-package edu.gatech.eilab.scheherazade.data
-import java.util.Properties
+package edu.gatech.eilab.scheherazade.graph
 
-class Relation(val source: Cluster, val target: Cluster, val trueInstance: Int, val totalObservations: Int) //extends Ordered[Relation] 
+import edu.gatech.eilab.scheherazade.data._
+
+class ObservedLink(source: Cluster, target: Cluster, val trueInstance: Int, val totalObservations: Int) extends Link(source, target)
 {
 
   override def equals(o: Any) = o match {
-    case that: Relation => this.source == that.source && this.target == that.target
+    case that: ObservedLink => this.source == that.source && this.target == that.target
     case _ => false
   }
 
@@ -17,9 +18,9 @@ class Relation(val source: Cluster, val target: Cluster, val trueInstance: Int, 
     else trueInstance.toDouble / totalObservations
   }
 
-  override def toString() = source.name + " -> " + target.name + " (" + trueInstance + " / " + totalObservations + ")"
+  override def toString() = "Link(" + source.name + " -> " + target.name + ", B(" + trueInstance + "/" + totalObservations + ")=" + confidence + ")"
 
-  def addEvidence(positive: Int, negative: Int) = Relation(source, target, trueInstance + positive, totalObservations + positive + negative)
+  def addEvidence(positive: Int, negative: Int) = ObservedLink(source, target, trueInstance + positive, totalObservations + positive + negative)
 
   def confidence = 1 - oneTail(trueInstance, totalObservations, 0.5)
 
@@ -32,21 +33,9 @@ class Relation(val source: Cluster, val target: Cluster, val trueInstance: Int, 
   private def choose(n: Int, k: Int): BigInt = (k + 1 to n).foldLeft(BigInt(1))(_ * BigInt(_)) / (1 to n - k).foldLeft(BigInt(1))(_ * BigInt(_))
 }
 
-object Relation {
+object ObservedLink {
 
-  //var UNOBSERVED: Int = 4 // PARAMETER S: number of hidden observations
-
-  //  def init(prop:java.util.Properties)
-  //  {
-  //    val str = prop.getProperty("s") 
-  //    if (str != null)
-  //    {
-  //      UNOBSERVED = str.trim.toInt
-  //      println("using the parameter: unobserved instances = " + UNOBSERVED)
-  //    }      
-  //  }
-
-  def apply(source: Cluster, target: Cluster, trueInstance: Int, totalObservations: Int) = new Relation(source, target,
+  def apply(source: Cluster, target: Cluster, trueInstance: Int, totalObservations: Int) = new ObservedLink(source, target,
     trueInstance, totalObservations)
 }
 
@@ -54,10 +43,13 @@ object Relation {
  * the Link class includes both temporal and causal links
  * the default is temporal if the kind field is not specified
  */
-class Link(val source: Cluster, val target: Cluster, val kind: String = "T") {
+class Link(val source: Cluster, val target: Cluster, var kind: String = "T") {
   require(kind == "T" || kind == "C")
 
-  override def toString = source.name.replace(" ", "_") + " -> " + target.name.replace(" ", "_")
+  override def toString = source.name + " -> " + target.name
+  
+  //def graphvisString = source.name.replace(" ", "_") + " -> " + target.name.replace(" ", "_")
+  
   override def equals(o: Any) = o match {
     case other: Link => this.source == other.source && this.target == other.target && this.kind == other.kind
     case _ => false

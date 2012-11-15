@@ -112,24 +112,24 @@ class Story(
   def size():Int = members.length
 }
 
-class ClusterLink(val source: Cluster, val target: Cluster, var count: Int = 0) extends Ordered[ClusterLink] with XStreamable {
-
-  override def equals(that: Any): Boolean =
-    that match {
-      case link: ClusterLink => this.source == link.source && this.target == link.target
-      case _ => false
-    }
-
-  def increment() {
-    count += 1
-  }
-
-  override def toString() = source.name + ", " + target.name + ", " + count
-
-  override def compare(that: ClusterLink): Int =
-    {
-      if (this.count < that.count) 1
-      else if (this.count == that.count) 0
-      else -1
-    }
-}
+//class ClusterLink(val source: Cluster, val target: Cluster, var count: Int = 0) extends Ordered[ClusterLink] with XStreamable {
+//
+//  override def equals(that: Any): Boolean =
+//    that match {
+//      case link: ClusterLink => this.source == link.source && this.target == link.target
+//      case _ => false
+//    }
+//
+//  def increment() {
+//    count += 1
+//  }
+//
+//  override def toString() = source.name + ", " + target.name + ", " + count
+//
+//  override def compare(that: ClusterLink): Int =
+//    {
+//      if (this.count < that.count) 1
+//      else if (this.count == that.count) 0
+//      else -1
+//    }
+//}
