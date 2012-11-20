@@ -2,11 +2,14 @@ package edu.gatech.eilab.scheherazade.utils
 
 import java.io._
 
+/** Add numbers to the unnumbered stories (as produced by CSVProcessor)
+ * 
+ */
 object NumberWriter extends App {
 
-  val text = scala.io.Source.fromFile("./data/new_movie/movie-stories.txt").mkString
+  val text = scala.io.Source.fromFile("./data/airport/airport stories.txt").mkString
 
-  val writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream("./data/new_movie/movieStories.txt")))
+  val writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream("./data/airport/airportStories.txt")))
 
   val lines = text.split("\n")
 

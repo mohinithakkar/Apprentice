@@ -1,5 +1,6 @@
 storyFile = ./data/restaurant/RtSimpleStories.txt
 clusterFile = ./data/restaurant/RtSimpleGold.txt
-parameters = probThresholds, minClusterSize
+parameters = probThresholds, minClusterSize, miThresholds
 probThresholds = 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85
 minClusterSize = 2, 3, 4, 5
+miThresholds = 0.05

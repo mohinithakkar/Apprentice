@@ -8,14 +8,14 @@ object CSVProcessor {
 
   def readCSV(filename: String): Array[Array[String]] = {
     val text = scala.io.Source.fromFile(filename).mkString
-    val writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream("./data/robbery/robberyStories Unnumbered.txt")))
+    
 
     val lines = text.split("\n")
     val buffer = ArrayBuffer[Array[String]]()
 
     lines foreach {
       l =>
-        //println("line = " + l)
+        println("line = " + l)
         val events = l.trim.replace(",,", ", ,").split(",")
         var next = 0
         var lineBuffer = ArrayBuffer[String]()
@@ -58,6 +58,26 @@ object CSVProcessor {
     }
 
     buffer.toArray
-
+   
+  }
+  
+  def main(args:Array[String])
+  {
+    val array = readCSV("./data/airport/airport_data.csv")
+    val writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream("./data/airport/airport stories.txt")))
+    for(story <- array)
+    {
+      for(line <- story)
+      {
+        val k = line.trim
+        if (k != "")
+        {
+        	writer.println(k)
+        }
+      }
+      writer.println("###")
+    }
+    
+    writer.close()
   }
 }

@@ -20,9 +20,9 @@ package main {
     }
 
     def generateGraphs() {
-      val reader = new ConfigReader("configNewMv.txt")
-      // val (stories, clusters) = reader.initData()
-      val (stories, clusters) = reader.initDataFiltered()
+      val reader = new ConfigReader("configRob.txt")
+      val (stories, clusters) = reader.initData()
+      //val (stories, clusters) = reader.initDataFiltered()
 
       // count average number of sentences in each story
       //val avg = stories.map(_.members.size).sum / stories.size
@@ -48,6 +48,7 @@ package main {
         // filter out clusters smaller than the minimum cluster size
         val minimumSize = para.intParam("minClusterSize")
         val insideClusters = clusters.filterNot(c => c.members.size < minimumSize)
+        println("$$$ minimumsize = " +  minimumSize + " filtered " + (clusters.size - insideClusters.size) + " clusters")
         val insideStories = reader.filterUnused(stories, insideClusters)
 
         para.printParameterValues(pw)
@@ -56,7 +57,7 @@ package main {
         i += 1
 
         val gen = new GraphGenerator(insideStories, insideClusters)
-        val hashmap = gen.generate(para)
+        val hashmap:scala.collection.mutable.HashMap[String, (Graph, Double)] = gen.generate(para)
 
         var beforeErr = 0.0
         var afterErr = 0.0

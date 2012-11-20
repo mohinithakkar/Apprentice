@@ -84,7 +84,7 @@ package graph {
       hashmap += (("original", (compactGraph, avg)))
 
       // improve the graph
-      val improvedGraph = updateBadPaths2(errorChecker.getBadPaths, compactGraph, allRelations)
+      val improvedGraph = updateBadPaths(errorChecker.getBadPaths, compactGraph, allRelations)
       avg = errorChecker.checkErrors(storyList, improvedGraph)._2
       errorAfter = avg
       hashmap += (("improved", (improvedGraph, avg)))
@@ -254,6 +254,120 @@ package graph {
         println("accepted modifications: " + accepted + " rejected modifications: " + rejected)
         oldGraph
       }
+    
+    /** This is the latest version. Nov 15 2012
+     * Only one possible parent is used in order of descending probability for each bad link
+     * 
+     */
+    def updateBadPaths4(badPaths: List[(Link, (Double, Double))], graph: Graph,
+      allRelations: List[ObservedLink]): Graph =
+      {
+
+        var newRelations = allRelations
+        var oldRelations = allRelations
+
+        var newLinks = graph.links
+        var newGraph = graph
+        var oldGraph = graph
+
+        var oldErr = errorChecker.checkErrors(storyList, graph)._2
+        var newErr = oldErr
+
+        var accepted = 0
+        var rejected = 0
+
+        // sort the pairs of events in decreasing order of graph error
+        val sorted = badPaths.sortWith {
+          (x, y) => math.abs(x._2._1) - x._2._2 > math.abs(y._2._1) - y._2._2
+        }
+
+        sorted foreach {
+          path =>
+            val link = path._1
+
+            var expected = math.abs(path._2._1)
+            val actual = path._2._2
+            val deviation = expected - actual
+
+            var source = link.source
+            var target = link.target
+
+            if (path._2._1 < 0) {
+              source = link.target
+              target = link.source
+            }
+
+            //println("processing bad link: " + source.name + " -> " + target.name + " expected = " + expected + " actual = " + actual + " deviation =" + deviation)
+
+            var possibleSources = newGraph.takeSteps(source, math.round(expected - 1).toInt)
+
+            possibleSources = possibleSources filter
+              {
+                possible =>
+                  !oldGraph.ordered(target, possible)
+                /* This prevents cycles. 
+                 * If there is already a path from target to this possible source,
+                 * we will create a cycle. 
+                 * If there is already a path from this possible source to target, this will not help
+                 */
+              }
+
+            // find possible new sources for our target event
+            // That is, what new sources would create the desired separation?
+            var possible = for (posSource <- possibleSources) yield {
+              val forward = oldRelations.find(r => r.source == posSource && r.target == target)
+              val backward = oldRelations.find(r => r.target == posSource && r.source == target)
+              if (forward.isDefined) (posSource, forward.get.confidence)
+              else if (backward.isDefined) (posSource, 1 - backward.get.confidence)
+              else (posSource, 0.5)
+            }
+
+            // sorts the possible new sources by the confidence of the link (new_possible_source, target)
+            possible = possible.sortWith((x, y) => x._2 > y._2)
+
+            possible foreach {
+              case (posSource, conf) =>
+                if (conf >= 0.5) {
+                  //if (newRelations.find(r => r.source == possible && r.target == target).isDefined) {
+
+                  //println("Evaluating: " + posSource.name + " -> " + target.name)
+                  // add a number of positive relations                     
+                  val updated = new ObservedLink(posSource, target, 1, 1)
+                  oldRelations = newRelations
+
+                  //                  newRelations.find(r => r.source == possible && r.target == target) match {
+                  //                    case None => newRelations = updated :: newRelations 
+                  //                    case _ => 
+                  //                  }
+
+                  newLinks = new Link(posSource, target) :: oldGraph.links.filterNot(l => l.source == source && l.target == target)
+                  newGraph = new Graph(graph.nodes, newLinks).compact
+                  newErr = errorChecker.checkErrors(storyList, newGraph)._2
+
+                  if (newErr >= oldErr) {
+                    //println("rolled back")
+                    rejected += 1
+                    // the total error has increased or stay constant. undo that update
+                    // this is a change from previous approach which only requires the error not to increase. 
+                    // This seems to curb the indeterminism
+                    newRelations = oldRelations
+                    newGraph = oldGraph
+                  } else {
+                    println("accepted " + posSource.name + " -> " + target.name)
+                    accepted += 1
+                    oldErr = newErr // total error decreased. update succeeded.
+                    oldGraph = newGraph
+                    oldRelations = newRelations
+                  }
+                }
+            }
+
+          //if (!updateSuccess) return newRelations
+        }
+        println("accepted modifications: " + accepted + " rejected modifications: " + rejected)
+        oldGraph
+      }
+
 
     def updateBadPaths(badPaths: List[(Link, (Double, Double))], graph: Graph,
       allRelations: List[ObservedLink]): Graph =
@@ -293,7 +407,7 @@ package graph {
               target = link.source
             }
 
-            println("processing bad link: " + source.name + " -> " + target.name + " expected = " + expected + " actual = " + actual + " deviation =" + deviation)
+            //println("processing bad link: " + source.name + " -> " + target.name + " expected = " + expected + " actual = " + actual + " deviation =" + deviation)
 
             var possibleSources = newGraph.takeSteps(source, math.round(expected - 1).toInt)
 
@@ -323,10 +437,10 @@ package graph {
 
             possible foreach {
               case (posSource, conf) =>
-                if (conf > 0.3) {
+                if (conf >= 0.5) {
                   //if (newRelations.find(r => r.source == possible && r.target == target).isDefined) {
 
-                  println("Evaluating: " + posSource.name + " -> " + target.name)
+                  //println("Evaluating: " + posSource.name + " -> " + target.name)
                   // add a number of positive relations                     
                   val updated = new ObservedLink(posSource, target, 1, 1)
                   oldRelations = newRelations
@@ -341,7 +455,7 @@ package graph {
                   newErr = errorChecker.checkErrors(storyList, newGraph)._2
 
                   if (newErr >= oldErr) {
-                    println("rolled back")
+                    //println("rolled back")
                     rejected += 1
                     // the total error has increased or stay constant. undo that update
                     // this is a change from previous approach which only requires the error not to increase. 
