@@ -114,7 +114,7 @@
 106 John sat down on the bench.
 107 John put his shoes back on.
 108 John then walked to the boarding gate.
-109 John Boarded the plane.
+109 John boarded the plane.
 ###
 110 John waited at the gate.
 111 A voice sounded on the loudspeaker.
@@ -160,7 +160,7 @@
 149 John went to the boarding door.
 150 John gave his ticket to the airline employee.
 151 The airline employee waved John through.
-152 John walked down the jet way.
+152 John walked down the jetway.
 153 John boarded the airplane.
 154 John found his seat.
 155 John stowed his bag.
@@ -261,7 +261,7 @@
 ###
 244 John opened the airport door.
 245 John walked into the airport.
-246 John walked to the desk for his airline
+246 John walked to the desk for his airline.
 247 John placed his baggage on the scale.
 248 John entered his confirmation code into the computer.
 249 John pulled his ticket from the computer.
@@ -273,10 +273,10 @@
 255 John gave his luggage to the security officer.
 256 John walked through the concourse.
 257 John got in line for security check in.
-258 John took off his shoes and belt
-259 John put his shoes and belt in the grey bin
+258 John took off his shoes and belt.
+259 John put his shoes and belt in the grey bin.
 260 John walked through the scanner.
-261 John picked up his grey bin
+261 John picked up his grey bin.
 262 John put his shoes and belt back on.
 263 John walked to the gate for his plane.
 ###
@@ -304,7 +304,7 @@
 284 John boarded the plane.
 ###
 285 John entered the airport.
-286 John approached the check in desk.
+286 John approached the check-in desk.
 287 John checked in his bag.
 288 John received his boarding pass.
 289 John waited in the security line.
@@ -386,7 +386,7 @@
 361 John paid money to have luggage put on to the plane.
 362 John got the airline tickets.
 363 John took off shoes,  jewelry and metal objects.
-364 John put shoes,  jewelry and carry on luggage into the bin.
+364 John put shoes, jewelry and carry on luggage into the bin.
 365 The security officer looked at the bin.
 366 John walked through the scanner.
 367 John's shoes went back on.
@@ -453,7 +453,7 @@
 425 John lifted his carry-on.
 426 John walked away in anger.
 ###
-427 John went to the airport
+427 John went to the airport.
 428 John got in line for the security check.
 429 John took off his shoes.
 430 John took off his belt.
@@ -474,8 +474,8 @@
 ###
 445 John arrived at the airport.
 446 John got to the airline check-in section.
-447 He gave the airline employee his passport.
-448 He put his luggage on the scale.
+447 John gave the airline employee his passport.
+448 John put his luggage on the scale.
 449 The employee put a sticker and label on John's suitcase.
 450 The employee looked at John's carry on luggage.
 451 The employee gave John back his passport along with his boarding pass.
@@ -558,7 +558,7 @@
 ###
 525 John drove to the airport.
 526 John parked his car.
-527 John walked into the airport
+527 John walked into the airport.
 528 John checked his bag.
 529 John waited in line at the security check.
 530 John took off his shoes at the security check.
@@ -591,7 +591,7 @@
 555 John drove to the airport.
 556 John parked his car.
 557 John entered the airport.
-558 John approached the check in desk.
+558 John approached the check-in desk.
 559 John checked his luggage with the airline employee.
 560 John walked to security.
 561 John waited in line to pass through security.
@@ -744,7 +744,7 @@
 698 John boarded the plane.
 699 John flew on the plane.
 700 John got off the plane.
-701 John picked-up his bags.
+701 John picked up his bags.
 702 John left the airport.
 ###
 703 John entered the airport.
@@ -765,7 +765,7 @@
 717 John entered his flight information into the self serve kiosk.
 718 John retrieved his boarding pass and luggage tags.
 719 John applied his luggage tags to his bags.
-720 John gave is bags to the airline employee.
+720 John gave his bags to the airline employee.
 721 John walked to security.
 722 John waited in the security line.
 723 John placed his belongings on the x-ray belt.
@@ -829,7 +829,7 @@
 777 John stored his carry-on bag.
 778 John sat in his seat.
 779 John waited for takeoff.
-780 John fastened his seatbelt.
+780 John fastened his seat belt.
 781 John flew.
 ###
 782 John entered the airport.
@@ -867,7 +867,7 @@
 813 John found his seat.
 814 John stowed his carry-on luggage above his seat.
 815 John sat down.
-816 John buckled his seat-belt.
+816 John buckled his seat belt.
 ###
 817 John entered the airport.
 818 John checked in at the counter.
@@ -909,14 +909,14 @@
 852 John walked up to the airline counter.
 853 John gave an airline employee his identification.
 854 The airline employee handed John his boarding pass.
-855 John entere the security check line.
+855 John entered the security check line.
 856 John placed his carry-on bag on the security belt.
 857 A security officer checked John's ID and boarding pass.
 858 John walked through the metal detector.
 859 John picked up his bag from the security belt.
 860 John walked to the airline gate.
 861 An airline employee took John's boarding pass at the gate.
-862 John boarded the airlplane.
+862 John boarded the airplane.
 ###
 863 John drove to the airport.
 864 John walked into the airport.
@@ -967,7 +967,7 @@
 907 John boarded the airplane.
 ###
 908 John arrived at the airport.
-909 john waited in line at the check-in.
+909 John waited in line at the check-in.
 910 John received a boarding pass.
 911 John went to security.
 912 A security officer checked John's ID.

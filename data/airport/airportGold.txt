@@ -1,0 +1,754 @@
+@ exit taxi
+17 John got out of the taxi.
+86 John exited the taxi.
+273 John exited the taxi.
+316 John got out of the taxi.
+###
+@ unload luggage from car
+69 John retrieved his luggage from the trunk.
+714 John got his luggage out of the car.
+878 John unloaded his baggage from the car.
+###
+@ drive to airport
+525 John drove to the airport.
+555 John drove to the airport.
+695 John drove to the airport.
+863 John drove to the airport.
+###
+@ parked car
+68 John parked his car.
+296 John parked his car at the airport.
+353 John parked the car in the extended stay parking area in the airport parking lot.
+526 John parked his car.
+556 John parked his car.
+713 John parked his car.
+###
+@ enter airport
+0 John entered the terminal building.
+19 John entered the airport.
+41 John entered the airport.
+60 John entered the airport.
+71 John entered the airport.
+41 John entered the airport.
+98 John arrived at the airport.
+139 John entered the airport.
+159 John arrived at the airport.
+167 John entered the airport.
+185 John entered the airport.
+199 John arrived at the airport.
+234 John walked into the airport.
+245 John walked into the airport.
+264 John entered the airport terminal.
+275 John walked into the airport.
+285 John entered the airport.
+298 John walked into the airport.
+332 John entered the airport.
+373 John arrived at the airport.
+427 John went to the airport.
+445 John arrived at the airport.
+509 John arrived at the airport.
+527 John walked into the airport.
+545 John entered the airport.
+557 John entered the airport.
+572 John entered the airport.
+583 John entered the doors of the airport.
+604 John entered the airport.
+618 John entered the airport.
+645 John entered the airport.
+658 John entered the airport departures terminal.
+703 John entered the airport.
+715 John walked into the airport.
+733 John entered the airport.
+751 John entered the airport.
+766 John entered the airport.
+782 John entered the airport.
+797 John arrived at the airport.
+817 John entered the airport.
+832 John arrived at the airport.
+851 John entered the airport.
+864 John walked into the airport.
+877 John arrived at the airport.
+889 John arrived at the airport.
+908 John arrived at the airport.
+###
+@ weigh baggage
+300 John weighed his bags.
+360 An airline employee weighed John's luggage.
+546 John weighted his luggages.
+648 An airline employee weighed John's luggage.
+867 John weighed his bags.
+###
+@ approach ticket counter
+87 John approached the ticket counter.
+99 John then approached the ticket counter.
+170 John headed to the airline front desk.
+202 John arrived at the check-in counter.
+246 John walked to the desk for his airline.
+286 John approached the check-in desk.
+333 John walked up to the ticketing counter.
+558 John approached the check-in desk.
+586 John stepped up to the ticket counter.
+754 John went to the check-in counter.
+783 John walked to the airline counter.
+798 John approached the ticketing counter.
+852 John walked up to the airline counter.
+891 John walked to the airline desk.
+###
+@ get tickets
+100 John bought a ticket to Las Vegas for a vacation.
+171 John purchased his plane ticket.
+187 John claimed John's ticket.
+249 John pulled his ticket from the computer.
+301 An airline employee gave John his ticket.
+336 John took his plane ticket from the airline employee.
+362 John got the airline tickets.
+474 An airline employee gave John his plane ticket.
+573 John purchased the ticket for his flight.
+594 The airline employee handed John a ticket.
+620 John got the tickets.
+###
+@ check in
+219 John checked in at the kiosk.
+818 John checked in at the counter.
+893 John checked in.
+###
+@ check in baggage
+1 John checked his luggage.
+42 John checked his baggage at the baggage counter.
+72 John checked his bags at the ticket counter.
+88 John checked his bag with the airline.
+126 John checked his luggage with an airline employee.
+160 John checked his bags.
+186 John checked John's baggage.
+235 John checked his luggage.
+276 John checked in his luggage.
+287 John checked in his bag.
+299 John checked in at the counter.
+374 John checked his luggage.
+394 John checked his baggage.
+472 John checked in at his airline counter.
+528 John checked his bag.
+559 John checked his luggage with the airline employee.
+574 John checked his luggage with an airline employee.
+661 John checked in his bag at the counter.
+679 John checked in his luggage.
+696 John checked his bags.
+767 John checked his bags.
+785 John gave his bag to the airline attendant.
+799 John checked his baggage.
+###
+@ airline took bag
+895 An airline employee took John's checked bag.
+###
+@ show id to airline
+203 John gave his ID to the airline employee.
+266 John presented his ticket and identification to the airline employee.
+447 He gave the airline employee his passport.
+591 John gave the airline employee photo identification.
+742 John showed the passport to the airline employee.
+853 John gave an airline employee his identification.
+###
+@receive boarding pass
+2 John received a boarding pass.
+205 The airline employee gave John his boarding pass.
+222 The airline employee issued John's boarding pass.
+236 John got his boarding pass from an airline employee.
+267 The airline employee gave John his boarding pass.
+288 John received his boarding pass.
+320 John claimed his boarding pass.
+375 John received his boarding pass.
+451 The employee gave John back his passport along with his boarding pass.
+513 An airline employee gave John John's boarding pass.
+660 John collected his boarding pass.
+706 John received a boarding pass.
+718 John retrieved his boarding pass and luggage tags.
+735 John received his boarding pass.
+800 John received his boarding pass.
+854 The airline employee handed John his boarding pass
+910 John received a boarding pass.
+###
+@ print boarding pass
+21 John printed out his boarding pass at the self-service check-in.
+89 John printed his boarding pass from a machine.
+277 John printed his boarding pass.
+391 John printed a boarding pass.
+492 The kiosk printed John's boarding pass.
+647 John printed his boarding pass at the self check-in station.
+678 John printed his boarding pass.
+834 John printed his ticket.
+###
+@ use bathroom
+20 John used the restroom.
+278 John visited the toilet.
+551 John went to restroom.
+###
+@ ask for directions
+169 John asked the security officer for directions.
+280 John asked an airline employee for directions.
+879 John asked for directions to the counter.
+###
+@ walked to security
+32 John walked to the security checkpoint.
+73 John approached the security checkpoint.
+101 John walked to the security gate.
+188 John proceeded to security.
+206 John went to the airport security control.
+268 John walked to the security checkpoint.
+560 John walked to security.
+623 John entered the security checkpoint.
+662 John walked towards the security checkpoint.
+721 John walked to security.
+820 John proceeded to the security section.
+835 John walked to the security check point.
+869 John walked to security.
+896 John walked to the security gate.
+911 John went to security.
+###
+@ enter security line
+3 John entered the queue for the security checkpoint.
+44 John entered the security line.
+92 John entered the security line.
+141 John entered the security line.
+161 John got in line at the security checkpoint.
+257 John got in line for security check in.
+302 John went to the security line.
+627 John entered the security line.
+650 John got in line to go through security.
+855 John entered the security check line.
+###
+@ wait in security line
+22 John stood in line at the security check.
+46 John waited in the security line.
+128 John waited in line for the security check.
+142 John waited in line.
+174 John waited in line for the security check.
+289 John waited in the security line.
+318 John stood in line for the x-ray machine.
+395 John stood in the security line.
+428 John got in line for the security check.
+475 John stood in the security line.
+529 John waited in line at the security check.
+561 John waited in line to pass through security.
+664 John waited for his turn in the security checkpoint queue.
+707 John stood in the security line.
+722 John waited in the security line.
+768 John stood in line.
+801 John stood in line for the security checkpoint.
+###
+@ give ID to security
+4 John showed his boarding pass and ID to the airport security officer.
+23 John presented his boarding pass and drivers license to the agent.
+33 John gave his ticket to a security officer.
+45 John handed his identification and boarding pass to a security officer.
+104 John showed his license and boarding pass to the security officer.
+189 John showed John's identification to security officer.
+223 John showed his boarding pass and ID to the security officer.
+304 John handed his ticket to a security officer.
+311 John handed his ticket to the security officer.
+338 John showed his plane ticket and identification to the security officer.
+413 John gave his passport to the security officer.
+455 John gave the security officer his passport and boarding pass.
+463 John gave the security officer his passport and boarding pass.
+476 John showed his driver's license and plane ticket to a security officer.
+497 John showed his photo identification and boarding pass to the security officer at the security area.
+597 John handed the security guard the ticket and photo identification.
+628 John showed his plane ticket to the security officer.
+663 John showed his ID to the security officer to enter the queue.
+681 John showed his ID to the security officer.
+###
+@ security checks id
+63 A security officer cleared John to board the plane.
+145 The security officer approved John's paperwork.
+319 An airline employee checked John's passport and ticket.
+603 A security officer checked John's identity card.
+857 A security officer checked John's ID and boarding pass.
+897 A security officer looked at John's ticket and John's identification.
+912 A security officer checked John's ID.
+###
+@ remove shoes
+5 John removed his shoes.
+24 John took off his shoes.
+36 John removed his shoes.
+48 John took off his shoes.
+74 John took off his shoes.
+103 John took his shoes off.
+190 John removed John's shoes.
+207 John took out his jacket and shoes.
+225 John took off his shoes and jacket.
+258 John took off his shoes and belt.
+321 John removed his shoes and belt for the security check.
+363 John took off shoes,  jewelry and metal objects.
+398 John took off his shoes.
+416 John removed his shoes and belt.
+429 John took off his shoes.
+459 John took off his shoes, belt.
+477 John took off his shoes and belt.
+530 John took off his shoes at the security check.
+596 John removed his belt and shoes.
+651 John took off his shoes and belt for the security checkpoint.
+682 John took off his shoes and belt.
+724 John took off his shoes.
+757 John took off his shoes.
+802 John removed his shoes, belt and watch.
+838 John took off his shoes.
+898 John took John's shoes off.
+###
+@ put lugggage on belt
+34 John placed his luggage on a conveyor belt.
+49 John placed his bags and shoes on the security belt.
+220 John put his luggage on the belt.
+224 John put his carry-on onto the belt.
+269 John placed his items on the security conveyor belt.
+290 John placed his bags on the security conveyor belt.
+303 John put his items on the security belt.
+339 John put his bag on the conveyor belt.
+378 John placed his carry-on luggage on the conveyor belt.
+397 John placed the bag on the belt.
+419 John slammed his carry-on on the conveyor belt.
+478 John put his carry-on bags on the scanner belt.
+512 John placed John's baggage on the conveyor belt.
+576 John loaded his carry-on bags atop a belt to be screened by a security officer.
+629 John put his luggage through the security machine.
+636 John put his luggage on a conveyor.
+665 John put his bags in the XRAY scanner.
+683 John put his items on the conveyor belt.
+723 John placed his belongings on the x-ray belt.
+803 John placed his carry-on luggage onto the X-ray conveyor belt.
+821 John put his belongings onto the conveyor belt.
+856 John placed his carry-on bag on the security belt.
+###
+@ put items in container
+6 John placed carry-on items in plastic trays.
+25 John placed his backpack and wallet into the tray.
+35 John placed his keys in a bowl.
+75 John placed his shoes and wallet in a tub.
+129 John emptied his pockets into the tray.
+177 John placed the items in a basket.
+209 John put his liquids and laptop on a tray.
+210 John put his jacket on another tray.
+259 John put his shoes and belt in the grey bin.
+364 John put shoes,  jewelry and carry on luggage into the bin.
+417 John placed his shoes and belt in a tray.
+433 John placed his personal belongings on a tray.
+460 John placed his cellphone and any metal objects in a tray.
+500 John put his shoes and jacket in a bin.
+562 John put everything in his pockets into a bin with his carry-on luggage.
+758 John put his shoes in a basket.
+839 John put his items in the tray.
+###
+@ go thru scanner
+7 John passed through an automatic scanner.
+26 John entered the x-ray booth.
+37 John walked through a metal detector.
+50 John walked through the security checkpoint.
+76 John walked through the metal detector.
+93 John walked through the scanner.
+105 John then stepped through the metal detector.
+131 John walked through the security sensors.
+178 John stepped on the metal detector.
+192 John stepped through the metal detector.
+227 John passed through the metal detector.
+237 John went through the scanners at the security station.
+260 John walked through the scanner.
+282 John went through the metal detector.
+291 John went through the metal detector.
+340 John walked through the metal detector.
+366 John walked through the scanner.
+379 John walked through the metal detector.
+400 John walked through the metal detector.
+420 John walked through the human body scanner.
+479 John walked through the metal detector.
+502 John walked through the metal detector.
+517 John walked through the metal detector.
+531 John walked through the metal detectors.
+563 John walked through the security scan machine.
+599 John walked through the security scanner.
+630 John stepped through the metal detector.
+652 John walked through the security X-ray.
+666 John went past the scanner himself.
+684 John walked through the metal detector.
+725 John walked through the scanner.
+747 John underwent metal detection.
+748 John underwent x-ray examination.
+760 John walked through a metal detector.
+770 John walked through the metal detector.
+786 John walked through a security machine.
+804 John walked through the security gate.
+822 John walked through the body scanner.
+858 John walked through the metal detector.
+881 John passed through the scanner.
+901 John walked through the security scanner.
+913 John walked through the metal detector.
+###
+@pat-down check
+322 A security officer checked John's body.
+422 John received a body inspection from the security officer.
+640 John is then searched by a security officer.
+653 A security officer patted John down for any hidden items.
+###
+@ go thru security
+871 John went through security.
+###
+@retrive bag
+40 John picked up his luggage.
+51 John retrieved his bags from the belt.
+66 John picked up the luggage bag.
+252 John picked up his luggage.
+342 John claimed his bag.
+368 John grabbed carry-on bags and other objects from the bin.
+423 John took his shoes, belt and carry-on.
+443 John took his bag.
+631 John retrieved his luggage from the conveyor belt.
+641 John picked up his luggage.
+667 John collected his bags from the security checkpoint.
+805 John gathered up his carry-on luggage.
+859 John picked up his bag from the security belt.
+872 John got his bags.
+902 John collected his carry-on bag.
+###
+@retrieve belongings
+8 John retrieved his possessions.
+27 John picked up his belongings from the conveyor.
+132 John retrieved his belongings from the tray.
+179 John collected his things.
+212 John took his things from the tray.
+228 John retrieved his belongings.
+242 John collected his things.
+305 John gathered his items.
+309 John gathered his things.
+323 John claimed his belongings.
+380 John collected his belongings.
+401 John collected his belongings.
+442 John took his personal belongings.
+464 John took back his belongings.
+481 John picked up his carry-on bags.
+503 John collected his things at the other end.
+518 John collected John's belongings from the conveyor belt.
+564 John gathered his belongings.
+654 John retrieved his shoes and belt past the security checkpoint.
+685 John retrieved his items.
+726 John collected his belongings.
+771 John gathered his things from the tray.
+823 John retrieved his belongings from the X-Ray machine.
+841 John collected his items.
+882 John collected his belongings.
+###
+@retrieve small items
+38 John put his keys in his pocket.
+###
+@put on shoes
+9 John donned his shoes.
+39 John put his shoes on.
+52 John put his shoes on.
+79 John put on his shoes.
+107 John put his shoes back on.
+133 John put his shoes back on.
+193 John put John's shoes back on.
+262 John put his shoes and belt back on.
+367 John's shoes went back on.
+402 John put on his shoes.
+424 John wore his shoes.
+440 John put his shoes back on.
+480 John put his shoes and belt back on.
+504 John put his shoes back on.
+532 John put his shoes back on.
+600 John put back on the belt and shoes.
+686 John put on his belt and shoes.
+727 John put his shoes on.
+762 John put on his shoes.
+806 John put his shoes, belt and watch back on.
+842 John put his shoes back on.
+###
+@find boarding gate
+292 John located his gate.
+370 John found the departure gate just on time.
+382 John found his gate.
+404 John found his gate.
+482 John found his gate.
+533 John found the gate for his flight.
+581 John located the gate for his flight.
+709 John located the depature gate.
+914 John found his gate.
+###
+@walk to boarding gate
+10 John walked to the boarding gate.
+28 John walked to his departure gate.
+43 John walked to his assigned gate.
+53 John walked to the gate.
+80 John walked to his departure gate.
+108 John then walked to the boarding gate.
+146 John walked to his gate.
+195 John proceeded to the gate.
+213 John went to his boarding gate.
+229 John walked to the correct gate.
+238 John found his gate.
+263 John walked to the gate for his plane.
+306 John went to the gate for his flight.
+324 John walked to the boarding gate.
+369 John raced to the departure gate.
+465 John walked to his departure gate.
+505 John walked to the proper gate.
+514 John walked to the security gate.
+519 John walked to the gate.
+601 John walked to the gate.
+632 John walked to his gate.
+638 John walked to his gate.
+655 John walked to his boarding gate.
+668 John started towards the departure gate of the flight.
+728 John walked to his gate.
+763 John walked to the gate.
+789 John walked to his gate.
+792 John walked to the boarding gate.
+807 John walked to his flight gate.
+828 John proceeded to his flight gate.
+843 John walked to the departure gate.
+860 John walked to the airline gate.
+903 John walked to the gate.
+###
+@waiting for flight
+11 John waited for his flight.
+29 John waited for boarding to begin.
+54 John waited at the gate.
+62 John waited until the flight was ready.
+110 John waited at the gate.
+135 John waited for the plane.
+164 John waited for his plane.
+196 John waited.
+293 John waited for his turn to board.
+307 John waited for the plane.
+344 John waited at his gate.
+384 John waited to board the plane.
+466 John waited until boarding time at his gate.
+483 John waited for his airplane.
+506 John waited until the plane was ready to board.
+568 John waited until it was time to board the plane.
+607 John waited for the flight.
+642 John waited for his flight.
+710 John waited for boarding.
+738 John waited for his plane.
+773 John waited to board his flight.
+790 John waited at the gate.
+808 John waited to board the plane.
+874 John waited for his plane.
+884 John waited for the plane.
+904 John waited to board the airplane.
+###
+@sit in waiting area
+81 John sat in the waiting area.
+147 John sat in the waiting area.
+240 John sat in the waiting area.
+325 John sat near the boarding gate.
+383 John took a seat.
+405 John sat down in an empty seat.
+534 John sat in the waiting area.
+567 John sat down in a chair.
+611 John sat in the lounge.
+687 John waited in the waiting area.
+844 John sat at the gate for a long time.
+915 John sat in a chair and waited.
+###
+@announce boarding
+82 An airline employee announced the boarding call.
+165 An airport officer announced the plane.
+308 An airline employee called his flight.
+345 The airline employee announced boarding.
+484 An airline employee called John's row.
+535 John was called to board the plane.
+552 An airport employee announced the airplane gate details.
+612 An airline employee announced flight departure.
+643 John's plane number was called out.
+774 The airport announced John's flight.
+845 The airline employee announced boarding.
+847 The airline employee called John's section.
+917 An airline employee announced boarding.
+###
+@announcement heard
+112 John heard his flight number.
+148 John heard his seat called.
+346 John heard his seating section announced.
+791 John heard his boarding call.
+905 John heard an airline employee call John's row.
+###
+@wait in boarding line
+55 John stood in line to board the plane.
+230 John lined up to board the plane.
+310 John stood in line.
+407 John lined up.
+536 John waited in line.
+569 John walked to the line to board the plane.
+688 John got in line.
+918 John got in line.
+###
+@show boarding pass
+12 John showed his boarding pass to the flight attendant.
+30 John handed his boarding pass to the airline employee.
+56 John showed his boarding pass to an airport employee.
+84 John showed his license and ticket to the airline employee.
+96 John handed his pass to the agent at the specified boarding time.
+114 John handed the boarding pass to the airline employee.
+150 John gave his ticket to the airline employee.
+180 John handed over his ticket to the airline employee.
+215 John gave his boarding pass and ID to the airline employee.
+231 John showed his boarding pass to the gate attendant.
+294 John gave his ticket to the airline employer.
+327 John gave his boarding pass.
+347 John showed his ticket to the airline employee.
+371 John showed the ticket to the airline employee.
+385 John gave his boarding pass to the airline employee.
+408 John gave the airline employee his boarding pass.
+467 John showed the boarding pass to the airline employee.
+570 John gave the airport employee his ticket.
+625 John gave the airline ticket to the airline employee.
+633 John showed his boarding pass to the airline employee.
+656 John showed his boarding pass to an airline employee.
+672 John presented his boarding pass to the airline employee.
+689 John showed the airline employee his boarding pass.
+711 John handed the boarding pass to the airline employee.
+730 John gave his boarding pass to the airline employee.
+764 John gave his boarding pass to an airline employee.
+775 John handed the staff his boarding pass.
+793 John gave his ticket to the flight attendant.
+810 John handed his boarding pass to the agent.
+829 John gave his ticket to the gate attendant.
+848 John showed the employee his ticket.
+861 An airline employee took John's boarding pass at the gate.
+###
+@scan boarding pass
+136 An airline employee checked John's ticket.
+521 An airline employee checked John's boarding pass and passport.
+537 An airline employee scanned John's ticket.
+613 An airline employee checked the ticket.
+906 An airline employee checked John's ticket.
+###
+@walk down jetway
+152 John walked down the jetway.
+232 John walked down the jetway.
+283 John walked through the linkway.
+468 John walked down the ramp to the plane.
+731 John walked down the ramp.
+794 John walked through the connecting tube.
+811 John walked down the boarding walkway.
+830 John walked down the gangway.
+###
+@ board plane
+13 John walked onto the plane.
+31 John boarded the plane.
+57 John boarded the plane.
+67 John boarded the plane.
+85 John boarded the plane.
+97 John boarded the plane for his trip.
+109 John boarded the plane.
+115 John walked into the plane.
+137 John boarded the plane.
+153 John boarded the airplane.
+166 John boarded the plane.
+197 John boarded the plane.
+218 John boarded the plane.
+233 John boarded the plane.
+243 John boarded the plane.
+271 John boarded the plane.
+284 John boarded the plane.
+295 John boarded the plane.
+312 John boarded the plane.
+328 John walked to the plane.
+348 John boarded the plane.
+372 John got on to the airplane.
+386 John boarded the plane.
+409 John boarded the plane.
+485 John boarded his airplane.
+508 John walked into the plane.
+522 John boarded the airplane.
+538 John walked onto the airplane.
+553 John entered the airplane.
+571 John walked onto the plane.
+582 John boarded his plane.
+602 John got on the plane.
+617 John boarded the plane.
+626 John entered the plane.
+634 John boarded the plane.
+644 John boarded the plane.
+657 John boarded his plane.
+690 John boarded the plane.
+698 John boarded the plane.
+712 John boarded the plane.
+732 John boarded the plane.
+740 John boarded the plane
+750 John went on board.
+765 John entered the airplane.
+812 John boarded the plane.
+831 John boarded the airplane.
+849 John boarded the plane.
+862 John boarded the airplane.
+875 John got on his plane.
+886 John walked onto the plane.
+907 John boarded the airplane.
+919 John boarded the plane.
+###
+@stow luggage
+14 John placed his carry-on items in the storage compartment.
+120 John put the bag inside the compartment.
+155 John stowed his bag.
+314 John stored his items.
+329 John placed his belongings on the overhead bin.
+349 John put his bag into the overhead bin.
+388 John stowed his carry on in the overhead compartment.
+523 John placed John's carry-on luggage in the overhead compartment.
+676 John put his bag in the overhead cabin.
+777 John stored his carry-on bag.
+814 John stowed his carry-on luggage above his seat.
+888 John stowed his baggage.
+###
+@find seat
+58 John found his seat.
+118 John reached his seat.
+154 John found his seat.
+198 John found John's seat.
+313 John found his seat.
+387 John found his assigned seat.
+410 John found a seat.
+470 John found his seat.
+486 John found his row and seat.
+539 John found his seat.
+813 John found his seat.
+887 John found his seat.
+###
+@sit down
+15 John sat in his assigned seat.
+59 John sat down in his seat.
+122 John sat in the seat.
+134 John sat down in a row of seats
+138 John took his assigned seat.
+156 John sat in his seat.
+183 John sat in his seat.
+272 John sat down in his seat.
+315 John sat down in his seat.
+330 John sat down.
+350 John sat down in his seat.
+471 John sat down.
+487 John sat down.
+524 John sat in John's seat.
+540 John sat down.
+691 John sat down.
+778 John sat in his seat.
+796 John sat in his seat.
+815 John sat down.
+850 John sat down in his seat.
+###
+@fasten seat belt
+16 John fastened his seatbelt.
+123 John fastened the seatbelt.
+157 John buckled his seat belt.
+184 John secured his seatbelt.
+331 John wore the seat belt.
+541 John buckled his seat belt.
+554 John fastened his seat belts.
+692 John buckled his seat belt.
+780 John fastened his seat belt.
+816 John buckled his seat belt.
+###
+@fall asleep
+125 John fell asleep.
+###
+@ go in bus
+615 John sat in the bus.
+###
