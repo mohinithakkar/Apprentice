@@ -20,12 +20,13 @@ import edu.stanford.nlp.ling.IndexedWord;
 package nlp {
   object NLPMain {
 
-    var dataSet = "Movie"
     var configFile = ""
     var parseFile = ""
     var semanticFile = ""
     var locationFile = ""
     var allFile = ""
+
+    var dataSet = "Airport"
 
     def main(args: Array[String]) {
       cluster()
@@ -54,6 +55,12 @@ package nlp {
         semanticFile = "RtSemantic.txt"
         locationFile = "RtLocation.txt"
         allFile = "RtSimilarity.txt"
+      } else if (dataSet == "Airport") {
+        configFile = "configAir.txt"
+        parseFile = "AirParse.txt"
+        semanticFile = "AirSemantic.txt"
+        locationFile = "AirLocation.txt"
+        allFile = "AirSimilarity.txt"
       }
     }
 
@@ -140,7 +147,7 @@ package nlp {
     }
 
     def cluster() {
-      switchDataSet("Movie")
+      switchDataSet("Airport")
       val reader = new ConfigReader(configFile)
       var (stories, gold) = reader.initData()
       val minCluster = 4
@@ -175,7 +182,7 @@ package nlp {
           utils.Matrix.prettyPrintTo(pw,simiMatrix, 6)
           pw.close();
           System.exit(0)
-        */  
+        */
       val local = new SimpleLocation(sentFn, 0.6, locationFile)
 
       var addition = new MatrixAddition(() => simi(), () => local(), 0.25, allFile)
@@ -204,25 +211,23 @@ package nlp {
       //iterativeRestrain(clusterList, stories, simi())
       evaluate(clusterList, gold)
     }
-    
-    def mutualKNN(matrix:Array[Array[Double]], k:Int):Array[Array[Double]] =
+
+    def mutualKNN(matrix: Array[Array[Double]], k: Int): Array[Array[Double]] =
       {
-    		val n = matrix.size
-    		val answer = matrix.clone()
-    		for(i <- 0 until n)
-    		{
-    		  val sorted = answer(i).sortWith(_ > _);
-    		  val cutoff = sorted(k);
-    		  for(j <- 0 until n)
-    		  {
-    		    if (answer(i)(j) < cutoff) answer(i)(j) = 0
-    		  }
-    		}
-    		
-    		for(i <- 0 until n; j <- 0 until n)
-    		  answer(i)(j) = math.min(answer(i)(j), answer(j)(i));
-    		
-    		answer
+        val n = matrix.size
+        val answer = matrix.clone()
+        for (i <- 0 until n) {
+          val sorted = answer(i).sortWith(_ > _);
+          val cutoff = sorted(k);
+          for (j <- 0 until n) {
+            if (answer(i)(j) < cutoff) answer(i)(j) = 0
+          }
+        }
+
+        for (i <- 0 until n; j <- 0 until n)
+          answer(i)(j) = math.min(answer(i)(j), answer(j)(i));
+
+        answer
       }
 
     def evaluate(clusters: List[Cluster], gold: List[Cluster]) {

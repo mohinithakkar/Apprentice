@@ -6,6 +6,8 @@ import java.io._
 import data._
 
 package io {
+  @ deprecated ("Use SimpleParser instead. GoldParser was intended for an old format of text files which" +
+  		"are no longer in use", "2013")
   object GoldParser extends JavaTokenParsers {
     protected def word: Parser[String] = """[-’\w\.,'’]+""".r
     protected def pos: Parser[String] = """[A-Z\$\.,]+""".r
@@ -13,7 +15,7 @@ package io {
       case word ~ "/" ~ pos => Token(word, pos)
     }
 
-    protected def sentence: Parser[Sentence] = wholeNumber ~ rep(token) ^^
+    protected def sentence: Parser[Sentence] = wholeNumber ~ rep(token) <~ """\s*""" ^^
       {
         case number ~ list =>
           Sentence(number.toInt, list.toArray)

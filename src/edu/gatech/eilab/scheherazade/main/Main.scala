@@ -20,7 +20,7 @@ package main {
     }
 
     def generateGraphs() {
-      val reader = new ConfigReader("configRob.txt")
+      val reader = new ConfigReader("configAir.txt")
       val (stories, clusters) = reader.initData()
       //val (stories, clusters) = reader.initDataFiltered()
 
@@ -85,6 +85,8 @@ package main {
       val emptyCols = property.allParamNames().length
       val avgBefore = (beforeErrList.sum / beforeErrList.size)
       val avgAfter = (afterErrList.sum / afterErrList.size)
+      
+      println("improved error = " + ((1 - (avgAfter / avgBefore)) * 100) + "%")
       pw.println(" ," * emptyCols + avgBefore + ", " + avgAfter + ", " + ((1 - (avgAfter / avgBefore)) * 100))
       pw.close()
     }

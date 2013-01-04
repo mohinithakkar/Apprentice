@@ -95,7 +95,7 @@ package cluster.metric {
       for (i <- 1 to 1) {
         //val tested = "robberyTotalManualClusters.txt"
         //val tested = "mv-cl-"+i+".txt" // cluster to be tested
-        val tested = "movieSpectral2.txt"
+        val tested = "./data/new_movie/georgeClusters.txt"
           
         val clusterFile = "./data/new_movie/movieGold2.txt"
         //val clusterFile = "./data/robbery/robberyGold.txt"

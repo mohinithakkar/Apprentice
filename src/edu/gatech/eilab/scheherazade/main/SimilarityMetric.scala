@@ -7,7 +7,7 @@ import similarity._
 package main {
   class SimilarityMetric {
 
-    val ruler: SimilarityMeasure = JiangConrath
+    val ruler: SimilarityMeasure = Resnik
 
     var simHash = HashMap.empty[(String, String), Double]
 

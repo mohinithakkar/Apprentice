@@ -10,6 +10,7 @@
 878 John unloaded his baggage from the car.
 ###
 @ drive to airport
+352 John drove up to the airport.
 525 John drove to the airport.
 555 John drove to the airport.
 695 John drove to the airport.
@@ -72,11 +73,22 @@
 908 John arrived at the airport.
 ###
 @ weigh baggage
+247 John placed his baggage on the scale.
 300 John weighed his bags.
 360 An airline employee weighed John's luggage.
+448 John put his luggage on the scale.
+494 An airport employee weighed his bag.
 546 John weighted his luggages.
 648 An airline employee weighed John's luggage.
 867 John weighed his bags.
+###
+@ tag luggage
+250 John watched the airline employee tag his luggage.
+449 The employee put a sticker and label on John's suitcase.
+453 John attached the label on the bag.
+495 The airport employee put a tag on John's luggage.
+719 John applied his luggage tags to his bags.
+866 John tagged his bags.
 ###
 @ approach ticket counter
 87 John approached the ticket counter.
@@ -109,6 +121,9 @@
 ###
 @ check in
 219 John checked in at the kiosk.
+635 John checked in with his ticket.
+734 John signed in with his ticket.
+784 John checked with the airline.
 818 John checked in at the counter.
 893 John checked in.
 ###
@@ -133,11 +148,19 @@
 661 John checked in his bag at the counter.
 679 John checked in his luggage.
 696 John checked his bags.
+736 John checked in his luggage.
 767 John checked his bags.
-785 John gave his bag to the airline attendant.
 799 John checked his baggage.
 ###
-@ airline took bag
+@ give bags to airline
+172 John handed his luggage.
+473 An airline employee took John's checked baggage.
+621 John gave the bags to the airline employee.
+720 John gave his bags to the airline employee.
+755 John gave his suitcase to an airline employee at the check-in counter.
+785 John gave his bag to the airline attendant.
+868 John handed over his bags.
+880 John gave his baggage to the airline employee.
 895 An airline employee took John's checked bag.
 ###
 @ show id to airline
@@ -485,6 +508,7 @@
 263 John walked to the gate for his plane.
 306 John went to the gate for his flight.
 324 John walked to the boarding gate.
+343 John proceeded to his gate.
 369 John raced to the departure gate.
 465 John walked to his departure gate.
 505 John walked to the proper gate.
@@ -551,6 +575,7 @@
 82 An airline employee announced the boarding call.
 165 An airport officer announced the plane.
 308 An airline employee called his flight.
+326 An airline employee called row numbers.
 345 The airline employee announced boarding.
 484 An airline employee called John's row.
 535 John was called to board the plane.
@@ -613,8 +638,10 @@
 848 John showed the employee his ticket.
 861 An airline employee took John's boarding pass at the gate.
 ###
+
 @scan boarding pass
 136 An airline employee checked John's ticket.
+507 An airport employee scanned John's boarding pass.
 521 An airline employee checked John's boarding pass and passport.
 537 An airline employee scanned John's ticket.
 613 An airline employee checked the ticket.

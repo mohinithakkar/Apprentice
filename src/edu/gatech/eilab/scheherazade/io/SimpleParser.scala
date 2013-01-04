@@ -26,7 +26,7 @@ package io {
           Sentence(number.toInt, list.toArray)
       }
 
-    protected def cluster: Parser[Cluster] = """@\s""".r ~> rep(word) ~ eol ~ rep(sentence) <~ "###" ~ opt(eol) ^^
+    protected def cluster: Parser[Cluster] = """@\s*""".r ~> rep(word) ~ eol ~ rep(sentence) <~ "###" ~ opt(eol) ^^
       {
         case nameList ~ eol ~ list =>
           //println("Parsed cluster " + name.trim)

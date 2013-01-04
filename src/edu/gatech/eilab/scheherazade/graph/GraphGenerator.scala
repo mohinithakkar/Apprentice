@@ -79,7 +79,7 @@ package graph {
 
       //println(compactGraph.links.mkString("\n"))
       var (sum, avg) = errorChecker.checkErrors(storyList, compactGraph)
-      println("before improvement, avg err = " + avg)
+      //println("before improvement, avg err = " + avg)
 
       hashmap += (("original", (compactGraph, avg)))
 

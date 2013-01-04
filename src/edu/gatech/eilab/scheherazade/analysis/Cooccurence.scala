@@ -2,7 +2,7 @@ package edu.gatech.eilab.scheherazade
 import data._
 import main._
 import graph._
-import org.apache.commons.math3.stat.inference.ChiSquareTest
+//import org.apache.commons.math3.stat.inference.ChiSquareTest
 
 package analysis {
   object Cooccurence extends App {
@@ -30,19 +30,19 @@ package analysis {
       val mi = mutualInfo(c1, c2, stories)
       val pmi = ptMutualInfo(c1, c2, stories)
       //val sizeEntropy = clusterSizeDifference(c1, c2, stories)
-      val chisquare = computeChi(c1, c2, stories)
+      //val chisquare = 0 //computeChi(c1, c2, stories)
       //println(c1.name + ", " + c2.name + ", " + count + ", " + max + ", " + count.toDouble / max + ", " + (mi._1 + mi._2) + ", " + mi._1 + ", " + mi._2)
       //if ((mi._1 + mi._2) > 0.05 && mi._2 > 0)
       if (c1.size >= 0 && c2.size >= 0)
         
-        println(", mi: " + (mi._1 + mi._2) + ", " + mi._1 + ", " + mi._2 + ", p-value: " + chisquare._1 + ", " + chisquare._2 ) 
+        println(", mi: " + (mi._1 + mi._2) + ", " + mi._1 + ", " + mi._2 ) 
           //+ ", pmi: " + (pmi._1 + pmi._2) + ", " + pmi._1 + ", " + pmi._2)
       //}
     }
 
     Thread.sleep(3000)
 
-    
+    /*
     def computeChi(c1: Cluster, c2: Cluster, stories: List[Story]): (Double, Int) = {
       val counts = Array.ofDim[Long](2, 2)
       
@@ -63,7 +63,7 @@ package analysis {
       
       val pValue = new ChiSquareTest().chiSquareTest(counts)
       (pValue, coOccur)
-    }
+    }*/
     
     def clusterSizeDifference(c1: Cluster, c2: Cluster, stories: List[Story]): Double = {
       val joint = jointSize(c1, c2, stories)
