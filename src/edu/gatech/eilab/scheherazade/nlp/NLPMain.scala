@@ -210,6 +210,8 @@ package nlp {
       var clusterList = OPTICS.cluster(distance, max, minCluster, stories.flatMap(_.members.toList))
       //iterativeRestrain(clusterList, stories, simi())
       evaluate(clusterList, gold)
+      
+      
     }
 
     def mutualKNN(matrix: Array[Array[Double]], k: Int): Array[Array[Double]] =
