@@ -47,13 +47,13 @@ package main {
 
     def compute(): T
 
-    /** Converting the data to a string format, which can be then stored
+    /**
+     * Converting the data to a string format, which can be then stored
      * The default is converting to XML using XStream.
      * Override this method if a different mechanism is desired.
      */
-    def convertToString(data:T):String = XStream.toXML(data)
-    
-    
+    def convertToString(data: T): String = XStream.toXML(data)
+
     def apply(): T = {
 
       if (cached) {
@@ -119,6 +119,15 @@ package main {
 
   class StoryNLPParser(val storyList: List[Story], cacheFile: String, overWrite: Boolean = true) extends CachedOp[StorySet](cacheFile, cacheFile, overWrite) {
     def compute(): StorySet = {
+
+      storyList foreach { s =>
+        s.members foreach {
+          sent =>
+            val lastword = sent.tokens.last.word
+            if (!lastword.endsWith("."))
+              throw new RuntimeException("sentence \"" + sent.toSimpleString() + " \" does not end with a period.")
+        }
+      }
 
       val text = storyList.flatMap { _.members.map { _.tokens.map(_.word).mkString(" ") } }.mkString("\n")
       val nlp = new NLPWrapper()

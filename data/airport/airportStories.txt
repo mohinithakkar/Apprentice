@@ -141,7 +141,7 @@
 131 John walked through the security sensors.
 132 John retrieved his belongings from the tray.
 133 John put his shoes back on.
-134 John sat down in a row of seats
+134 John sat down in a row of seats.
 135 John waited for the plane.
 136 An airline employee checked John's ticket.
 137 John boarded the plane.
@@ -269,7 +269,7 @@
 251 John removed his luggage from the scale.
 252 John picked up his luggage.
 253 John walked over to the baggage check area.
-254 John answered the security officer's questions about his luggage
+254 John answered the security officer's questions about his luggage.
 255 John gave his luggage to the security officer.
 256 John walked through the concourse.
 257 John got in line for security check in.
@@ -791,7 +791,7 @@
 741 John entered into the passenger's lounge.
 742 John showed the passport to the airline employee.
 743 John got back the passport after check in.
-744 John obtained foreign money exchange
+744 John obtained foreign money exchange.
 745 John produced luggage for check in.
 746 John appeared before the security officer.
 747 John underwent metal detection.
