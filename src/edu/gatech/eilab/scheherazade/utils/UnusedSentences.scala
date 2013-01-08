@@ -11,7 +11,7 @@ package utils {
   object UnusedSentences {
 
     def main(args: Array[String]) {
-      val reader = new ConfigReader("configAir.txt")
+      val reader = new ConfigReader("configCoffee.txt")
       val (stories, clusters) = reader.initData
       
       val sent1 = stories.flatMap(_.members)
