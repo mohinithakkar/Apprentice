@@ -1,3 +1,9 @@
 This is a project that aims to learn scripts usable by artificial intelligence from crowd-sourced data
 
 Most of the libraries needed are under the library folder. The Stanford CoreNLP package is not included because of its size. You can download it at http://nlp.stanford.edu/software/corenlp.shtml#Download
+
+Also:
+Include lib from Apache Commons Math 3.1.1. http://commons.apache.org/math/download_math.cgi
+Download/Install wordnet http://wordnet.princeton.edu/wordnet/download/
+Include JAWS (Java API for WordNet) http://lyle.smu.edu/~tspell/jaws/index.html
+Update system property that points to WordNet database file (-Dwordnet.database.dir=<wherever>\WordNet-3.0\dict\)
