@@ -30,7 +30,7 @@ package main {
 
       val gen = new GraphGenerator(insideStories, insideClusters)
       var graph: Graph = gen.generate(para)("mutualExcl")._1
-
+      graph.draw("abcdefg")
       val me = graph.mutualExcls
 
       // starting point:
