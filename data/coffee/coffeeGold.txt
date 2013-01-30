@@ -1,0 +1,349 @@
+@ open cupboard
+36 John opened the cupboard.
+112 John opened kitchen cupboard.
+131 John opened the cabinet.
+292 John opened the cupboard.
+303 John opened a cupboard door.
+382 John opened the cabinet.
+393 John opened the cabinet.
+###
+@ walked into kitchen
+63 John walked into the kitchen.
+81 John entered the kitchen.
+111 John walked into kitchen.
+141 John entered the kitchen.
+194 John walked into the kitchen.
+244 John went to the kitchen.
+258 John entered the kitchen.
+270 John entered the kitchen.
+284 John walked into the kitchen.
+###
+@ open can of coffee
+84 John opened the can of coffee.
+182 John opened the coffee container.
+###
+@ lift the lid
+47 John lifted the lid.
+128 John opened the top of the coffee maker.
+208 John opened the coffee maker's lid.
+235 John opened the lid of the coffee machine.
+363 John opened the top of the coffee maker.
+387 John opened the lid on the coffee pot.
+###
+@ grab pot
+1 John grabbed the coffee pot.
+12 John picked up the coffee pot.
+124 John grabbed the coffee pot.
+###
+@ pour water into pot
+2 John poured water into the coffee pot.
+13 John filled the coffee pot with water.
+54 John filled the mug with water.
+126 John filled the coffee pot with water.
+187 John filled the carafe with water from the faucet.
+276 John filled the carafe with cold water.
+328 John filled the carafe with water.
+339 John filled the coffee pot full of water.
+362 John filled the coffee pot with 12 ounces of cold water.
+414 John poured the water into the back of the pot.
+
+###
+@ pour water into coffee machine
+3 John poured water from the coffee pot into the water container on the coffee machine.
+14 John poured the water from the coffee pot into the coffee maker.
+32 John added six ounces of water to the coffee maker.
+44 John poured the water into the resevoir of the coffee maker.
+55 John poured the water into the coffeemaker.
+72 John poured water into the reservoir.
+86 John added water to the coffee maker.
+92 John put water in the coffee maker.
+115 John put water in coffee maker.
+129 John poured the water into the coffee maker.
+160 John emptied the water into the coffee maker.
+188 John poured the water from the carafe into the coffee maker's water reservoir.
+209 John filled the coffee maker with water.
+219 John added the water to the coffee maker.
+236 John put a new coffee filter in the coffee machine.
+240 John poured water into the coffee machine.
+259 John filled the coffee maker with water.
+277 John poured the water into the coffee maker.
+285 John poured water into the coffee maker.
+298 John added 3 cups of water to the coffee maker.
+314 John poured water into the coffee maker.
+340 John poured the water into the top back section.
+364 John poured the water from the pot into the coffee maker.
+400 John poured the water into the coffee maker.
+
+###
+@ take filter
+4 John grabbed a coffee filter.
+82 John took a coffee filter from the package.
+206 John got a coffee filter out.
+294 John grabbed a coffee filter.
+322 John got out the coffee filter.
+###
+@ install a filter
+5 John placed a coffee filter into the coffee machine.
+15 John put a coffee filter into the coffee maker.
+30 John placed a new filter on the coffee maker filter base.
+48 John installed a coffee filter.
+73 John inserted a filter into the filter basket.
+83 John placed the filter in the filter basket.
+144 John put a Filter in the Coffee Maker.
+156 John put the coffee filter into the basket of the coffee maker.
+181 John placed a new coffee filter in the filter basket.
+210 John placed the coffee filter into the machine.
+215 John placed a coffee filter into the coffee maker.
+260 John placed a filter in the coffee maker.
+274 John placed a coffee filter in the coffee maker.
+296 John put the filter in the coffee maker.
+323 John put the filter in the filter basket.
+370 John put a coffee filter into the top of the coffee maker.
+401 John put a coffee filter into the coffee maker.
+410 John placed a filter in the pot.
+
+###
+@ take coffee grounds
+6 John grabbed the coffee grounds.
+###
+@ scooped coffee
+39 John scooped a measured amount of coffee grounds.
+51 John scooped out some coffee.
+238 John scooped the coffee grinds out of the bag.
+371 John scooped two overflowing scoops of coffee grounds into the coffee filter.
+388 John scooped the coffee from the container.
+###
+@ measured coffee
+75 John measured a spoon of coffee.
+95 John measure the coffee grounds.
+216 John measured the coffee with a coffee spoon.
+348 John measured several scoops of coffee into the coffee filter.
+402 John measured the coffee grounds.
+###
+@ ground coffee beans
+66 John grounded his coffee beans in his grinder.
+94 John ground the coffee beans.
+###
+@ put grounds into filter
+7 John placed the coffee grounds into the coffee filter.
+16 John added coffee grounds to the coffee filter.
+31 John added two teaspoons of coffee to the coffee maker.
+40 John dumped the coffee grounds into the filter of the coffee maker.
+52 John deposited the coffee onto the filter.
+85 John put the coffee in the filter.
+96 John put two scoops of coffee grounds in a coffee filter.
+145 John put Grounds in the Filter.
+157 John put the ground beans into the basket of the coffee maker.
+183 John poured two scoops of coffee grounds into the filter basket.
+211 John placed coffee into the filter.
+217 John placed the coffee into the filter.
+239 John poured the coffee grinds into the coffee filter.
+261 John poured some coffee grounds into the filter.
+275 John dumped the ground coffee into the filter.
+299 John put 3 scoops of coffee in the filter.
+313 John poured coffee into the coffee maker.
+337 John put the grounds in the filter at the top.
+389 John dumped the coffee into the coffee pot.
+403 John added the coffee grounds to the filter.
+
+###
+@ close lid
+17 John closed the lid of the coffee maker.
+56 John closed the lid.
+147 John closed the Lid of the Coffee Maker.
+212 John closed the coffee machine lid.
+220 John closed the cover.
+241 John closed the lid of the coffee machine.
+300 John closed the lid of the coffee pot.
+342 John closed the top of the coffee maker.
+372 John closed the lid of the coffee maker.
+390 John closed the lid on the coffee pot.
+415 John closed the lid on the coffee pot.
+###
+@ turn on coffee maker
+8 John turned on the coffee machine.
+19 John turned on the coffee maker.
+33 John turned on the coffee maker.
+45 John turned on the coffee maker.
+78 John switched the coffee machine on.
+87 John turned on the coffee maker.
+99 John turned the coffee maker on.
+119 John turned on coffee maker.
+190 John turned the coffee maker on.
+262 John turned on the coffee maker.
+279 John turned on the coffee maker.
+287 John turned on the coffee maker.
+331 John turned on the coffee maker.
+352 John turned the coffee maker on.
+343 John turned on the coffee maker.
+404 John turned on the coffee maker.
+416 John turned the coffee pot on.
+###
+@ push the brew button
+140 John pressed the brew button.
+221 John pushed the "brew" button.
+243 John pushed the brew button on the coffee machine.
+392 John pressed the brew button.
+###
+@ turn off coffee machine
+25 John turned off the coffee maker.
+121 John turned off coffee maker.
+###
+@ wait
+9 John waited for the coffee to brew.
+20 John waited for the coffee.
+34 John waited until the coffee was brewed.
+58 John waited several minutes.
+69 John waited three minuted for the coffee to brew.
+79 John waited for the coffee to drip into the carafe.
+149 John waited for the Coffee.
+162 John waited for ten minutes.
+191 John waited for the coffee maker to finish.
+203 John waited.
+214 John waits for the coffee to brew.
+222 John waited for the complete brew cycle.
+280 John waited for the coffee to brew.
+288 John waited for the coffee to be finished.
+302 John waited for the coffee to brew.
+316 John waited for the coffee pot to fill.
+332 John waited.
+374 John waited for four minute while the water heated and ran through the grounds into the coffee pot.
+405 John waited ten minutes.
+417 John waited for coffee.
+###
+@ take a mug
+10 John grabbed a cup.
+21 John took a coffee mug off of the shelf.
+42 John took a glass from the cupboard.
+53 John reached for a mug.
+88 John picked up his coffee mug.
+169 John took a mug out of the cupboard.
+281 John took a coffee mug out of the cupboard.
+357 John got a coffee mug.
+375 When the coffee maker was finished,  John got his Tigger coffee mug from the cupboard.
+394 John took a mug out of the cabinet.
+
+###
+@ pour coffee into cup
+11 John poured himself a cup of coffee.
+22 John poured the coffee into the mug.
+35 John poured the coffee into a cup.
+61 John poured the coffee.
+71 John poured his coffee into a cup.
+80 John poured coffee into a cup.
+89 John poured coffee into his mug.
+100 John poured the coffee into a coffee mug.
+123 John poured coffee into a cup.
+151 John poured the Coffee into a Mug.
+163 John poured the coffee into his mug.
+193 John poured coffee into his cup.
+205 John poured himself a cup of black coffee.
+289 John poured the coffed into a cup.
+307 John poured the coffee in the mug.
+318 John poured coffee into his mug.
+376 John poured coffee from the pot into his mug.
+397 John poured the coffee into the mug.
+406 John poured coffee into a cup.
+427 John poured the coffee into a mug.
+
+###
+@ add milk and sugar
+23 John added milk and sugar to the coffee.
+90 John added cream and sugar to his coffee.
+108 John added milk.
+109 John added sugar.
+152 John poured Cream in the Mug.
+176 John put one teaspoon of sugar into the mug.
+178 John poured milk into the mug.
+233 John poured the steamed milk into the coffee cup.
+282 John poured the coffee into the mug.
+290 John poured sugar and creamer into the coffee.
+308 John added sugar to the coffee.
+309 John added cream to the coffee.
+319 John added milk to his coffee.
+360 John added sugar and cream.
+377 John added two packets of sugar to his Tigger coffee mug.
+378 John added four ounces of creamer to his Tigger coffee mug.
+###
+@ remove filter
+26 John removed the coffee filter and grounds from the coffee maker.
+###
+@ wash the pot
+27 John washed the coffee pot.
+###
+@ drink coffee
+28 John finished his coffee.
+62 John drank his mug of coffee.
+91 John drank his coffee.
+153 John drank the Coffee.
+234 John drank the coffee.
+257 John drank the coffee.
+269 John drank the coffee.
+283 John drank the hot coffee.
+291 John drank the coffee.
+320 John drank the coffee.
+381 John relished his first sip of freshly made coffee.
+###
+@ boil water
+67 John heated up water in the microwave.
+101 John boiled a pot of water.
+198 John boiled the water.
+356 John boiled water.
+###
+@ put instant coffee in mug
+105 John placed the instant coffee in the mug.
+170 John put one teaspoon of instant coffee into the mug.
+252 John poured the instant coffee into the cup.
+358 John put 2 spoonfuls of instant coffee in the mug.
+###
+@ put hot water in mug
+106 John poured hot water into the mug.
+254 John poured hot water into the cup.
+359 John poured hot water in the mug.
+###
+@ get a spoon
+255 John took out a spoon from the drawer.
+310 John picked up the spoon.
+379 John got a teaspoon from the drawer.
+
+###
+@ stir coffee
+110 John stirred the coffee.
+174 John stirred the coffee.
+179 John stirred the coffee.
+256 John stirred the coffee.
+311 John stirred the coffee.
+380 John stirred his coffee in the Tigger coffee mug.
+423 John stirred the water and coffee.
+###
+@ pour hot water into french press
+68 John added his hot water and ground coffee to the french press.
+201 John poured the hot water into the french press.
+422 John poured very hot water into the french press.
+###
+@ push lever on french press
+70 John plunged his french press.
+204 After several minutes,  John pushed the lever down on the french press.
+426 John slowly pushed the plunger on the french press down.
+###
+@ ground beans
+66 John ground his coffee beans in his grinder.
+94 John ground the coffee beans.
+273 John pressed the button to grind the beans.
+368 John ground the beans.
+420 John ground the coffee to his desired consistency.
+###
+@ put coffee beans into grinder
+419 John put two scoops of beans into the coffee grinder.
+407 John poured coffee beans into the grinder.
+367 John filled his bean grinder with coffee beans.
+272 John measured coffee beans into the grinder.
+224 John poured the coffee beans into the coffee grinder.
+154 John put the coffee beans into the grinder.
+###
+@ take coffee beans
+65 John grabbed his bag of coffee beans from the cabinet.
+93 John took coffee beans from the freezer.
+223 John took the bag of coffee beans out of the cupboard.
+418 John got the coffee beans out of the cabinet.
+###

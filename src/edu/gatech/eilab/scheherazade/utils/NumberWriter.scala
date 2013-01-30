@@ -7,9 +7,9 @@ import java.io._
  */
 object NumberWriter extends App {
 
-  val text = scala.io.Source.fromFile("./data/airport/airport stories.txt").mkString
+  val text = scala.io.Source.fromFile("./data/coffee/coffeeUnnumbered.txt").mkString
 
-  val writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream("./data/airport/airportStories.txt")))
+  val writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream("./data/coffee/coffeeStories.txt")))
 
   val lines = text.split("\n")
 

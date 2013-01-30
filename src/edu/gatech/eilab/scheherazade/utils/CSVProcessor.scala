@@ -63,8 +63,8 @@ object CSVProcessor {
   
   def main(args:Array[String])
   {
-    val array = readCSV("./data/airport/airport_data.csv")
-    val writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream("./data/airport/airport stories.txt")))
+    val array = readCSV("./data/coffee/data.csv")
+    val writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream("./data/coffee/coffeeStories.txt")))
     for(story <- array)
     {
       for(line <- story)
