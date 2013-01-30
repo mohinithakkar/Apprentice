@@ -303,14 +303,14 @@ package edu.gatech.eilab.scheherazade {
             val reach = pts.map(_.reachability)
 
             val valid =
-              reach.sliding(minClusterSize + 1).exists(l => l.head * 0.98 > l.tail.min) && // head is greater than min movie = 0.98
-                reach.sliding(minClusterSize).exists(l => l.max < l.min * 1.4) // a relative flat area bestRobbery = 1.05, best movie = 1.4
+              reach.sliding(minClusterSize + 1).exists(l => l.head * 0.9 > l.tail.min) && // head is greater than min movie = 0.98
+                reach.sliding(minClusterSize).exists(l => l.max < l.min * 1.05) // a relative flat area bestRobbery = 1.05, best movie = 1.4
 
             if (valid) {
               val max = reach.max
               val min = reach.min
               //val portion = if (loose) 0.35 else 0.3
-              var goodPortion = pts.filter { x => x.reachability < (min + (max - min) * 0.5) }.toList // 0.5(in acs paper)-0.6 for movie 0.4 for robbery
+              var goodPortion = pts.filter { x => x.reachability < (min + (max - min) * 0.4) }.toList // 0.5(in acs paper)-0.6 for movie 0.4 for robbery
               // divide the portions into continuous parts
               var additional = List[Point]()
               var separation = List[(Int, Int)]()
