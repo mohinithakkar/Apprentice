@@ -8,12 +8,18 @@ package main {
   object StoryGenerater {
 
     def main(args: Array[String]) {
-      val MI_THRESHOLD = 0.05
+    	generateOne()
+    }
 
+    /**
+     * Generate one story
+     *
+     */
+    def generateOne() {
       // generate graph
       val (stories, clusters, eGraph) = generateGraph()
       // generate mutual exclusive links
-      val me = generateMtlExcl(stories, clusters, MI_THRESHOLD)
+      val me = eGraph.mutualExcls
       // println("me: " + me.mkString("\n"))
 
       // starting point:
@@ -28,14 +34,62 @@ package main {
       val optionals = findOptionals(graph, me)
       graph = graph.addSkipLinks(optionals)
       sources = graph.nodes.filter(n => (!sources.contains(n)) &&
-      graph.links.filter(l => l.target == n).map(_.source).forall(optionals contains)) ::: sources
+        graph.links.filter(l => l.target == n).map(_.source).forall(optionals contains)) ::: sources
 
       println(sources.map(_.name).mkString("sources :", "\n", ""))
       println(optionals.map(_.name).mkString("optionals :", "\n", ""))
       graph.draw("initGraph")
 
       val firstWalk = Walk.fromInits(sources, graph, me, optionals)
+      randomWalk(firstWalk, ends, me, optionals)
+    }
+
+    def generateAll() {
+      //val MI_THRESHOLD = 0.05
+
+      // generate graph
+      val (stories, clusters, eGraph) = generateGraph()
+      // generate mutual exclusive links
+      val me = eGraph.mutualExcls
+      // println("me: " + me.mkString("\n"))
+
+      // starting point:
+      var sources = eGraph.sourceNodes().map(eGraph.num2Node)
+      //println(sources.map(_.name).mkString("sources : ", "\n", ""))
+      val ends = eGraph.sinkNodes().map(eGraph.num2Node)
+      //println(ends.map(_.name).mkString("ends : ", "\n", ""))
+
+      // remove from the graph nodes without predecessors that are not sources
+      var graph: Graph = eGraph.removeIrregularSourceEnds()
+
+      val optionals = findOptionals(graph, me)
+      graph = graph.addSkipLinks(optionals)
+      sources = graph.nodes.filter(n => (!sources.contains(n)) &&
+        graph.links.filter(l => l.target == n).map(_.source).forall(optionals contains)) ::: sources
+
+      //println(sources.map(_.name).mkString("sources :", "\n", ""))
+      //println(optionals.map(_.name).mkString("optionals :", "\n", ""))
+      graph.draw("initGraph")
+
+      val firstWalk = Walk.fromInits(sources, graph, me, optionals)
       bruteSearch(firstWalk, ends, me, optionals)
+    }
+
+    def randomWalk(firstWalk: Walk, ends: List[Cluster], me: List[MutualExcl], optionals: List[Cluster]) {
+      //val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream("valid stories.txt")))
+
+      var walk = firstWalk
+      while (!ends.exists(c => walk.history.contains(c))) {
+        walk = walk.oneRandomStep(me, optionals)
+      }
+
+      println("*******FOUND STORY*********")
+      walk.history.reverse.foreach{
+        step =>
+          println(step.name)
+      }
+
+      //pw.close()
     }
 
     def bruteSearch(firstWalk: Walk, ends: List[Cluster], me: List[MutualExcl], optionals: List[Cluster]) {
@@ -154,7 +208,7 @@ package main {
 
     val debug = false
 
-    def nextFringe(step: Cluster, melinks:List[MutualExcl], optionals:List[Cluster]): Walk = {
+    def nextFringe(step: Cluster, melinks: List[MutualExcl], optionals: List[Cluster]): Walk = {
       if (!fringe.contains(step)) throw new RuntimeException("Illegal Step: " + step)
 
       val newHistory = step :: history
@@ -171,12 +225,57 @@ package main {
       var newFringe = Walk.maxFringe(newHistory, newGraph, optionals)
       // delete those already executed
       newFringe = newFringe filterNot (newHistory contains)
-      
-      new Walk(id, newHistory, newFringe, excl, newGraph)	
+
+      new Walk(id, newHistory, newFringe, excl, newGraph)
     }
 
     /**
-     * Takes one step in the graph
+     * Takes a random step in the graph and returns a list of history
+     *
+     */
+    def oneRandomStep(melinks: List[MutualExcl], optionals: List[Cluster]): Walk =
+      {
+        val i = math.floor(math.random * fringe.length).toInt
+        val step = fringe(i)
+
+        val newHistory = step :: history
+        var excluded = Walk.excluded(List(step), melinks).filter(selfGraph.nodes contains)
+        var excl = excluded ::: exclList
+        excl = findTransitiveClosure(selfGraph, excl)
+        //println(excl.map(_.name).mkString("closure mutex: ", ", ", ""))
+        excluded = excl -- exclList
+        val expired = selfGraph.links.filter(l => l.target == step).map(_.source)
+        val newGraph = selfGraph.addSkipLinks(excluded).removeNodes(excluded ::: expired)
+
+        var newFringe = Walk.maxFringe(newHistory, newGraph, optionals)
+        // delete those already executed
+        newFringe = newFringe filterNot (newHistory contains)
+
+        if (debug) {
+          println("*******************************")
+          println(this)
+          println("taking step: " + step.name)
+          println("excluded because of mutual exclusions " + excluded.map(_.name).mkString("(", ", ", ")"))
+          println("excluded because of temporal ordering: " + expired.map(_.name).mkString("(", ", ", ")"))
+          println("excluded by parent: " + exclList.map(_.name).mkString("(", ", ", ")"))
+          println("is temporal ordering removal necessary: " + (newFringe filter (expired contains)).map(_.name).mkString)
+
+          newGraph.draw("valid")
+        }
+
+        val id = Walk.nextId()
+        if (debug) {
+          println("final fringe: " + newFringe.map(_.name).mkString("(", ", ", ")"))
+
+          println("next story : " + id + "\n*******************************")
+          readLine()
+        }
+        new Walk(id, newHistory, newFringe, excl, newGraph)
+
+      }
+
+    /**
+     * Takes all possible step in the graph at the same time and returns the list of history created by each possible step.
      *
      */
     def oneStep(melinks: List[MutualExcl], optionals: List[Cluster]): List[Walk] =
@@ -217,6 +316,8 @@ package main {
 
           }
 
+          //ignoring events that are (1) parallel to the step taken (2) whose name is bigger than the step taken
+          // this reduces the size of possible stories to a manageable number.
           newFringe =
             if ((newFringe -- parallel).isEmpty) newFringe
             else (newFringe -- parallel)
@@ -315,6 +416,5 @@ package main {
       new Walk(nextId(), Nil, fringe, Nil, graph)
     }
   }
-
 
 }
