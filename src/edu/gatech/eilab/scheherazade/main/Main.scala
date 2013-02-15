@@ -23,12 +23,12 @@ package main {
       val reader = new ConfigReader("configRobBest.txt")
       // val (stories, clusters) = reader.initData()
       val (stories, clusters) = reader.initDataFiltered()
-
+      
       // count average number of sentences in each story
       //val avg = stories.map(_.members.size).sum / stories.size
       //println("average = " + avg); 
       //println(clusters.map(c => c.name + ", " + c.size).mkString("\n"));System.exit(1)
-
+ 
       val property = reader.properties
       val parameters = property.allParameters()
 

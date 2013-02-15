@@ -17,10 +17,10 @@ package main {
      */
     def generateOne() {
       // generate graph
-      val (stories, clusters, eGraph) = generateGraph()
+      val (stories, clusters, eGraph, me) = generateGraph()
       // generate mutual exclusive links
-      val me = eGraph.mutualExcls
-      // println("me: " + me.mkString("\n"))
+      //val me = eGraph.mutualExcls
+      println("me: " + me.mkString("\n"))
 
       // starting point:
       var sources = eGraph.sourceNodes().map(eGraph.num2Node)
@@ -41,16 +41,22 @@ package main {
       graph.draw("initGraph")
 
       val firstWalk = Walk.fromInits(sources, graph, me, optionals)
+      
+      var clusterProbabilities=getClusterProb(stories,clusters)
+      println("clusterProbs"+clusterProbabilities.mkString(","))
+      
       randomWalk(firstWalk, ends, me, optionals)
+      mostProbableWalk(firstWalk, ends, me, optionals,clusters,clusterProbabilities)
+      leastProbableWalk(firstWalk, ends, me, optionals,clusters,clusterProbabilities)
     }
 
     def generateAll() {
       //val MI_THRESHOLD = 0.05
 
       // generate graph
-      val (stories, clusters, eGraph) = generateGraph()
+      val (stories, clusters, eGraph, me) = generateGraph()
       // generate mutual exclusive links
-      val me = eGraph.mutualExcls
+      //val me = eGraph.mutualExcls
       // println("me: " + me.mkString("\n"))
 
       // starting point:
@@ -83,15 +89,63 @@ package main {
         walk = walk.oneRandomStep(me, optionals)
       }
 
-      println("*******FOUND STORY*********")
+      var storycontent=new ListBuffer[String]()
+      println("*******RANDOM STORY*********")
       walk.history.reverse.foreach{
         step =>
-          println(step.name)
+          //println(step.name)
+          storycontent+=step.name
       }
+      
+      var POS=new POSMain();
+      POS.convertToFirstPerson(storycontent.toArray);
 
       //pw.close()
     }
+    
+    def mostProbableWalk(firstWalk: Walk, ends: List[Cluster], me: List[MutualExcl], optionals: List[Cluster],clusters: List[Cluster],clusterProbabilities:Array[Double]) {
+      //val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream("valid stories.txt")))
 
+      var walk = firstWalk
+      while (!ends.exists(c => walk.history.contains(c))) {
+       walk = walk.oneMostProbableStep(me, optionals,clusters,clusterProbabilities)
+      }
+
+      var storycontent=new ListBuffer[String]()
+      println("*******MOST PROBABLE STORY*********")
+      walk.history.reverse.foreach{
+        step =>
+          //println(step.name)
+          storycontent+=step.name
+      }
+      
+      var POS=new POSMain();
+      POS.convertToFirstPerson(storycontent.toArray);
+      
+      //pw.close()
+    }
+
+    def leastProbableWalk(firstWalk: Walk, ends: List[Cluster], me: List[MutualExcl], optionals: List[Cluster],clusters: List[Cluster],clusterProbabilities:Array[Double]) {
+      //val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream("valid stories.txt")))
+
+      var walk = firstWalk
+      while (!ends.exists(c => walk.history.contains(c))) {
+       walk = walk.oneLeastProbableStep(me, optionals,clusters,clusterProbabilities)
+      }
+
+      var storycontent=new ListBuffer[String]()
+      println("*******LEAST PROBABLE STORY*********")
+      walk.history.reverse.foreach{
+        step =>
+          //println(step.name)
+          storycontent+=step.name
+      }
+      
+      var POS=new POSMain();
+      POS.convertToFirstPerson(storycontent.toArray);
+
+      //pw.close()
+    }
     def bruteSearch(firstWalk: Walk, ends: List[Cluster], me: List[MutualExcl], optionals: List[Cluster]) {
       val pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream("valid stories.txt")))
 
@@ -141,7 +195,7 @@ package main {
       println("Considered " + Walk.id + " search nodes. ")
     }
 
-    def generateGraph(): (List[Story], List[Cluster], EfficientGraph) =
+    def generateGraph() =
       {
         val reader = new ConfigReader("configRobBest.txt")
         var (stories, clusters) = reader.initDataFiltered()
@@ -153,12 +207,24 @@ package main {
         val insideStories = reader.filterUnused(stories, insideClusters)
 
         val gen = new GraphGenerator(insideStories, insideClusters)
-        var graph: Graph = gen.generate(para)("improved")._1
+        var graph: Graph = gen.generate(para)("mutualExcl")._1
         val eGraph = graph.makeEfficient()
 
-        (stories, clusters, eGraph)
+        (stories, clusters, eGraph, graph.mutualExcls)
       }
 
+    
+    def getClusterProb(stories:List[Story],clusters:List[Cluster]):Array[Double]=
+    {
+      var clusterProbabilities=new Array[Double](clusters.length)
+      for(i<-0 until clusters.length )
+      {
+      clusterProbabilities(i)=stories.filter((z)=> z.members.filter((x)=>clusters(i).members.exists(z.members contains)).length>0).length/stories.length.toDouble
+      //println("Cluster prob:["+i+"]"+clusterProbabilities(i))
+      }
+      clusterProbabilities
+    }
+    
     def generateMtlExcl(stories: List[Story], clusters: List[Cluster], threshold: Double) = {
       var melinks = ListBuffer[MutualExcl]()
       val size = clusters.size
@@ -234,9 +300,45 @@ package main {
      *
      */
     def oneRandomStep(melinks: List[MutualExcl], optionals: List[Cluster]): Walk =
-      {
-        val i = math.floor(math.random * fringe.length).toInt
+    {	val i = math.floor(math.random * fringe.length).toInt
         val step = fringe(i)
+        oneStoryStep(step,melinks, optionals)
+    }
+    
+    def oneMostProbableStep(melinks: List[MutualExcl], optionals: List[Cluster],clusters: List[Cluster],clusterProbabilities:Array[Double]): Walk =
+    {	var fringeProbs=fringe.map(f=>findProb(f,clusters,clusterProbabilities) )
+    	//println("fringe data:"+fringe.mkString(","))
+    	//println("fringe prob:"+fringeProbs.mkString(","))
+    	
+    	val i = fringeProbs.zipWithIndex.max._2
+    	//println("max"+i)
+        val step = fringe(i)
+        oneStoryStep(step,melinks, optionals)
+    }
+    
+    def oneLeastProbableStep(melinks: List[MutualExcl], optionals: List[Cluster],clusters: List[Cluster],clusterProbabilities:Array[Double]): Walk =
+    {	var fringeProbs=fringe.map(f=>findProb(f,clusters,clusterProbabilities) )
+    	//println("fringe data:"+fringe.mkString(","))
+    	//println("fringe prob:"+fringeProbs.mkString(","))
+    	
+    	val i = fringeProbs.zipWithIndex.min._2
+    	//println("max"+i)
+        val step = fringe(i)
+        oneStoryStep(step,melinks, optionals)
+    }
+    
+      def findProb(f:Cluster,clusters:List[Cluster],clusterProbabilities:Array[Double]):Double=
+      {var p:Double=0
+        for(j<-0 until clusters.length)
+        {
+          if(clusters(j).equals(f)) p=clusterProbabilities(j)
+        }
+        p
+      }
+      
+    def oneStoryStep(step:Cluster,melinks: List[MutualExcl], optionals: List[Cluster]): Walk =
+      {
+        
 
         val newHistory = step :: history
         var excluded = Walk.excluded(List(step), melinks).filter(selfGraph.nodes contains)
