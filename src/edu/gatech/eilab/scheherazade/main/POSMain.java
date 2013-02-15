@@ -1,5 +1,8 @@
 package edu.gatech.eilab.scheherazade.main;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 import simplenlg.framework.*;
 import simplenlg.lexicon.*;
@@ -27,11 +30,11 @@ public class POSMain {
 		sample[5]="Sally puts money in bag";
 		sample[6]="John takes the bag";
 		sample[7]="John leaves bank";
-		sample[8]="John gets in car";
+		sample[8]="Police arrests John";
 		sample[9]="John drives to bank";
 		sample[10]="The note demands money"; 
 		sample[11]="John points gun at Sally";
-		sample[12]="Sally scared";//makes it scareded :(
+		sample[12]="Sally scared";
 		sample[13]="John and Sally leave";
 		sample[14]="Jim and Sally leave";
 		
@@ -45,6 +48,9 @@ public class POSMain {
 	{String output[]=new String[input.length];
 		try
 		{
+		Map<String,String> exceptionwords=new HashMap<String,String>();
+		exceptionwords.put("scareded", "scared");
+		
 		Lexicon lexicon = Lexicon.getDefaultLexicon();
         NLGFactory nlgFactory = new NLGFactory(lexicon);
         Realiser realiser = new Realiser(lexicon);
@@ -60,7 +66,6 @@ public class POSMain {
 	        
 			String[] splits = tagged.split(" ");
 			String m="the ";
-			boolean first=true;
 			String firstsubj="";
 			boolean conjunction=false;
 			boolean theobj=false;
@@ -70,13 +75,12 @@ public class POSMain {
 				{n++;
 					if(x.contains("_NNP") && n<4)
 					{ int i=x.indexOf("_");
-						if(first)
+						if(n==1)
 						{String subj=x.substring(0, i);
 							if(subj.equals("John"))
 					        p.setSubject("I");
 							else
 							p.setSubject(subj);	
-						first=false;
 						firstsubj=subj;
 						}
 						else if(conjunction && n==3)
@@ -132,6 +136,8 @@ public class POSMain {
 						{p.setSubject("The "+obj);
 						theobj=false;
 						}
+						else if(n==1)
+							p.setSubject(obj);
 						else if(prevobj=="" || !m.equals("the "))
 							prevobj+= m + obj;
 						else	
@@ -150,6 +156,14 @@ public class POSMain {
 	        p.setFeature(Feature.TENSE, Tense.PAST);
 	        
 	        output[k] = realiser.realiseSentence(p); 
+	        
+	        	for(Map.Entry<String,String> entry:exceptionwords.entrySet())
+	        	{
+		        	if(output[k].contains(entry.getKey()))
+		        	{output[k]=output[k].replace(entry.getKey(), entry.getValue());
+		        	break;
+		        	}
+	        	}
 	        System.out.println(output[k]);
 			}
 	        

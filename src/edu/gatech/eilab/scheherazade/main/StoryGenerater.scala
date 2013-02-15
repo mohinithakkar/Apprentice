@@ -43,7 +43,7 @@ package main {
       val firstWalk = Walk.fromInits(sources, graph, me, optionals)
       
       var clusterProbabilities=getClusterProb(stories,clusters)
-      println("clusterProbs"+clusterProbabilities.mkString(","))
+      //println("clusterProbs"+clusterProbabilities.mkString(","))
       
       randomWalk(firstWalk, ends, me, optionals)
       mostProbableWalk(firstWalk, ends, me, optionals,clusters,clusterProbabilities)
