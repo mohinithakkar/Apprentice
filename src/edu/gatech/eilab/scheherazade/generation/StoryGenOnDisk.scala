@@ -5,8 +5,12 @@ import graph._
 import analysis._
 import scala.collection.mutable.ListBuffer
 import java.io._
+import main._
 
-package main {
+/** TODO: Refactor this to use Walk or a subclass of Walk
+ * 
+ */
+package generation {
   object StoryGenOnDisk {
 
     var node2Num: Map[Cluster, Int] = null
