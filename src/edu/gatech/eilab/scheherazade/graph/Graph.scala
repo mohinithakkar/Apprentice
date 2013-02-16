@@ -220,7 +220,9 @@ package graph {
           val predecessors = newLinks.filter(l => l.target == e).map(_.source)
           val successors = newLinks.filter(l => l.source == e).map(_.target)
           for (p <- predecessorsOf(e); s <- successors)
-            newLinks += new Link(p, s)
+           {
+            newLinks += new Link(p, s)            
+           }
         }
         
         new Graph(nodes, newLinks.toList, this.mutualExcls)

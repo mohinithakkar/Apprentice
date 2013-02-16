@@ -1,20 +1,19 @@
 package edu.gatech.eilab.scheherazade
 
-import main.StoryGenerater._
+import main._
 import utils.CSVProcessor
 import data._
 import graph._
 
 import java.io._
 
-package main {
+package generation {
 
   //TODO: A thorough test to make sure there is bugs and is consistent with the graph. 
   //TODO: Prompts for the time the engine waits for user input.
   object InteractiveEngine {
 
-    var node2Num: Map[Cluster, Int] = null
-    var num2Node: Map[Int, Cluster] = null
+    var graphIndex:GraphIndex = null
 
     def main(args: Array[String]) {
       val desc = readDescriptions("./data/robbery/textDescriptions.csv")
@@ -30,90 +29,20 @@ package main {
 
       val gen = new GraphGenerator(insideStories, insideClusters)
       var graph: Graph = gen.generate(para)("mutualExcl")._1
-      graph.draw("abcdefg")
-      val me = graph.mutualExcls
 
-      // starting point:
-      var sources = graph.nodes.filterNot(n => graph.links.exists(l => l.target == n))
-      //println(sources.map(_.name).mkString("sources : ", "\n", ""))
-      val ends = graph.nodes.filterNot(n => graph.links.exists(l => l.source == n))
-      //println(ends.map(_.name).mkString("ends : ", "\n", ""))
-      //readLine()
+      graph.draw("abcdefg.png")
+      var walk = Walk(graph)
 
-      node2Num = {
-        val sorted = graph.nodes.sortWith((x, y) => x.name > y.name) // introduce an arbitrary ordering between the clusters
-        val num = 0 until graph.nodes.length
-        (sorted zip num).toMap
-      }
 
-      num2Node = {
-        node2Num.map { case (x, y) => (y, x) }
-      }
-
-      // remove from the graph nodes without predecessors that are not sources
-      //graph = eGraph.removeIrregularSourceEnds()
-
-      val optionals = findOptionals(graph)
-      graph = graph.addSkipLinks(optionals)
-      sources = graph.nodes.filter(n => (!sources.contains(n)) &&
-        graph.links.filter(l => l.target == n).map(_.source).forall(optionals contains)) ::: sources
-
-      execute(sources, ends, graph, me, optionals, desc)
+      execute(walk, desc)
     }
 
-    def findOptionals(graph: Graph): List[Cluster] =
-      {
-        // condition 1: c1 and c2 share a mutual exclusion but there is also a path from c1 to c2 on the graph
-        val candidates = graph.mutualExcls.filter(m => graph.ordered(m.c1, m.c2)).map(m => (m.c1, m.c2))
-        //println("candidates:\n" + candidates.mkString("\n"))
-        // condition 2: c1 is not mutually exclusive to another (direct or indirect) predecessor of c2
-        val real = candidates.filterNot {
-          case (c1, c2) =>
-            var early: Cluster = null
-            var late: Cluster = null
-            if (graph.shortestDistance(c1, c2) != -1) {
-              early = c1
-              late = c2
-            } else {
-              early = c2
-              late = c1
-            }
-
-            val bool = graph.mutualExcls.exists(m =>
-              (m.c1 == early && m.c2 != late && graph.shortestDistance(m.c2, late) != -1) ||
-                (m.c2 == early && m.c1 != late && graph.shortestDistance(m.c1, late) != -1))
-
-            if (bool) {
-              val prevent = graph.mutualExcls.filter(m =>
-                (m.c1 == early && graph.shortestDistance(m.c2, late) != -1) ||
-                  (m.c2 == early && graph.shortestDistance(m.c1, late) != -1))
-
-              //println(prevent.mkString(" ") + " prevents " + early.name + " " + late.name);
-            }
-            bool
-        }
-
-        /*
-        candidates foreach {
-          case (early, late) => 
-            graph.mutualExcls.foreach(m =>
-              if ((m.c1 == early && graph.shortestDistance(m.c2, late) != -1) ||
-              (m.c2 == early && graph.shortestDistance(m.c1, late) != -1))
-              
-            println(m + " prevents " + early.name + " " + late.name);
-        }*/
-
-        real.flatMap(x => List(x._1, x._2))
-      }
-
-    def execute(sources: List[Cluster], ends: List[Cluster], graph: Graph, me: List[MutualExcl], optionals: List[Cluster], desc: List[TextDescription]) {
+    def execute(walk:Walk, desc: List[TextDescription]) {
       var playAgain = true
       do {
-        var walk = Walk.fromInits(sources, graph, me, optionals)
+        var stroll = walk
         var step: Cluster = null
-
         val actors = desc.map(_.actor).distinct
-
         var actor = "John"
         /* the following allows you to select an actor other than John. Now only John is allowed
            * 
@@ -130,10 +59,10 @@ package main {
             }
            */
         do {
-          var fringe = walk.fringe
+          var fringe = stroll.fringe
           step = makeChoice(fringe, desc, actor)
-          walk = walk.nextFringe(step, me, optionals)
-        } while (!ends.contains(step))
+          stroll = stroll.forward(step)
+        } while (stroll.hasMoreSteps)
 
         println("The End.\n\n\nLet's play again!\n\n")
         var input: Char = 0
@@ -255,100 +184,5 @@ package main {
   }
 
   case class TextDescription(val name: String, val actor: String, val optionText: String, val SelfExec: String, val otherExec: String)
-  /*
-  object ReadMaybe {
-    
-    import java.io.FileInputStream;
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.nio.ByteBuffer;
-import java.nio.channels.ClosedByInterruptException;
 
-	final buf = ByteBuffer.allocate(4096);
-
-	def readLine(timeout:Long):String = {
-			val in = extract(System.in);
-			if (!(in instanceof FileInputStream))
-				throw new RuntimeException(
-						"Could not extract a FileInputStream from STDIN.");
-
-				val ret = maybeAvailable(in.asInstanceOf[FileInputStream], timeout);
-				if (ret == 0)
-					return "";
-				else {
-					val result = buf.asCharBuffer().subSequence(0, ret).toString();
-					return result;
-				}
-	}
-
-	/*
-	 * unravels all layers of FilterInputStream wrappers to get to the core
-	 * InputStream
-	 */
-	private def extract(in:InputStream): InputStream = {
-
-	  var k = in
-		val f = classOf[FilterInputStream].getDeclaredField("in");
-		f.setAccessible(true);
-
-		while (k.isInstanceof[FilterInputStream])
-			k = f.get(k.asInstanceOf[FilterInputStream]).asInstanceOf[InputStream]
-
-		return in
-	}
-
-	/*
-	 * Returns the number of bytes which could be read from the stream, timing
-	 * out after the specified number of milliseconds. Returns 0 on timeout
-	 * (because no bytes could be read) and -1 for end of stream.
-	 */
-	private def maybeAvailable(in:FileInputStream, timeout:Long):Int =
-			 {
-
-		var dataReady = Array[Int].ofDim(1);
-		final IOException[] maybeException = { null };
-		final Thread reader = new Thread() {
-			public void run() {
-				try {
-					dataReady[0] = in.getChannel().read(buf);
-				} catch (ClosedByInterruptException e) {
-					System.err.println("Reader interrupted.");
-				} catch (IOException e) {
-					maybeException[0] = e;
-				}
-			}
-		};
-
-		Thread interruptor = new Thread() {
-			public void run() {
-				reader.interrupt();
-			}
-		};
-
-		reader.start();
-		for (;;) {
-
-			reader.join(timeout);
-			if (!reader.isAlive())
-				break;
-
-			interruptor.start();
-			interruptor.join(1000);
-			reader.join(1000);
-			if (!reader.isAlive())
-				break;
-
-			System.err.println("Fatal: Timeout during readline is not supported. Are you running this with Eclipse within an IDE? ");
-			System.exit(1);
-		}
-
-		if (maybeException[0] != null)
-			throw maybeException[0];
-
-		return dataReady[0];
-	}
-}
-*/
 }
