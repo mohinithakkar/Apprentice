@@ -28,6 +28,11 @@ case class Sentence(
       "(S" + id + ") " + tokens.map { _.word }.mkString(" ")
     }
 
+   def getOrigString(): String =
+   {
+     tokens.map { _.word }.mkString(" ")
+  }
+    
   // these two override methods are only temporary. Should delete after Mar 15
   override def equals(o: Any) = o match {
     case s: Sentence => this.id == s.id
@@ -85,6 +90,7 @@ class Cluster(
 
 class Story(
   val members: Array[Sentence]) extends XStreamable {
+  
   override def toString(): String =
     {
       if (members.isEmpty)

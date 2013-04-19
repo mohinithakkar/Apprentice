@@ -1,0 +1,3 @@
+probThresholds,  minClusterSize,  miThresholds, Error Before Improvement, Error After Improvement, % Decrease
+0.05, 0.75, 4, 3.0506214792523187, 2.024539385018052,33.63518224770877
+ , , ,3.0506214792523187, 2.024539385018052, 33.63518224770877

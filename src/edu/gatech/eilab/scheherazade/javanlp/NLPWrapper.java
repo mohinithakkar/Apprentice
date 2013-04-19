@@ -83,22 +83,23 @@ public class NLPWrapper {
 				.get(CollapsedCCProcessedDependenciesAnnotation.class);
 	}
 	
-//	public void main(String[] args)
-//	{
-//		init();
-//		getParsed("This is a sentence. \n Tom orders a cake.\n Jerry ordered a cake. \n");
-//		while(hasNextSentence())
-//		{
-//			processNextSentence();
-//			String[][] t = getTokens();
-//			for(int i = 0; i < t.length; i++)
-//			{
-//				for(int j = 0; j < 4; j++)
-//					System.out.print(t[i][j] + " ");
-//				
-//				System.out.println();
-//			}
-//			
-//		}
-//	}
+	public static void main(String[] args)
+	{
+		//init();
+		NLPWrapper nlp=new NLPWrapper();
+		nlp.getParsed("This is a sentence. \n Tom orders a cake.\n Jerry ordered a cake. \n");
+		while(nlp.hasNextSentence())
+		{
+			nlp.processNextSentence();
+			String[][] t = nlp.getTokens();
+			for(int i = 0; i < t.length; i++)
+			{
+				for(int j = 0; j < 4; j++)
+					System.out.print(t[i][j] + " ");
+				
+				System.out.println();
+			}
+		
+		}
+	}
 }

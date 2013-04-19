@@ -1,0 +1,69 @@
+digraph G {
+"Sally greets John" -> "John covers face" [style=dashed, dir=none];
+"John demands money" -> "John hands Sally a note" [style=dashed, dir=none];
+"John demands money" -> "Sally reads note" [style=dashed, dir=none];
+"John demands money" -> "the note demands money" [style=dashed, dir=none];
+"John demands money" -> "Sally gives John Bag" [style=dashed, dir=none];
+"John demands money" -> "Sally opens cash drawer" [style=dashed, dir=none];
+"Sally screams" -> "John hands Sally a note" [style=dashed, dir=none];
+"John pulls out gun" -> "John shows gun" [style=dashed, dir=none];
+"John pulls out gun" -> "John hands Sally a note" [style=dashed, dir=none];
+"Sally presses alarm" -> "Sally calls police" [style=dashed, dir=none];
+"John gives Sally bag" -> "Sally gives John money" [style=dashed, dir=none];
+"Sally puts money in bag" -> "Sally gives John money" [style=dashed, dir=none];
+"Sally gives John Bag" -> "Sally gives John money" [style=dashed, dir=none];
+"Sally gives John Bag" -> "John collects money" [style=dashed, dir=none];
+"John takes the bag" -> "Sally gives John money" [style=dashed, dir=none];
+"John takes the bag" -> "John collects money" [style=dashed, dir=none];
+"police arrived" -> "John leaves bank" [style=dashed, dir=none]
+"John shows gun" -> "Sally opens cash drawer"
+"the note demands money" -> "Sally collects money"
+"Sally gives John money" -> "John collects money"
+"John pulls out gun" -> "Sally screams"
+"John approaches Sally" -> "Sally scared"
+"Sally greets John" -> "John hands Sally a note"
+"John hands Sally a note" -> "John shows gun"
+"Sally scared" -> "Sally puts money in bag"
+"John collects money" -> "John leaves bank"
+"John gives Sally bag" -> "Sally puts money in bag"
+"John covers face" -> "John approaches Sally"
+"John gets in car" -> "John drives away"
+"Sally scared" -> "Sally gives John money"
+"Sally gives John Bag" -> "John takes the bag"
+"Sally screams" -> "John demands money"
+"Sally greets John" -> "John pulls out gun"
+"John leaves bank" -> "John gets in car"
+"Sally calls police" -> "police arrests John"
+"John sees Sally" -> "John approaches Sally"
+"Sally puts money in bag" -> "Sally presses alarm"
+"John collects money" -> "Sally cries"
+"John enters bank" -> "John scans the bank"
+"John pulls out gun" -> "John points gun at Sally"
+"police arrived" -> "police arrests John"
+"John leaves bank" -> "Sally calls police"
+"John scans the bank" -> "John approaches Sally"
+"John enters bank" -> "John sees Sally"
+"John approaches Sally" -> "Sally greets John"
+"Sally presses alarm" -> "police arrived"
+"Sally collects money" -> "Sally puts money in bag"
+"Sally cries" -> "police arrived"
+"John takes the bag" -> "John leaves bank"
+"Sally puts money in bag" -> "Sally gives John Bag"
+"John enters bank" -> "waits in line"
+"Sally reads note" -> "Sally opens cash drawer"
+"John demands money" -> "Sally collects money"
+"waits in line" -> "John approaches Sally"
+"Sally presses alarm" -> "John gets in car"
+"Sally opens cash drawer" -> "Sally collects money"
+"John leaves bank" -> "police arrived"
+"John shows gun" -> "John demands money"
+"John hands Sally a note" -> "John gives Sally bag"
+"John points gun at Sally" -> "John demands money"
+"John hands Sally a note" -> "the note demands money"
+"John opens bank door" -> "waits in line"
+"John drives to bank" -> "John enters bank"
+"Sally puts money in bag" -> "John collects money"
+"Sally collects money" -> "Sally gives John money"
+"John hands Sally a note" -> "Sally reads note"
+"John pulls out gun" -> "John gives Sally bag"
+}
